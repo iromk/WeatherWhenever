@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Weather Whenever</string>
     <string name="welcome_text">Hello World!</string>
     <string name="button_forecast">Forecast</string>
-    <string name="cities_forcasts_title">Citites forecasts</string>
+    <string name="cities_forecasts_title">Cities forecasts</string>
     <string name="preference_file_key">private_prefs</string>
     <string name="selected_city_index_prefs_key">last_selected_city</string>
     <string name="tip_of_the_day">You always be prepared</string>
@@ -36,5 +36,6 @@
         <item>Take off the glasses</item>
         <item>Drink more wine</item>
     </string-array>
+    <string name="title_activity_forecast">ForecastActivity</string>
 
 </resources>

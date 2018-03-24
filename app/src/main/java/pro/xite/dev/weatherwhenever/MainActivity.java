@@ -1,6 +1,7 @@
 package pro.xite.dev.weatherwhenever;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,9 +14,6 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Spinner.OnItemSelectedListener {
 
     private Spinner spinnerCityList;
-    private String[] forecasts;
-    private String[] tipsOfTheDay;
-    private int totalForecasts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         spinnerCityList = findViewById(R.id.spinner_city_list);
         spinnerCityList.setOnItemSelectedListener(this);
-        forecasts = getResources().getStringArray(R.array.forecasts_hardcoded_list);
-        tipsOfTheDay = getResources().getStringArray(R.array.todo_actions_list);
-        totalForecasts = forecasts.length;
-
-        // implementation assumes that each forecast has certain related tip.
-        if (totalForecasts != tipsOfTheDay.length) throw new AssertionError();
+        ForecastProvider.create(this);
 
         loadSelectionFromPreferences();
     }
@@ -39,8 +32,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(id == R.id.button_get_forecast) {
             Log.d("TRACER", "The button has been clicked");
             saveSelectionInPreferences();
-            makeUsualWeatherForecast();
+            Intent intent = new Intent(this, ForecastActivity.class);
+            intent.putExtra(Intentional.FORECAST, ForecastProvider.makeReliableForecast(getSelectedCityName()));
+            startActivity(intent);
         }
+    }
+
+    private int getSelectedCityId() {
+        return spinnerCityList.getSelectedItemPosition();
+    }
+
+    private String getSelectedCityName() {
+        return getCityByIndex(getSelectedCityId());
+    }
+
+    private String getCityByIndex(int i) {
+        return getResources().getStringArray(R.array.city_list)[i];
     }
 
     private void saveSelectionInPreferences() {
@@ -48,13 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final SharedPreferences sharedPref = context.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPref.edit();
-        final int last_city_index = spinnerCityList.getSelectedItemPosition();
-        editor.putInt(getString(R.string.selected_city_index_prefs_key), last_city_index);
+        editor.putInt(getString(R.string.selected_city_index_prefs_key), getSelectedCityId());
         editor.apply(); // tip! writes in a background
         //editor.commit(); // tip! writes data immediately
     }
-
-
 
     private void loadSelectionFromPreferences() {
         final Context context = this;
@@ -73,12 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }
-
-    private void makeUsualWeatherForecast() {
-        final int randomWeather = (int) (Math.random() * totalForecasts);
-        setForecastText(forecasts[randomWeather]);
-        setTextDailyTip(tipsOfTheDay[randomWeather]);
     }
 
     private void setTextDailyTip(String text) {
