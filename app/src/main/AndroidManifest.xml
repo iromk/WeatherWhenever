@@ -19,7 +19,13 @@
         <activity
             android:name=".ForecastActivity"
             android:label="@string/title_activity_forecast"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name= "android.intent.action.FORECAST" />
+                <category android:name= "android.intent.category.DEFAULT" />
+                <data android:mimeType= "text/plain" />
+            </intent-filter>
+    </activity>
     </application>
 
 </manifest>
