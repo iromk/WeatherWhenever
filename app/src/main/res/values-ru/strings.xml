@@ -15,8 +15,14 @@
         <item>Венеция</item>
     </string-array>
 
-    <string-array name="forecasts_hardcoded">
-        <item></item>
+    <string-array name="forecasts_hardcoded_list">
+        <item>Дождик</item>
+        <item>Снежок</item>
+        <item>Ветерок</item>
+        <item>Солнышко</item>
+        <item>Зомбики</item>
+        <item>Тучки</item>
+        <item>Винцо</item>
     </string-array>
 
 </resources>

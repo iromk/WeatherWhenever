@@ -15,6 +15,7 @@
         android:id="@+id/spinner_city_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:entries="@array/city_list"/>
 
     <Button
@@ -28,6 +29,14 @@
         android:id="@+id/textview_forecast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/welcome_text"/>
+        android:text="@string/welcome_text"
+        android:textSize="32sp"/>
+
+    <TextView
+        android:id="@+id/textview_tipoftheday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tip_of_the_day"
+        android:textSize="25sp"/>
 
 </LinearLayout>
