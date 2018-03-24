@@ -43,10 +43,9 @@ public class ForecastProvider implements Serializable {
      */
     public static Forecast makeReliableForecast(String city) {
         instance.fingerPointingInDaSkyForecast = (int) (Math.random() * instance.totalForecasts);
-        Forecast forecast = new Forecast(city,
+        return new Forecast(city,
                 instance.forecasts[instance.fingerPointingInDaSkyForecast],
                 instance.tipsOfTheDay[instance.fingerPointingInDaSkyForecast]);
-        return forecast;
     }
 
 }

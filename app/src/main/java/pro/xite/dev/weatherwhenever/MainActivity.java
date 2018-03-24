@@ -32,8 +32,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(id == R.id.button_get_forecast) {
             Log.d("TRACER", "The button has been clicked");
             saveSelectionInPreferences();
+            Forecast reliableForecast = ForecastProvider.makeReliableForecast(getSelectedCityName());
+            setForecastText(reliableForecast.getWeather());
             Intent intent = new Intent(this, ForecastActivity.class);
-            intent.putExtra(Intentional.FORECAST, ForecastProvider.makeReliableForecast(getSelectedCityName()));
+            intent.putExtra(Intentional.FORECAST, reliableForecast);
             startActivity(intent);
         }
     }
