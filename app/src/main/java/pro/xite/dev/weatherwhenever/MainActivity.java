@@ -47,15 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             saveSelectionInPreferences();
             reliableForecast = ForecastProvider.makeReliableForecast(getSelectedCityName());
             setForecastText(reliableForecast.getWeather());
-//            Intent intent = new Intent(Intent.ACTION_SEND);
             Intent intent = new Intent(this, ForecastActivity.class);
             intent.putExtra(Intentional.FORECAST, reliableForecast);
-            try {
-                startActivityForResult(intent, 1);
-            } catch (RuntimeException e) {
-                Log.d("TRACER", "Don't panic");
-
-            }
+            startActivityForResult(intent, 1);
         }
     }
 

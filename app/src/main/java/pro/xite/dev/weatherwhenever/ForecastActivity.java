@@ -1,5 +1,7 @@
 package pro.xite.dev.weatherwhenever;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,13 +13,14 @@ import android.widget.Toast;
 public class ForecastActivity extends AppCompatActivity {
 
     private boolean messageSent = false;
+    private Forecast reliableForecast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
         Intent intent = getIntent();
-        Forecast reliableForecast = (Forecast) intent.getSerializableExtra(Intentional.FORECAST);
+        reliableForecast = (Forecast) intent.getSerializableExtra(Intentional.FORECAST);
         setTextDailyTip(reliableForecast.getTip());
         setForecastText(reliableForecast.getWeather());
         setCityText(reliableForecast.getCity());
@@ -53,6 +56,14 @@ public class ForecastActivity extends AppCompatActivity {
         Log.d("TRACER", "Tell the friend clicked");
         messageSent = true;
         Toast.makeText(this, "Message to the friend has been sent", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(Intent.ACTION_QUICK_VIEW);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, reliableForecast.getTip());
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Log.d("TRACER", "Don't panic. That activity is still in development.");
+        }
     }
 
     @Override
