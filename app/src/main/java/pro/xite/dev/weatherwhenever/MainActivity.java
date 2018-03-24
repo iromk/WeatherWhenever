@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Spinner.OnItemSelectedListener {
 
@@ -36,7 +37,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setForecastText(reliableForecast.getWeather());
             Intent intent = new Intent(this, ForecastActivity.class);
             intent.putExtra(Intentional.FORECAST, reliableForecast);
-            startActivity(intent);
+//            startActivity(intent);
+            startActivityForResult(intent, 1);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            String response = data.getStringExtra("friends_response");
+            Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "friend wouldn't know", Toast.LENGTH_LONG).show();
         }
     }
 

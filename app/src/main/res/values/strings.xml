@@ -37,5 +37,6 @@
         <item>Drink more wine</item>
     </string-array>
     <string name="title_activity_forecast">ForecastActivity</string>
+    <string name="tell_the_friend">Tell the friend</string>
 
 </resources>

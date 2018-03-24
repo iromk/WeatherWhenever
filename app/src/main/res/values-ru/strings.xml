@@ -25,4 +25,6 @@
         <item>Винцо</item>
     </string-array>
 
+    <string name="tell_the_friend">Сообщить другу</string>
+
 </resources>
