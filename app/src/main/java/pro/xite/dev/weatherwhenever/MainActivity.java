@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Spinner.OnItemSelectedListener {
 
+    public static final String LATEST_FORECAST_KEY = "latest_forecast";
     private Spinner spinnerCityList;
+    private Forecast reliableForecast = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +25,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spinnerCityList = findViewById(R.id.spinner_city_list);
         spinnerCityList.setOnItemSelectedListener(this);
         ForecastProvider.create(this);
-
         loadSelectionFromPreferences();
+
+        if(savedInstanceState != null) {
+            reliableForecast = (Forecast) savedInstanceState.getSerializable(LATEST_FORECAST_KEY);
+            setForecastText(reliableForecast.getWeather());
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(LATEST_FORECAST_KEY, reliableForecast);
     }
 
     @Override
@@ -33,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(id == R.id.button_get_forecast) {
             Log.d("TRACER", "The button has been clicked");
             saveSelectionInPreferences();
-            Forecast reliableForecast = ForecastProvider.makeReliableForecast(getSelectedCityName());
+            reliableForecast = ForecastProvider.makeReliableForecast(getSelectedCityName());
             setForecastText(reliableForecast.getWeather());
 //            Intent intent = new Intent(Intent.ACTION_SEND);
             Intent intent = new Intent(this, ForecastActivity.class);
