@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Погода по ходу</string>
+    <string name="welcome_text">В начале было Hello World</string>
+    <string name="button_forecast">Прогноз</string>
+    <string name="cities_forcasts_title">Погода по городам</string>
+
+    <string-array name="city_list">
+        <item>Рио</item>
+        <item>Тула</item>
+        <item>Минск</item>
+        <item>Вашингтон</item>
+        <item>Берлин</item>
+        <item>Антверпен</item>
+        <item>Венеция</item>
+    </string-array>
+
+    <string-array name="forecasts_hardcoded">
+        <item></item>
+    </string-array>
+
+</resources>

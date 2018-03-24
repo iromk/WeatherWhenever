@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name" translatable="false">Weather Whenever</string>
+    <string name="welcome_text">Hello World!</string>
+    <string name="button_forecast">Forecast</string>
+    <string name="cities_forcasts_title">Citites forecasts</string>
+    <string name="preference_file_key">private_prefs</string>
+    <string name="selected_city_index_prefs_key">last_selected_city</string>
+
+    <string-array name="city_list">
+        <item>Rio</item>
+        <item>Tula</item>
+        <item>Minsk</item>
+        <item>Washington</item>
+        <item>Berlin</item>
+        <item>Antverpen</item>
+        <item>Venice</item>
+    </string-array>
+
+    <string-array name="forecasts_hardcoded">
+        <item></item>
+    </string-array>
+
+</resources>

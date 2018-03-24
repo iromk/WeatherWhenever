@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cities_forcasts_title"/>
+
+    <Spinner
+        android:id="@+id/spinner_city_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/city_list"/>
+
+    <Button
+        android:id="@+id/button_get_forecast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="@string/button_forecast" />
+
+    <TextView
+        android:id="@+id/textview_forecast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_text"/>
+
+</LinearLayout>
