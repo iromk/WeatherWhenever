@@ -44,13 +44,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = view.getId();
         if(id == R.id.button_get_forecast) {
             Log.d("TRACER", "The button has been clicked");
-            saveSelectionInPreferences();
             reliableForecast = ForecastProvider.makeReliableForecast(getSelectedCityName());
             setForecastText(reliableForecast.getWeather());
             Intent intent = new Intent(this, ForecastActivity.class);
             intent.putExtra(Intentional.FORECAST, reliableForecast);
             startActivityForResult(intent, 1);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        saveSelectionInPreferences();
+        super.onPause();
     }
 
     @Override
@@ -103,11 +108,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }
-
-    private void setTextDailyTip(String text) {
-        TextView tv = findViewById(R.id.textview_tipoftheday);
-        tv.setText(text);
     }
 
     private void setForecastText(String text) {
