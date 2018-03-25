@@ -6,6 +6,6 @@ package pro.xite.dev.weatherwhenever;
 
 public interface Intentional {
 
-    String FORECAST = "forecastObject";
+    String FORECAST_OBJECT = "forecastObject";
 
 }

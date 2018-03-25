@@ -15,6 +15,9 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Spinner.OnItemSelectedListener {
 
     public static final String LATEST_FORECAST_KEY = "latest_forecast";
+    public static final String FRIENDS_RESPONSE = "friends_response";
+    public static final String TAG_TRACER = "TRACER";
+
     private Spinner spinnerCityList;
     private Forecast reliableForecast = null;
 
@@ -43,11 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         int id = view.getId();
         if(id == R.id.button_get_forecast) {
-            Log.d("TRACER", "The button has been clicked");
+            Log.d(TAG_TRACER, "The button has been clicked");
             reliableForecast = ForecastProvider.makeReliableForecast(getSelectedCityName());
             setForecastText(reliableForecast.getWeather());
             Intent intent = new Intent(this, ForecastActivity.class);
-            intent.putExtra(Intentional.FORECAST, reliableForecast);
+            intent.putExtra(ForecastActivity.FORECAST_OBJECT, reliableForecast);
             startActivityForResult(intent, 1);
         }
     }
@@ -62,10 +65,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
-            String response = data.getStringExtra("friends_response");
+            String response = data.getStringExtra(FRIENDS_RESPONSE);
             Toast.makeText(this, response, Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "friend wouldn't know", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Friend wouldn't know", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -81,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return getResources().getStringArray(R.array.city_list)[i];
     }
 
+    // TODO move to external class
     private void saveSelectionInPreferences() {
         final Context context = this;
         final SharedPreferences sharedPref = context.getSharedPreferences(
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //editor.commit(); // tip! writes data immediately
     }
 
+    // TODO move to external class
     private void loadSelectionFromPreferences() {
         final Context context = this;
         final SharedPreferences sharedPref = context.getSharedPreferences(
@@ -102,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        Log.d("TRACER", spinnerCityList.getSelectedItem().toString());
+        Log.d(TAG_TRACER, spinnerCityList.getSelectedItem().toString());
     }
 
     @Override
