@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15sp"
+        android:id="@+id/cities_forecast_title"
         android:text="@string/cities_forecasts_title"/>
 
     <Spinner
         android:id="@+id/spinner_city_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:layout_below="@+id/cities_forecast_title"
+        android:layout_marginTop="15sp"
         android:entries="@array/city_list"/>
 
     <Button
         android:id="@+id/button_get_forecast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/setting_layout"
+        android:layout_marginTop="15sp"
         android:onClick="onClick"
         android:text="@string/button_forecast" />
 
@@ -29,6 +32,8 @@
         android:id="@+id/textview_forecast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/spinner_city_list"
+        android:layout_marginTop="15sp"
         android:text="@string/welcome_text"
         android:textSize="32sp"/>
 
@@ -36,7 +41,25 @@
         android:id="@+id/textview_tipoftheday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textview_forecast"
         android:text="@string/tip_of_the_day"
         android:textSize="25sp"/>
 
-</LinearLayout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/setting_layout"
+        android:layout_below="@+id/textview_tipoftheday">
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="switch1"/>
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="switcxhfghfghh2"/>
+    </LinearLayout>
+
+</RelativeLayout>
