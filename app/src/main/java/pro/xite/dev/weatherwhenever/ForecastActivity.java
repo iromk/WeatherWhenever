@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -32,18 +33,20 @@ public class ForecastActivity extends AppCompatActivity {
         setForecastText(reliableForecast.getWeather());
         setCityText(reliableForecast.getCity());
 
-        new Thread() {
-            public void run() {
-                JSONObject jsonObject = OWMForecastProvider.getJSONData("London");
-                if(jsonObject != null) {
-                    Log.d(TAG_TRACER, jsonObject.toString());
-                }
-
-            }
-        }.start();
-
+        OWMForecastProvider.getForecast("London", handler);
         logMethod();
     }
+
+    final private Handler handler = new Handler() {
+
+        public void handleMessage(Message msg) {
+            Log.d(TAG_TRACER, "Has got the message");
+            Bundle b = msg.getData();
+            Forecast fo = (Forecast)b.getSerializable("fo");
+            Log.d(TAG_TRACER, fo.toString());
+        }
+
+    };
 
     private void logMethod() {
         Log.i(TAG_LIFECYCLE, Helpers.getMethodName(2));
