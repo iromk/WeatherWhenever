@@ -4,11 +4,14 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 public class ForecastActivity extends AppCompatActivity {
 
@@ -28,6 +31,17 @@ public class ForecastActivity extends AppCompatActivity {
         setTextDailyTip(reliableForecast.getTip());
         setForecastText(reliableForecast.getWeather());
         setCityText(reliableForecast.getCity());
+
+        new Thread() {
+            public void run() {
+                JSONObject jsonObject = OWMForecastProvider.getJSONData("London");
+                if(jsonObject != null) {
+                    Log.d(TAG_TRACER, jsonObject.toString());
+                }
+
+            }
+        }.start();
+
         logMethod();
     }
 
