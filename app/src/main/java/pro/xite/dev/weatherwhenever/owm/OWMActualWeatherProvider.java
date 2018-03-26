@@ -5,7 +5,6 @@ package pro.xite.dev.weatherwhenever.owm;
  */
 
 import android.os.Handler;
-import pro.xite.dev.weatherwhenever.Forecast;
 
 /**
  * Data loader and parser for Current weather data provided by OWM.
@@ -21,9 +20,7 @@ public class OWMActualWeatherProvider extends OWMDataProvider {
     protected String getApiAction() { return OWM_ACTION_WEATHER; }
 
     public void request(String city, Handler handler) {
-        loadForecast(city, Forecast.class, handler);
-//        Forecast f = loadJSONData(city, Forecast.class);
-
+        requestOWM(city, OWMWeather.class, handler);
     }
 
 }

@@ -13,6 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import pro.xite.dev.weatherwhenever.owm.OWMActualWeatherProvider;
+import pro.xite.dev.weatherwhenever.owm.OWMNearestForecast;
+import pro.xite.dev.weatherwhenever.owm.OWMNearestForecastProvider;
+import pro.xite.dev.weatherwhenever.owm.OWMWeather;
 
 public class ForecastActivity extends AppCompatActivity {
 
@@ -29,24 +32,34 @@ public class ForecastActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forecast);
         Intent intent = getIntent();
         reliableForecast = (Forecast) intent.getSerializableExtra(FORECAST_OBJECT);
-//        setTextDailyTip(reliableForecast.getTip());
-//        setForecastText(reliableForecast.loadWeather());
-//        setCityText(reliableForecast.getCity());
 
-//        OWMForecastProvider.loadForecast("London", handler);
-        new OWMActualWeatherProvider().request("Yekaterinburg", handler);
+        new OWMActualWeatherProvider().request("London", handler);
+        new OWMNearestForecastProvider().request("Cairo", handlerForecast);
         logMethod();
     }
 
+    // TODO possible mem leak point?
     final private Handler handler = new Handler() {
 
         public void handleMessage(Message msg) {
             Log.d(TAG_TRACER, "Has got the message");
-            Bundle b = msg.getData();
-            Forecast fo = (Forecast)b.getSerializable("fo");
-            Log.d(TAG_TRACER, fo.toString());
-            setCityText(fo.getName());
-            setForecastText(String.format("%s, %s", fo.getTemp(), fo.getWind()));
+            Bundle bundle = msg.getData();
+            OWMWeather owmWeather = (OWMWeather)bundle.getSerializable("fo");
+            Log.d(TAG_TRACER, owmWeather.toString());
+            setCityText(owmWeather.getCity());
+            setForecastText(String.format("%s, %s", owmWeather.getTemp(), owmWeather.getPressure()));
+        }
+
+    };
+
+    final private Handler handlerForecast = new Handler() {
+
+        public void handleMessage(Message msg) {
+            Bundle bundle = msg.getData();
+            OWMNearestForecast owmNearestForecast = (OWMNearestForecast)bundle.getSerializable("fo");
+            Log.d(TAG_TRACER, owmNearestForecast.toString());
+            setCityText(owmNearestForecast.getCity().getName());
+//            setForecastText(String.format("%s, %s", fo.getTemp(), fo.getPressure()));
         }
 
     };

@@ -43,12 +43,12 @@ abstract public class OWMDataProvider {
      */
     private static final int HTTP_CODE_200 = 200;
 
-    private static final String TAG_TRACER = "TRACER-OWM<>";
+    private static final String TAG_TRACER = "TRACER/OWMDP";
 
     abstract protected String getApiAction();
     protected String getExtraGetParams() { return OWM_EXTRA_GET_PARAMS; }
 
-    protected <T> T loadJSONData(String city, Class<T> owmObjectClass) {
+    protected <T> T loadData(String city, Class<T> owmObjectClass) {
 
         try {
 
@@ -66,6 +66,7 @@ abstract public class OWMDataProvider {
 
             JSONObject jsonObject = new JSONObject(rawData.toString());
             if (jsonObject.getInt(RESPONSE_JSON_KEY) != HTTP_CODE_200) {
+                Log.d(TAG_TRACER, String.format("Json response code: %d", jsonObject.getInt(RESPONSE_JSON_KEY)));
                 return null;
             }
 
@@ -77,14 +78,14 @@ abstract public class OWMDataProvider {
         }
     }
 
-    public <T extends Serializable> void loadForecast(final String city, final Class<T> d, final Handler handler) {
+    public <T extends Serializable> void requestOWM(final String city, final Class<T> d, final Handler handler) {
         Log.d(TAG_TRACER, Helpers.getMethodName());
 
         final Forecast owmForecast = new Forecast(city, "no data", "do whatever you want");
 
         new Thread() {
             public void run() {
-                T forecast = loadJSONData(city, d);
+                T forecast = loadData(city, d);
                 if(forecast != null) {
                     Message msgObj = handler.obtainMessage();
                     Bundle b = new Bundle();
