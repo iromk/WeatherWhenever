@@ -15,13 +15,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.function.Function;
 
 import android.os.Handler;
 
 import com.google.gson.Gson;
 
 /**
+ * @deprecated
  * Provides weather and forecast info from openweathermap.org.
  */
 public class OWMForecastProvider {
@@ -54,7 +54,7 @@ public class OWMForecastProvider {
 
         new Thread() {
             public void run() {
-                Forecast forecast = OWMForecastProvider.getJSONData("London");
+                Forecast forecast = getJSONData("London");
                 if(forecast != null) {
                     Message msgObj = handler.obtainMessage();
                     Bundle b = new Bundle();

@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import pro.xite.dev.weatherwhenever.owm.OWMActualWeatherProvider;
+
 public class ForecastActivity extends AppCompatActivity {
 
     public static final String TAG_LIFECYCLE = "LIFETIME";
@@ -31,7 +33,8 @@ public class ForecastActivity extends AppCompatActivity {
 //        setForecastText(reliableForecast.loadWeather());
 //        setCityText(reliableForecast.getCity());
 
-        OWMForecastProvider.loadForecast("London", handler);
+//        OWMForecastProvider.loadForecast("London", handler);
+        new OWMActualWeatherProvider().request("Yekaterinburg", handler);
         logMethod();
     }
 
