@@ -24,6 +24,7 @@ public class OWMWeather extends OWMCity implements Serializable {
     @SerializedName("main")
     private Main main;
 
+
     public class Main {
         @SerializedName("temp")
         Double temp;
@@ -45,6 +46,15 @@ public class OWMWeather extends OWMCity implements Serializable {
         return String.valueOf(main.pressure);
     }
 
+    public String getHumidity() {
+        return String.valueOf(main.humidity);
+    }
+
     public String getCity() { return name; }
 
+    @Override
+    public String toString() {
+        return String.format("Weather for %s is:\n  t = %s,\n  pressure = %s\n  humidity = %s%%",
+                super.toString(), getTemp(), getPressure(), getHumidity());
+    }
 }

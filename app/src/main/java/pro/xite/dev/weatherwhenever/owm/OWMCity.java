@@ -51,5 +51,10 @@ public class OWMCity implements Serializable {
     public Long getPopulation() {
         return population;
     }
+
+    @Override
+    public String toString() {
+        return String.format("City %s [id%d] of country %s", getName(), getId(), getCountry());
+    }
 }
 

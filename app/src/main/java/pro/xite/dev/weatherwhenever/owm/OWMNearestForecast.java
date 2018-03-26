@@ -27,7 +27,13 @@ public class OWMNearestForecast implements Serializable {
         OWMWeather.Main main;
     }
 
+
     public OWMCity getCity() {
         return city;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Nearest forecast for %s", getCity());
     }
 }

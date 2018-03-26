@@ -33,7 +33,7 @@ public class ForecastActivity extends AppCompatActivity {
         Intent intent = getIntent();
         reliableForecast = (Forecast) intent.getSerializableExtra(FORECAST_OBJECT);
 
-        new OWMActualWeatherProvider().request("London", handler);
+        new OWMActualWeatherProvider().request("Cairo", handler);
         new OWMNearestForecastProvider().request("Cairo", handlerForecast);
         logMethod();
     }
@@ -46,7 +46,7 @@ public class ForecastActivity extends AppCompatActivity {
             Bundle bundle = msg.getData();
             OWMWeather owmWeather = (OWMWeather)bundle.getSerializable("fo");
             Log.d(TAG_TRACER, owmWeather.toString());
-            setCityText(owmWeather.getCity());
+            setCityText(owmWeather.toString());
             setForecastText(String.format("%s, %s", owmWeather.getTemp(), owmWeather.getPressure()));
         }
 
@@ -58,7 +58,7 @@ public class ForecastActivity extends AppCompatActivity {
             Bundle bundle = msg.getData();
             OWMNearestForecast owmNearestForecast = (OWMNearestForecast)bundle.getSerializable("fo");
             Log.d(TAG_TRACER, owmNearestForecast.toString());
-            setCityText(owmNearestForecast.getCity().getName());
+            setTextDailyTip(owmNearestForecast.toString());
 //            setForecastText(String.format("%s, %s", fo.getTemp(), fo.getPressure()));
         }
 
