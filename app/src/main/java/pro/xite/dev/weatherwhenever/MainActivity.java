@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(savedInstanceState != null) {
             reliableForecast = (Forecast) savedInstanceState.getSerializable(LATEST_FORECAST_KEY);
-            setForecastText(reliableForecast.getWeather());
+//            setForecastText(reliableForecast.getWeather());
         }
     }
 
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(id == R.id.button_get_forecast) {
             Log.d(TAG_TRACER, "The button has been clicked");
             reliableForecast = ForecastProvider.makeReliableForecast(getSelectedCityName());
-            setForecastText(reliableForecast.getWeather());
+//            setForecastText(reliableForecast.getWeather());
             Intent intent = new Intent(this, ForecastActivity.class);
             intent.putExtra(ForecastActivity.FORECAST_OBJECT, reliableForecast);
             startActivityForResult(intent, 1);

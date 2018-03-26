@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
 public class ForecastActivity extends AppCompatActivity {
 
     public static final String TAG_LIFECYCLE = "LIFETIME";
@@ -29,11 +27,11 @@ public class ForecastActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forecast);
         Intent intent = getIntent();
         reliableForecast = (Forecast) intent.getSerializableExtra(FORECAST_OBJECT);
-        setTextDailyTip(reliableForecast.getTip());
-        setForecastText(reliableForecast.getWeather());
-        setCityText(reliableForecast.getCity());
+//        setTextDailyTip(reliableForecast.getTip());
+//        setForecastText(reliableForecast.loadWeather());
+//        setCityText(reliableForecast.getCity());
 
-        OWMForecastProvider.getForecast("London", handler);
+        OWMForecastProvider.loadForecast("London", handler);
         logMethod();
     }
 
@@ -44,6 +42,8 @@ public class ForecastActivity extends AppCompatActivity {
             Bundle b = msg.getData();
             Forecast fo = (Forecast)b.getSerializable("fo");
             Log.d(TAG_TRACER, fo.toString());
+            setCityText(fo.getName());
+            setForecastText(String.format("%s, %s", fo.getTemp(), fo.getWind()));
         }
 
     };
