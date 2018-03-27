@@ -55,11 +55,11 @@
         <Switch
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="switch1"/>
+            android:text="@string/owm_switch_label"/>
         <Switch
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="switcxhfghfghh2"/>
+            android:text="@string/fids_switch_label"/>
     </LinearLayout>
 
 </RelativeLayout>

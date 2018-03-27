@@ -11,18 +11,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/selected_city_name"
         android:text="@string/cities_forecasts_title"
-        android:textSize="32sp"/>
+        android:textSize="25sp"/>
 
     <TextView
-        android:layout_marginTop="100sp"
+        android:layout_marginTop="25sp"
         android:id="@+id/textview_forecast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/welcome_text"
-        android:textSize="32sp"/>
+        android:textSize="25sp"/>
 
     <TextView
-        android:layout_marginTop="50sp"
+        android:layout_marginTop="25sp"
         android:id="@+id/textview_tipoftheday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
