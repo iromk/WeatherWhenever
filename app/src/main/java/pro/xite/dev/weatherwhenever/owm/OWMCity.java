@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Roman Syrchin on 3/26/18.
  */
 
-public class OWMCity implements Serializable {
+public class OWMCity extends OWMData implements Serializable {
 
     @SerializedName("id")
     Integer id;

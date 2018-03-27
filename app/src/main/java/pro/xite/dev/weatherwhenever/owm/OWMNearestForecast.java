@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Roman Syrchin on 3/26/18.
  */
 
-public class OWMNearestForecast implements Serializable {
+public class OWMNearestForecast extends OWMData implements Serializable {
 
     @SerializedName("list")
     List<ListItem> mainList;
@@ -25,6 +25,9 @@ public class OWMNearestForecast implements Serializable {
 
         @SerializedName("main")
         OWMWeather.Main main;
+
+        @SerializedName("weather")
+        List<OWMWeather.WeatherItem> weather;
     }
 
 
@@ -34,6 +37,6 @@ public class OWMNearestForecast implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("Nearest forecast for %s", getCity());
+        return String.format("Nearest forecast for %s is: \n%s", getCity(), mainList.get(0).weather.get(0).getDescription());
     }
 }

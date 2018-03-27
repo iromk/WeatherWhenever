@@ -38,6 +38,18 @@ public class OWMWeather extends OWMCity implements Serializable {
         Double temp_max;
     }
 
+    public class WeatherItem {
+        @SerializedName("id")
+        Integer id;
+        @SerializedName("main")
+        String main;
+        @SerializedName("description")
+        String description;
+        @SerializedName("icon")
+        String icon;
+
+        public String getDescription() { return description; }
+    }
     public String getTemp() {
         return String.valueOf(main.temp);
     }
