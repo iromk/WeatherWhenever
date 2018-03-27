@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import pro.xite.dev.weatherwhenever.Forecast;
 import pro.xite.dev.weatherwhenever.Helpers;
 
 /**
@@ -28,7 +27,7 @@ abstract public class OWMDataProvider {
      * OWM API definitions
      */
     private static final String OWM_API_KEY = "62a13a0ac59c620b10c5f3680ec685f0";
-    private static final String OWM_API_BASE =
+    private static final String OWM_API_BASE_URL =
             "http://api.openweathermap.org/data/2.5/%s?appid=%s&q=%s%s";
     private static final String OWM_EXTRA_GET_PARAMS = "&units=metric";
 
@@ -36,14 +35,16 @@ abstract public class OWMDataProvider {
     /**
      * OWM Json keys
      */
-    private static final String RESPONSE_JSON_KEY = "cod";
+    private static final String RESPONSE_CODE_JSON_KEY = "cod";
 
     /**
      * Response codes
      */
-    private static final int HTTP_CODE_200 = 200;
+    private static final int RESPONSE_CODE_200 = 200;
 
     private static final String TAG_TRACER = "TRACER/OWMDP";
+
+    public static final String OWM_DATA_KEY = "owmData";
 
     abstract protected String getApiAction();
     protected String getExtraGetParams() { return OWM_EXTRA_GET_PARAMS; }
@@ -52,46 +53,46 @@ abstract public class OWMDataProvider {
 
         try {
 
-            URL url = new URL(String.format(OWM_API_BASE, getApiAction(), OWM_API_KEY, city, getExtraGetParams()));
+            URL url = new URL(String.format(OWM_API_BASE_URL, getApiAction(), OWM_API_KEY, city, getExtraGetParams()));
             Log.d(Helpers.getMethodName(), url.toString());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder rawData = new StringBuilder(1024);
-            String tempVariable;
-            while ((tempVariable = reader.readLine()) != null) {
-                rawData.append(tempVariable);
+            String nextLine;
+            while ((nextLine = reader.readLine()) != null) {
+                rawData.append(nextLine);
             }
             reader.close();
 
             JSONObject jsonObject = new JSONObject(rawData.toString());
-            if (jsonObject.getInt(RESPONSE_JSON_KEY) != HTTP_CODE_200) {
-                Log.d(TAG_TRACER, String.format("Json response code: %d", jsonObject.getInt(RESPONSE_JSON_KEY)));
+            if (jsonObject.getInt(RESPONSE_CODE_JSON_KEY) != RESPONSE_CODE_200) {
+                Log.d(TAG_TRACER, String.format("Json response code: %d", jsonObject.getInt(RESPONSE_CODE_JSON_KEY)));
                 return null;
             }
 
-            T owmObject = new Gson().fromJson(jsonObject.toString(), owmObjectClass);
+            return new Gson().fromJson(jsonObject.toString(), owmObjectClass);
 
-            return owmObject;
         } catch (Exception e) {
+            Log.d(TAG_TRACER, Helpers.getMethodName() + " failed:\n  " + e.toString());
             return null;
         }
     }
 
     public <T extends Serializable> void requestOWM(final String city, final Class<T> d, final Handler handler) {
-        Log.d(TAG_TRACER, Helpers.getMethodName());
 
-        final Forecast owmForecast = new Forecast(city, "no data", "do whatever you want");
+        Log.d(TAG_TRACER, Helpers.getMethodName());
 
         new Thread() {
             public void run() {
-                T forecast = loadData(city, d);
-                if(forecast != null) {
+                Log.d(TAG_TRACER, Helpers.getMethodName());
+                T owmData = loadData(city, d);
+                Log.d(TAG_TRACER, "Data loaded");
+                if(owmData != null) {
                     Message msgObj = handler.obtainMessage();
-                    Bundle b = new Bundle();
-                    b.putSerializable("fo", forecast);
-                    msgObj.setData(b);
-                    Log.d(TAG_TRACER, "sending <> the message");
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(OWM_DATA_KEY, owmData);
+                    msgObj.setData(bundle);
                     handler.sendMessage(msgObj);
                 }
             }

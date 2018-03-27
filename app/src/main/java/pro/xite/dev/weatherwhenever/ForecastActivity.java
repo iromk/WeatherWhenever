@@ -4,8 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +15,7 @@ import pro.xite.dev.weatherwhenever.owm.OWMNearestForecast;
 import pro.xite.dev.weatherwhenever.owm.OWMNearestForecastProvider;
 import pro.xite.dev.weatherwhenever.owm.OWMWeather;
 
-public class ForecastActivity extends AppCompatActivity {
+public class ForecastActivity extends AppCompatActivity implements ViewUpdatable {
 
     public static final String TAG_LIFECYCLE = "LIFETIME";
     public static final String TAG_TRACER = "TRACER";
@@ -32,81 +30,70 @@ public class ForecastActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forecast);
         Intent intent = getIntent();
         reliableForecast = (Forecast) intent.getSerializableExtra(FORECAST_OBJECT);
+        // TODO savedInstance
+        new OWMActualWeatherProvider().request("Cairo", this);
+        new OWMNearestForecastProvider().request("Cairo", this);
 
-        new OWMActualWeatherProvider().request("Cairo", handler);
-        new OWMNearestForecastProvider().request("Cairo", handlerForecast);
-        logMethod();
+        logMe();
     }
 
-    // TODO possible mem leak point?
-    final private Handler handler = new Handler() {
-
-        public void handleMessage(Message msg) {
-            Log.d(TAG_TRACER, "Has got the message");
-            Bundle bundle = msg.getData();
-            OWMWeather owmWeather = (OWMWeather)bundle.getSerializable("fo");
-            Log.d(TAG_TRACER, owmWeather.toString());
+    @Override
+    public <T> void updateViews(T owm) {
+        if(owm instanceof OWMWeather) {
+            OWMWeather owmWeather = (OWMWeather) owm;
             setCityText(owmWeather.toString());
             setForecastText(String.format("%s, %s", owmWeather.getTemp(), owmWeather.getPressure()));
         }
 
-    };
-
-    final private Handler handlerForecast = new Handler() {
-
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            OWMNearestForecast owmNearestForecast = (OWMNearestForecast)bundle.getSerializable("fo");
-            Log.d(TAG_TRACER, owmNearestForecast.toString());
+        if(owm instanceof OWMNearestForecast) {
+            OWMNearestForecast owmNearestForecast = (OWMNearestForecast) owm;
             setTextDailyTip(owmNearestForecast.toString());
-//            setForecastText(String.format("%s, %s", fo.getTemp(), fo.getPressure()));
         }
+    }
 
-    };
-
-    private void logMethod() {
+    private void logMe() {
         Log.i(TAG_LIFECYCLE, Helpers.getMethodName(2));
     }
 
     @Override
     protected void onStart() {
-        logMethod();
+        logMe();
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        logMethod();
+        logMe();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        logMethod();
+        logMe();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        logMethod();
+        logMe();
         super.onDestroy();
     }
 
     @Override
     protected void onStop() {
-        logMethod();
+        logMe();
         super.onStop();
     }
 
     @Override
     protected void onRestart() {
-        logMethod();
+        logMe();
         super.onRestart();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        logMethod();
+        logMe();
         super.onConfigurationChanged(newConfig);
     }
 
@@ -140,8 +127,8 @@ public class ForecastActivity extends AppCompatActivity {
         Log.d(TAG_TRACER, "Tell the friend clicked");
         messageSent = true;
         Toast.makeText(this, "Message to the friend has been sent", Toast.LENGTH_LONG).show();
-//        Intent intent = new Intent(Intent.ACTION_SEND);
-        Intent intent = new Intent(Intent.ACTION_QUICK_VIEW); // test of unavailable activity
+        Intent intent = new Intent(Intent.ACTION_SEND);
+//        Intent intent = new Intent(Intent.ACTION_QUICK_VIEW); // test of unavailable activity
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, reliableForecast.getTip());
         try {

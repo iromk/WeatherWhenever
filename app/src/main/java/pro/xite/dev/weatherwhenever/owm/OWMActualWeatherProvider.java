@@ -6,6 +6,9 @@ package pro.xite.dev.weatherwhenever.owm;
 
 import android.os.Handler;
 
+import pro.xite.dev.weatherwhenever.LeakSafeHandler;
+import pro.xite.dev.weatherwhenever.ViewUpdatable;
+
 /**
  * Data loader and parser for Current weather data provided by OWM.
  */
@@ -21,6 +24,11 @@ public class OWMActualWeatherProvider extends OWMDataProvider {
 
     public void request(String city, Handler handler) {
         requestOWM(city, OWMWeather.class, handler);
+    }
+
+    public void request(String city, ViewUpdatable activity) {
+        requestOWM(city, OWMWeather.class,
+                new LeakSafeHandler<OWMWeather>(activity));
     }
 
 }
