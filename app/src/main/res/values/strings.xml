@@ -41,5 +41,6 @@
     <string name="tell_the_friend">Tell the friend</string>
     <string name="owm_switch_label">Open Weather Map</string>
     <string name="fids_switch_label">Finger in da sky</string>
+    <string name="hint_cityname">city name</string>
 
 </resources>

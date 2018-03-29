@@ -4,23 +4,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+<!--
     <TextView
+        style="@style/CodeFont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:id="@+id/cities_forecast_title"
         android:text="@string/cities_forecasts_title"/>
+-->
 
     <EditText
-        android:layout_width="100dp"
+        android:id="@+id/edittext_cityname"
+        style="@style/textEdit"
+        android:layout_width="300dp"
+        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
-        android:text="piu piu piu"/>
+        android:textSize="36sp"
+        android:hint="@string/hint_cityname"/>
+        <!--android:text="piu piu piu"/>-->
+        <!--android:textColor="@color/colorWhite"-->
+        <!--android:textColorHint="@color/colorNotWhite"-->
+        <!--android:layout_below="@+id/cities_forecast_title"-->
 
+<!--
     <Spinner
         android:id="@+id/spinner_city_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/cities_forecast_title"
+        android:layout_below="@+id/setting_layout"
         android:layout_marginTop="15dp"
         android:entries="@array/city_list"/>
 
@@ -28,16 +40,17 @@
         android:id="@+id/button_get_forecast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/setting_layout"
         android:layout_marginTop="15dp"
+        android:layout_below="@+id/spinner_city_list"
         android:onClick="onClick"
         android:text="@string/button_forecast" />
+-->
 
+<!--
     <TextView
         android:id="@+id/textview_forecast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinner_city_list"
         android:layout_marginTop="15dp"
         android:text="@string/welcome_text"
         android:textSize="32sp"/>
@@ -50,21 +63,32 @@
         android:text="@string/tip_of_the_day"
         android:textSize="25sp"/>
 
-    <LinearLayout
+-->
+    <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:id="@+id/setting_layout"
-        android:layout_below="@+id/textview_tipoftheday">
+        android:layout_below="@+id/edittext_cityname">
+        <!--android:layout_marginTop="45dp"-->
         <Switch
-            android:layout_width="match_parent"
+            style="@style/textEdit"
+            android:id="@+id/switch_forecast"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/owm_switch_label"/>
+            android:text="@string/owm_switch_label" />
+<!--
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="70dp"
+            android:layout_alignParentTop="true"
+-->
         <Switch
-            android:layout_width="match_parent"
+            style="@style/textEdit"
+            android:layout_toRightOf="@id/switch_forecast"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/fids_switch_label"/>
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
