@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Погода по ходу</string>
     <string name="welcome_text">В начале было Hello World</string>
-    <string name="button_forecast">Прогноз</string>
+    <string name="button_forecast">П</string>
     <string name="cities_forecasts_title">Погода по городам</string>
 
     <string-array name="city_list">

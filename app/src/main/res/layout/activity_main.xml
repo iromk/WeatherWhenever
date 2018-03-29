@@ -35,25 +35,29 @@
         android:layout_below="@+id/setting_layout"
         android:layout_marginTop="15dp"
         android:entries="@array/city_list"/>
+-->
 
     <Button
         android:id="@+id/button_get_forecast"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_below="@+id/spinner_city_list"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_toEndOf="@id/edittext_cityname"
+        android:background="@drawable/round_b"
+        android:gravity="center_vertical|center_horizontal"
         android:onClick="onClick"
+        android:textColor="@color/colorWhite"
         android:text="@string/button_forecast" />
--->
-
+        <!--android:layout_marginTop="15dp"-->
 <!--
     <TextView
-        android:id="@+id/textview_forecast"
+        style="@style/textEdit"
+        android:id="@+id/textview_wheather_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="@string/welcome_text"
         android:textSize="32sp"/>
+
 
     <TextView
         android:id="@+id/textview_tipoftheday"
