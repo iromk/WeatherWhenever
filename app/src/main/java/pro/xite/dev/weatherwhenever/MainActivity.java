@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import pro.xite.dev.weatherwhenever.owm.OWMActualWeatherProvider;
+import pro.xite.dev.weatherwhenever.owm.OWMWeather;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Spinner.OnItemSelectedListener, ViewUpdatable {
 
@@ -128,5 +129,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public <T> void updateViews(T owm) {
         Log.d(TAG_TRACER, Helpers.getMethodName());
+        TextView textView = findViewById(R.id.textview_wheather_now);
+        if(owm instanceof OWMWeather) {
+            textView.setText(owm.toString());
+        }
     }
 }

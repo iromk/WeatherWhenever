@@ -48,17 +48,18 @@
         android:textColor="@color/colorWhite"
         android:text="@string/button_forecast" />
         <!--android:layout_marginTop="15dp"-->
-<!--
+
     <TextView
         style="@style/textEdit"
         android:id="@+id/textview_wheather_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="@string/welcome_text"
+        android:layout_below="@id/setting_layout"
+        android:layout_marginTop="25dp"
         android:textSize="32sp"/>
 
 
+<!--
     <TextView
         android:id="@+id/textview_tipoftheday"
         android:layout_width="wrap_content"
