@@ -20,6 +20,7 @@
         android:layout_width="300dp"
         android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
         android:textSize="36sp"
         android:hint="@string/hint_cityname"/>
         <!--android:text="piu piu piu"/>-->
@@ -39,8 +40,8 @@
 
     <Button
         android:id="@+id/button_get_forecast"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:layout_toEndOf="@id/edittext_cityname"
         android:background="@drawable/round_b"
         android:gravity="center_vertical|center_horizontal"
