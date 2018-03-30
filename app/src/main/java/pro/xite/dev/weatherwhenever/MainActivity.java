@@ -54,23 +54,24 @@ public class MainActivity extends AppCompatActivity implements
                                             Context.MODE_PRIVATE));
 //        recentCitiesList = new RecentCitiesList();
         recentCitiesList = prefsManager.loadRecentCitiesList();
+        if(recentCitiesList == null) {
+            recentCitiesList = new RecentCitiesList();
+        } else {
+            NavigationView navView = findViewById(R.id.nav_view);
+            Menu menu = navView.getMenu();
+            for (OWMCity city : recentCitiesList.getCities()) {
+                menu.add(city.getName());
+            }
 
+            owmCity = recentCitiesList.getLatestCity();
+            owmWeather = recentCitiesList.getLatestWeather();
+            owmNearestForecast = recentCitiesList.getLatestForecast();
 
-        NavigationView navView = findViewById(R.id.nav_view);
-        Menu menu = navView.getMenu();
-        for(OWMCity city: recentCitiesList.getCities()) {
-            menu.add(city.getName());
+            TextView textView = findViewById(R.id.textview_wheather_now);
+            TextView textViewTemp = findViewById(R.id.textview_temp);
+            textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
+            textView.setText(owmWeather.toString());
         }
-
-        owmCity = recentCitiesList.getLatestCity();
-        owmWeather = recentCitiesList.getLatestWeather();
-        owmNearestForecast = recentCitiesList.getLatestForecast();
-
-        TextView textView = findViewById(R.id.textview_wheather_now);
-        TextView textViewTemp = findViewById(R.id.textview_temp);
-        textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
-        textView.setText(owmWeather.toString());
-
 //            ForecastProvider.create(this);
         initDrawer();
     }
