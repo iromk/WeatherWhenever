@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import pro.xite.dev.weatherwhenever.owm.OWMActualWeatherProvider;
+import pro.xite.dev.weatherwhenever.owm.OWMCity;
+import pro.xite.dev.weatherwhenever.owm.OWMNearestForecast;
+import pro.xite.dev.weatherwhenever.owm.OWMNearestForecastProvider;
 import pro.xite.dev.weatherwhenever.owm.OWMWeather;
 
 public class MainActivity extends AppCompatActivity implements
@@ -36,20 +40,22 @@ public class MainActivity extends AppCompatActivity implements
     private Spinner spinnerCityList;
     private Forecast reliableForecast = null;
 
+    private PrefsManager prefsManager;
+    private RecentCitiesList recentCitiesList;
+    private OWMWeather owmWeather;
+    private OWMNearestForecast owmNearestForecast;
+    private OWMCity owmCity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
-//        spinnerCityList = findViewById(R.id.spinner_city_list);
-//        spinnerCityList.setOnItemSelectedListener(this);
+        prefsManager  = new PrefsManager(getSharedPreferences(
+                                            getString(R.string.preference_file_key),
+                                            Context.MODE_PRIVATE));
+        recentCitiesList = RecentCitiesList.getInstance();
         ForecastProvider.create(this);
         initDrawer();
-//        loadSelectionFromPreferences();
-
-//        if(savedInstanceState != null) {
-//            reliableForecast = (Forecast) savedInstanceState.getSerializable(LATEST_FORECAST_KEY);
-//            setForecastText(reliableForecast.getWeather());
-//        }
     }
 
     @Override
@@ -67,16 +73,13 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        final ViewUpdatable viewUpdatable = this;
-        final View.OnClickListener vol = this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Requesting owm", Snackbar.LENGTH_INDEFINITE)
 //                        .setAction("Action", vol)
                         .show();
-                EditText editText = findViewById(R.id.edittext_cityname);
-                new OWMActualWeatherProvider().request(editText.getText().toString(), viewUpdatable);
+                addCityAndLoadWeather();
             }
         });
 
@@ -88,6 +91,16 @@ public class MainActivity extends AppCompatActivity implements
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void addCityAndLoadWeather() {
+        EditText editText = findViewById(R.id.edittext_cityname);
+        final String city = editText.getText().toString();
+        owmNearestForecast = null;
+        owmWeather = null;
+        owmCity = null;
+        new OWMActualWeatherProvider().request(city, this);
+        new OWMNearestForecastProvider().request(city, this);
     }
 
     @Override
@@ -102,8 +115,7 @@ public class MainActivity extends AppCompatActivity implements
         int id = view.getId();
         if(id == R.id.button_get_forecast) {
             Log.d(TAG_TRACER, "The button has been clicked");
-            EditText editText = findViewById(R.id.edittext_cityname);
-            new OWMActualWeatherProvider().request(editText.getText().toString(), this);
+            addCityAndLoadWeather();
 //            reliableForecast = ForecastProvider.makeReliableForecast(getSelectedCityName());
 //            setForecastText(reliableForecast.getWeather());
 //            Intent intent = new Intent(this, ForecastActivity.class);
@@ -183,9 +195,24 @@ public class MainActivity extends AppCompatActivity implements
         TextView textView = findViewById(R.id.textview_wheather_now);
         TextView textViewTemp = findViewById(R.id.textview_temp);
         if(owm instanceof OWMWeather) {
-            OWMWeather owmWeather = (OWMWeather) owm;
+            owmWeather = (OWMWeather) owm;
             textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
             textView.setText(owmWeather.toString());
+        } else if (owm instanceof OWMNearestForecast) {
+            owmNearestForecast = (OWMNearestForecast) owm;
+        }
+        tryToSavePreferences();
+    }
+
+    private void tryToSavePreferences() {
+        if(owmWeather != null && owmNearestForecast != null) {
+            owmCity = owmWeather.getOWMCity();
+            recentCitiesList.add(owmCity, owmWeather, owmNearestForecast);
+            prefsManager.savePrefs(recentCitiesList);
+
+            NavigationView navView = findViewById(R.id.nav_view);
+            Menu menu = navView.getMenu();
+            menu.add(owmCity.getName());
         }
     }
 

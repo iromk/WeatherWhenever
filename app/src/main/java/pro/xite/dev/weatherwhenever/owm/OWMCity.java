@@ -52,6 +52,9 @@ public class OWMCity extends OWMData implements Serializable {
         return population;
     }
 
+    public OWMCity getOWMCity() { return this; }
+
+
     @Override
     public String toString() {
         return String.format("City %s [id%d] of country %s", getName(), getId(), getCountry());
