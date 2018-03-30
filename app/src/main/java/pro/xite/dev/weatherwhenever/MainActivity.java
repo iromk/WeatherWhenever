@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -51,16 +52,31 @@ public class MainActivity extends AppCompatActivity implements
 //        }
     }
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void initDrawer() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final ViewUpdatable viewUpdatable = this;
+        final View.OnClickListener vol = this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, "Requesting owm", Snackbar.LENGTH_INDEFINITE)
+//                        .setAction("Action", vol)
+                        .show();
+                EditText editText = findViewById(R.id.edittext_cityname);
+                new OWMActualWeatherProvider().request(editText.getText().toString(), viewUpdatable);
             }
         });
 
@@ -82,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View view) {
+        Log.d(TAG_TRACER, Helpers.getMethodName());
         int id = view.getId();
         if(id == R.id.button_get_forecast) {
             Log.d(TAG_TRACER, "The button has been clicked");
@@ -164,8 +181,11 @@ public class MainActivity extends AppCompatActivity implements
     public <T> void updateViews(T owm) {
         Log.d(TAG_TRACER, Helpers.getMethodName());
         TextView textView = findViewById(R.id.textview_wheather_now);
+        TextView textViewTemp = findViewById(R.id.textview_temp);
         if(owm instanceof OWMWeather) {
-            textView.setText(owm.toString());
+            OWMWeather owmWeather = (OWMWeather) owm;
+            textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
+            textView.setText(owmWeather.toString());
         }
     }
 

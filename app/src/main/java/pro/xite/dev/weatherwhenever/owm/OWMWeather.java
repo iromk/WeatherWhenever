@@ -27,15 +27,15 @@ public class OWMWeather extends OWMCity implements Serializable {
 
     public class Main {
         @SerializedName("temp")
-        Double temp;
+        Float temp;
         @SerializedName("pressure")
         Float pressure;
         @SerializedName("humidity")
         Integer humidity;
         @SerializedName("temp_min")
-        Double temp_min;
+        Float temp_min;
         @SerializedName("temp_max")
-        Double temp_max;
+        Float temp_max;
     }
 
     public class WeatherItem {
@@ -50,8 +50,8 @@ public class OWMWeather extends OWMCity implements Serializable {
 
         public String getDescription() { return description; }
     }
-    public String getTemp() {
-        return String.valueOf(main.temp);
+    public Float getTemp() {
+        return Float.valueOf(main.temp);
     }
 
     public String getPressure() {

@@ -37,6 +37,7 @@
         android:layout_marginTop="15dp"
         android:entries="@array/city_list"/>
 -->
+<!--
 
     <Button
         android:id="@+id/button_get_forecast"
@@ -48,16 +49,31 @@
         android:onClick="onClick"
         android:textColor="@color/colorWhite"
         android:text="@string/button_forecast" />
+-->
         <!--android:layout_marginTop="15dp"-->
 
     <TextView
         style="@style/textEdit"
+        android:layout_centerHorizontal="true"
         android:id="@+id/textview_wheather_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/setting_layout"
         android:layout_marginTop="25dp"
-        android:textSize="32sp"/>
+        android:layout_toRightOf="@id/textview_temp"
+        android:layout_below="@id/edittext_cityname"
+        android:textSize="14sp"/>
+        <!--android:layout_marginLeft="-60dp"-->
+        <!--android:layout_below="@id/setting_layout"-->
+
+    <TextView
+        android:id="@+id/textview_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:textColor="@color/colorNotWhite"
+        android:textSize="75sp"
+        android:layout_below="@id/edittext_cityname"/>
 
 
 <!--
@@ -70,6 +86,7 @@
         android:textSize="25sp"/>
 
 -->
+<!--
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
@@ -77,18 +94,20 @@
         android:orientation="horizontal"
         android:id="@+id/setting_layout"
         android:layout_below="@+id/edittext_cityname">
-        <!--android:layout_marginTop="45dp"-->
+        &lt;!&ndash;android:layout_marginTop="45dp"&ndash;&gt;
         <Switch
             style="@style/textEdit"
             android:id="@+id/switch_forecast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/owm_switch_label" />
+-->
 <!--
             android:layout_alignParentStart="true"
             android:layout_marginTop="70dp"
             android:layout_alignParentTop="true"
 -->
+<!--
         <Switch
             style="@style/textEdit"
             android:layout_toRightOf="@id/switch_forecast"
@@ -96,5 +115,6 @@
             android:layout_height="wrap_content"
             android:text="@string/fids_switch_label"/>
     </RelativeLayout>
+-->
 
 </RelativeLayout>
