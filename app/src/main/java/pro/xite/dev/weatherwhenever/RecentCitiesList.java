@@ -1,7 +1,11 @@
 package pro.xite.dev.weatherwhenever;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.function.Consumer;
 
 import pro.xite.dev.weatherwhenever.owm.OWMCity;
 import pro.xite.dev.weatherwhenever.owm.OWMNearestForecast;
@@ -13,16 +17,6 @@ import pro.xite.dev.weatherwhenever.owm.OWMWeather;
 public class RecentCitiesList implements Serializable {
 
     private static final int MAX_RECENT_CITIES = 5;
-    // TODO try to find a way to not be singleton
-    private static RecentCitiesList instance;
-
-    private RecentCitiesList() {}
-
-    public static RecentCitiesList getInstance() {
-        if(instance == null)
-            instance = new RecentCitiesList();
-        return instance;
-    }
 
     private ArrayDeque<OWMCity> cities = new ArrayDeque<>();
     private ArrayDeque<OWMWeather> weathers = new ArrayDeque<>();
@@ -40,5 +34,21 @@ public class RecentCitiesList implements Serializable {
         cities.add(city);
         weathers.add(weather);
         forecasts.add(forecast);
+    }
+
+    public ArrayDeque<OWMCity> getCities() {
+        return cities;
+    }
+
+    public OWMCity getLatestCity() {
+        return cities.getLast();
+    }
+
+    public OWMWeather getLatestWeather() {
+        return weathers.getLast();
+    }
+
+    public OWMNearestForecast getLatestForecast() {
+        return forecasts.getLast();
     }
 }

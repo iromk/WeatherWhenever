@@ -2,7 +2,6 @@ package pro.xite.dev.weatherwhenever;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -53,8 +52,26 @@ public class MainActivity extends AppCompatActivity implements
         prefsManager  = new PrefsManager(getSharedPreferences(
                                             getString(R.string.preference_file_key),
                                             Context.MODE_PRIVATE));
-        recentCitiesList = RecentCitiesList.getInstance();
-        ForecastProvider.create(this);
+//        recentCitiesList = new RecentCitiesList();
+        recentCitiesList = prefsManager.loadRecentCitiesList();
+
+
+        NavigationView navView = findViewById(R.id.nav_view);
+        Menu menu = navView.getMenu();
+        for(OWMCity city: recentCitiesList.getCities()) {
+            menu.add(city.getName());
+        }
+
+        owmCity = recentCitiesList.getLatestCity();
+        owmWeather = recentCitiesList.getLatestWeather();
+        owmNearestForecast = recentCitiesList.getLatestForecast();
+
+        TextView textView = findViewById(R.id.textview_wheather_now);
+        TextView textViewTemp = findViewById(R.id.textview_temp);
+        textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
+        textView.setText(owmWeather.toString());
+
+//            ForecastProvider.create(this);
         initDrawer();
     }
 
@@ -141,39 +158,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private int getSelectedCityId() {
-        return spinnerCityList.getSelectedItemPosition();
-    }
-
-    private String getSelectedCityName() {
-        return getCityByIndex(getSelectedCityId());
-    }
-
-    private String getCityByIndex(int i) {
-        return getResources().getStringArray(R.array.city_list)[i];
-    }
-
-    // TODO move to external class
-    private void saveSelectionInPreferences() {
-        final Context context = this;
-        final SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(getString(R.string.selected_city_index_prefs_key), getSelectedCityId());
-        editor.apply(); // tip! writes in a background
-        //editor.commit(); // tip! writes data immediately
-    }
-
-    // TODO move to external class
-    private void loadSelectionFromPreferences() {
-//        final Context context = this;
-//        final SharedPreferences sharedPref = context.getSharedPreferences(
-//                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-//        final int default_city_index = 0; //getResources().getStringArray(R.array.city_list)[0];
-//        final int last_city_index = sharedPref.getInt(getString(R.string.selected_city_index_prefs_key), default_city_index);
-//        spinnerCityList.setSelection(last_city_index,true);
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         Log.d(TAG_TRACER, spinnerCityList.getSelectedItem().toString());
@@ -182,11 +166,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }
-
-    private void setForecastText(String text) {
-        TextView tv = findViewById(R.id.textview_forecast);
-        tv.setText(text);
     }
 
     @Override
