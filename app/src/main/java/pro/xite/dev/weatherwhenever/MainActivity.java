@@ -198,6 +198,13 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        owmCity = recentCitiesList.getCity(item.getTitle());
+        owmWeather = recentCitiesList.getWeatherForCity(item.getTitle());
+        owmNearestForecast = recentCitiesList.getForecastForCity(item.getTitle());
+        TextView textView = findViewById(R.id.textview_wheather_now);
+        TextView textViewTemp = findViewById(R.id.textview_temp);
+        textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
+        textView.setText(owmWeather.toString());
+        return true;
     }
 }

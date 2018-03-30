@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
@@ -18,16 +19,16 @@ public class RecentCitiesList implements Serializable {
 
     private static final int MAX_RECENT_CITIES = 5;
 
-    private ArrayDeque<OWMCity> cities = new ArrayDeque<>();
-    private ArrayDeque<OWMWeather> weathers = new ArrayDeque<>();
-    private ArrayDeque<OWMNearestForecast> forecasts = new ArrayDeque<>();
+    private ArrayList<OWMCity> cities = new ArrayList<>();
+    private ArrayList<OWMWeather> weathers = new ArrayList<>();
+    private ArrayList<OWMNearestForecast> forecasts = new ArrayList<>();
     private int counter = 0;
 
     public void add(OWMCity city, OWMWeather weather, OWMNearestForecast forecast) {
         if(counter == MAX_RECENT_CITIES) {
-            cities.removeFirst();
-            weathers.removeFirst();
-            forecasts.removeFirst();
+            cities.remove(0);
+            weathers.remove(0);
+            forecasts.remove(0);
             counter--;
         }
         counter++;
@@ -36,19 +37,55 @@ public class RecentCitiesList implements Serializable {
         forecasts.add(forecast);
     }
 
-    public ArrayDeque<OWMCity> getCities() {
+    public ArrayList<OWMCity> getCities() {
         return cities;
     }
 
     public OWMCity getLatestCity() {
-        return cities.getLast();
+        return cities.get(cities.size()-1);
     }
 
     public OWMWeather getLatestWeather() {
-        return weathers.getLast();
+        return weathers.get(weathers.size()-1);
     }
 
     public OWMNearestForecast getLatestForecast() {
-        return forecasts.getLast();
+        return forecasts.get(forecasts.size()-1);
+    }
+
+    private int indexForCityByName(String cityName) {
+        if(counter > 0) {
+            int n = 0;
+            for(OWMCity city : cities) {
+                if (city.getName().equals(cityName))
+                    return n;
+                else n++;
+            }
+        }
+        return -1;
+    }
+
+    public OWMCity getCity(CharSequence cityName) {
+        int n = indexForCityByName(cityName.toString());
+        if(n > -1) {
+            return cities.get(n);
+        }
+        return new OWMCity();
+    }
+
+    public OWMWeather getWeatherForCity(CharSequence cityName) {
+        int n = indexForCityByName(cityName.toString());
+        if(n > -1) {
+            return weathers.get(n);
+        }
+        return new OWMWeather();
+    }
+
+    public OWMNearestForecast getForecastForCity(CharSequence cityName) {
+        int n = indexForCityByName(cityName.toString());
+        if(n > -1) {
+            return forecasts.get(n);
+        }
+        return new OWMNearestForecast();
     }
 }
