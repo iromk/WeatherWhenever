@@ -13,13 +13,14 @@
         android:theme="@style/DeepPurple">
 
         <!-- android:theme="@style/AppTheme"> -->
-        <activity android:name=".MainActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
+        <!--<activity android:name=".MainActivity">-->
+<!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+-->
+        <!--</activity>-->
         <activity
             android:name=".ForecastActivity"
             android:configChanges="uiMode|orientation|keyboard|keyboardHidden"
@@ -32,8 +33,9 @@
             <!-- <data android:mimeType= "text/plain" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity
-            android:name=".DrawerActivity"
+        <!--<activity-->
+            <!--android:name=".DrawerActivity"-->
+        <activity android:name=".MainActivity"
             android:label="@string/title_activity_drawer"
             android:theme="@style/DeepPurple.NoActionBar">
             <intent-filter>

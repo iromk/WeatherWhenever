@@ -3,9 +3,17 @@ package pro.xite.dev.weatherwhenever;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -16,7 +24,9 @@ import android.widget.Toast;
 import pro.xite.dev.weatherwhenever.owm.OWMActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.owm.OWMWeather;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, Spinner.OnItemSelectedListener, ViewUpdatable {
+public class MainActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        View.OnClickListener, Spinner.OnItemSelectedListener, ViewUpdatable {
 
     public static final String LATEST_FORECAST_KEY = "latest_forecast";
     public static final String FRIENDS_RESPONSE = "friends_response";
@@ -28,16 +38,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_drawer);
 //        spinnerCityList = findViewById(R.id.spinner_city_list);
 //        spinnerCityList.setOnItemSelectedListener(this);
         ForecastProvider.create(this);
+        initDrawer();
 //        loadSelectionFromPreferences();
 
 //        if(savedInstanceState != null) {
 //            reliableForecast = (Forecast) savedInstanceState.getSerializable(LATEST_FORECAST_KEY);
 //            setForecastText(reliableForecast.getWeather());
 //        }
+    }
+
+    private void initDrawer() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -133,5 +167,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(owm instanceof OWMWeather) {
             textView.setText(owm.toString());
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
     }
 }
