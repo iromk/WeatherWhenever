@@ -19,15 +19,37 @@ public class OWMCity extends OWMData implements Serializable {
     @SerializedName("coord")
     Coord coord;
 
-    private class Coord {
+    private class Coord implements GeoLocation {
         @SerializedName("lat")
         Float lat;
         @SerializedName("lon")
         Float lon;
+
+        @Override
+        public float getLatitude() {
+            return lat;
+        }
+
+        @Override
+        public float getLongitude() {
+            return lon;
+        }
     }
 
-    @SerializedName("country")
-    String country;
+    private class Sys {
+        /*  API: "Internal parameters"
+        int type;
+        int id;
+        float message; */
+        /** country code, 2 chars */
+        String country;
+        /** UTC time */
+        long sunrise;
+        long sunset;
+    }
+
+    @SerializedName("sys")
+    Sys sys;
 
     @SerializedName("population")
     Long population;
@@ -40,12 +62,13 @@ public class OWMCity extends OWMData implements Serializable {
         return name;
     }
 
-    public Coord getCoord() {
-        return coord;
+    public String getCountryCode() {
+        return sys.country;
     }
 
-    public String getCountry() {
-        return country;
+    @Override
+    public GeoLocation getGeoLocation() {
+        return coord;
     }
 
     public Long getPopulation() {
@@ -57,7 +80,7 @@ public class OWMCity extends OWMData implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("City %s [id%d] of country %s", getName(), getId(), getCountry());
+        return String.format("City %s [id%d] of country %s", getName(), getId(), getCountryCode());
     }
 }
 
