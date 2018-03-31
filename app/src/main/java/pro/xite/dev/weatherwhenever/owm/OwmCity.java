@@ -2,8 +2,6 @@ package pro.xite.dev.weatherwhenever.owm;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
 import pro.xite.dev.weatherwhenever.data.CityInfo;
 import pro.xite.dev.weatherwhenever.data.GeoLocation;
 
@@ -11,7 +9,7 @@ import pro.xite.dev.weatherwhenever.data.GeoLocation;
  * Created by Roman Syrchin on 3/26/18.
  */
 
-public class OWMCity extends OWMData implements CityInfo {
+public class OwmCity extends OwmData implements CityInfo {
 
     @SerializedName("id")
     Integer id;
@@ -78,7 +76,7 @@ public class OWMCity extends OWMData implements CityInfo {
         return population;
     }
 
-    public OWMCity getOWMCity() { return this; }
+    public OwmCity getOWMCity() { return this; }
 
 
     @Override

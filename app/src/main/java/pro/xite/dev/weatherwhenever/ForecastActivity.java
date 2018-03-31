@@ -10,10 +10,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import pro.xite.dev.weatherwhenever.owm.OWMActualWeatherProvider;
-import pro.xite.dev.weatherwhenever.owm.OWMNearestForecast;
-import pro.xite.dev.weatherwhenever.owm.OWMNearestForecastProvider;
-import pro.xite.dev.weatherwhenever.owm.OWMWeather;
+import pro.xite.dev.weatherwhenever.owm.OwmActualWeatherProvider;
+import pro.xite.dev.weatherwhenever.owm.OwmNearestForecast;
+import pro.xite.dev.weatherwhenever.owm.OwmNearestForecastProvider;
+import pro.xite.dev.weatherwhenever.owm.OwmWeather;
 
 public class ForecastActivity extends AppCompatActivity implements ViewUpdatable {
 
@@ -31,22 +31,22 @@ public class ForecastActivity extends AppCompatActivity implements ViewUpdatable
         Intent intent = getIntent();
         reliableForecast = (Forecast) intent.getSerializableExtra(FORECAST_OBJECT);
         // TODO savedInstance
-        new OWMActualWeatherProvider().request("Cairo", this);
-        new OWMNearestForecastProvider().request("Cairo", this);
+        new OwmActualWeatherProvider().request("Cairo", this);
+        new OwmNearestForecastProvider().request("Cairo", this);
 
         logMe();
     }
 
     @Override
     public <T> void updateViews(T owm) {
-        if(owm instanceof OWMWeather) {
-            OWMWeather owmWeather = (OWMWeather) owm;
+        if(owm instanceof OwmWeather) {
+            OwmWeather owmWeather = (OwmWeather) owm;
             setCityText(owmWeather.toString());
             setForecastText(String.format("%s, %s", owmWeather.getTemp(), owmWeather.getPressure()));
         }
 
-        if(owm instanceof OWMNearestForecast) {
-            OWMNearestForecast owmNearestForecast = (OWMNearestForecast) owm;
+        if(owm instanceof OwmNearestForecast) {
+            OwmNearestForecast owmNearestForecast = (OwmNearestForecast) owm;
             setTextDailyTip(owmNearestForecast.toString());
         }
     }

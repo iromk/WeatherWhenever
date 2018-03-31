@@ -9,7 +9,7 @@ import pro.xite.dev.weatherwhenever.ViewUpdatable;
  * Created by Roman Syrchin on 3/26/18.
  */
 
-public class OWMNearestForecastProvider extends OWMDataProvider {
+public class OwmNearestForecastProvider extends OwmDataProvider {
 
     /**
      * Api url data identifier name.
@@ -31,12 +31,12 @@ public class OWMNearestForecastProvider extends OWMDataProvider {
      * @param handler
      */
     public void request(String city, Handler handler) {
-        requestOWM(city, OWMNearestForecast.class, handler);
+        requestOWM(city, OwmNearestForecast.class, handler);
     }
 
     public void request(String city, ViewUpdatable activity) {
-        requestOWM(city, OWMNearestForecast.class,
-                new LeakSafeHandler<OWMNearestForecast>(activity));
+        requestOWM(city, OwmNearestForecast.class,
+                new LeakSafeHandler<OwmNearestForecast>(activity));
     }
 
 

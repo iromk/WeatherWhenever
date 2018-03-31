@@ -22,11 +22,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import pro.xite.dev.weatherwhenever.owm.OWMActualWeatherProvider;
-import pro.xite.dev.weatherwhenever.owm.OWMCity;
-import pro.xite.dev.weatherwhenever.owm.OWMNearestForecast;
-import pro.xite.dev.weatherwhenever.owm.OWMNearestForecastProvider;
-import pro.xite.dev.weatherwhenever.owm.OWMWeather;
+import pro.xite.dev.weatherwhenever.owm.OwmActualWeatherProvider;
+import pro.xite.dev.weatherwhenever.owm.OwmCity;
+import pro.xite.dev.weatherwhenever.owm.OwmNearestForecast;
+import pro.xite.dev.weatherwhenever.owm.OwmNearestForecastProvider;
+import pro.xite.dev.weatherwhenever.owm.OwmWeather;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -41,9 +41,9 @@ public class MainActivity extends AppCompatActivity implements
 
     private PrefsManager prefsManager;
     private RecentCitiesList recentCitiesList;
-    private OWMWeather owmWeather;
-    private OWMNearestForecast owmNearestForecast;
-    private OWMCity owmCity;
+    private OwmWeather owmWeather;
+    private OwmNearestForecast owmNearestForecast;
+    private OwmCity owmCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             NavigationView navView = findViewById(R.id.nav_view);
             Menu menu = navView.getMenu();
-            for (OWMCity city : recentCitiesList.getCities()) {
+            for (OwmCity city : recentCitiesList.getCities()) {
                 menu.add(city.getName());
             }
 
@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity implements
         owmNearestForecast = null;
         owmWeather = null;
         owmCity = null;
-        new OWMActualWeatherProvider().request(city, this);
-        new OWMNearestForecastProvider().request(city, this);
+        new OwmActualWeatherProvider().request(city, this);
+        new OwmNearestForecastProvider().request(city, this);
     }
 
     @Override
@@ -174,12 +174,12 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG_TRACER, Helpers.getMethodName());
         TextView textView = findViewById(R.id.textview_wheather_now);
         TextView textViewTemp = findViewById(R.id.textview_temp);
-        if(owm instanceof OWMWeather) {
-            owmWeather = (OWMWeather) owm;
+        if(owm instanceof OwmWeather) {
+            owmWeather = (OwmWeather) owm;
             textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
             textView.setText(owmWeather.toString());
-        } else if (owm instanceof OWMNearestForecast) {
-            owmNearestForecast = (OWMNearestForecast) owm;
+        } else if (owm instanceof OwmNearestForecast) {
+            owmNearestForecast = (OwmNearestForecast) owm;
         }
         tryToSavePreferences();
     }

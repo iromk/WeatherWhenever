@@ -6,5 +6,5 @@ import java.io.Serializable;
  * Created by Roman Syrchin on 3/27/18.
  */
 
-abstract public class OWMData implements Serializable {
+abstract public class OwmData implements Serializable {
 }

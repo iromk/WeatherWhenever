@@ -21,7 +21,7 @@ import pro.xite.dev.weatherwhenever.Helpers;
  * Created by Roman Syrchin on 3/26/18.
  */
 
-abstract public class OWMDataProvider {
+abstract public class OwmDataProvider {
 
     /**
      * OWM API definitions

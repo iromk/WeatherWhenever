@@ -4,13 +4,12 @@ package pro.xite.dev.weatherwhenever.owm;
  * Created by Roman Syrchin on 3/26/18.
  */
 
-import java.io.Serializable;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Represents data provided by the OWM service.
  */
-public class OWMWeather extends OWMCity {
+public class OwmWeather extends OwmCity {
 
 //    @SerializedName("id")
 //    private Integer id;

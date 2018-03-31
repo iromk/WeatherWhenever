@@ -12,7 +12,7 @@ import pro.xite.dev.weatherwhenever.ViewUpdatable;
 /**
  * Data loader and parser for Current weather data provided by OWM.
  */
-public class OWMActualWeatherProvider extends OWMDataProvider {
+public class OwmActualWeatherProvider extends OwmDataProvider {
 
     /**
      * Api url data identifier name.
@@ -23,12 +23,12 @@ public class OWMActualWeatherProvider extends OWMDataProvider {
     protected String getApiAction() { return OWM_ACTION_WEATHER; }
 
     public void request(String city, Handler handler) {
-        requestOWM(city, OWMWeather.class, handler);
+        requestOWM(city, OwmWeather.class, handler);
     }
 
     public void request(String city, ViewUpdatable activity) {
-        requestOWM(city, OWMWeather.class,
-                new LeakSafeHandler<OWMWeather>(activity));
+        requestOWM(city, OwmWeather.class,
+                new LeakSafeHandler<OwmWeather>(activity));
     }
 
 }

@@ -1,6 +1,5 @@
 package pro.xite.dev.weatherwhenever.owm;
 
-import java.io.Serializable;
 import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
@@ -10,13 +9,13 @@ import com.google.gson.annotations.SerializedName;
  * Created by Roman Syrchin on 3/26/18.
  */
 
-public class OWMNearestForecast extends OWMData {
+public class OwmNearestForecast extends OwmData {
 
     @SerializedName("list")
     List<ListItem> mainList;
 
     @SerializedName("city")
-    OWMCity city;
+    OwmCity city;
 
     class ListItem {
 
@@ -24,14 +23,14 @@ public class OWMNearestForecast extends OWMData {
         String dt;
 
         @SerializedName("main")
-        OWMWeather.Main main;
+        OwmWeather.Main main;
 
         @SerializedName("weather")
-        List<OWMWeather.WeatherItem> weather;
+        List<OwmWeather.WeatherItem> weather;
     }
 
 
-    public OWMCity getCity() {
+    public OwmCity getCity() {
         return city;
     }
 
