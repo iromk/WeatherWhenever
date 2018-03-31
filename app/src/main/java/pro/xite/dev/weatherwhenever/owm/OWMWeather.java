@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Represents data provided by the OWM service.
  */
-public class OWMWeather extends OWMCity implements Serializable {
+public class OWMWeather extends OWMCity {
 
 //    @SerializedName("id")
 //    private Integer id;

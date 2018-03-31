@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Roman Syrchin on 3/26/18.
  */
 
-public class OWMNearestForecast extends OWMData implements Serializable {
+public class OWMNearestForecast extends OWMData {
 
     @SerializedName("list")
     List<ListItem> mainList;
