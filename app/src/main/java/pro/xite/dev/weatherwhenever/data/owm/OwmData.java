@@ -1,4 +1,4 @@
-package pro.xite.dev.weatherwhenever.owm;
+package pro.xite.dev.weatherwhenever.data.owm;
 
 import java.io.Serializable;
 

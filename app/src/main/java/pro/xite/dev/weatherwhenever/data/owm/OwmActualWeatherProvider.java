@@ -1,4 +1,4 @@
-package pro.xite.dev.weatherwhenever.owm;
+package pro.xite.dev.weatherwhenever.data.owm;
 
 /**
  * Created by Roman Syrchin on 3/26/18.

@@ -10,10 +10,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import pro.xite.dev.weatherwhenever.owm.OwmActualWeatherProvider;
-import pro.xite.dev.weatherwhenever.owm.OwmNearestForecast;
-import pro.xite.dev.weatherwhenever.owm.OwmNearestForecastProvider;
-import pro.xite.dev.weatherwhenever.owm.OwmWeather;
+import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
+import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecast;
+import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
+import pro.xite.dev.weatherwhenever.data.owm.OwmWeather;
 
 public class ForecastActivity extends AppCompatActivity implements ViewUpdatable {
 

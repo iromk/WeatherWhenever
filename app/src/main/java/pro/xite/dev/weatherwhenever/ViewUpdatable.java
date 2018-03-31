@@ -8,6 +8,4 @@ public interface ViewUpdatable {
 
     <T> void updateViews(T owm);
 
-//    void updateViews(OWMWeather owm);
-
 }

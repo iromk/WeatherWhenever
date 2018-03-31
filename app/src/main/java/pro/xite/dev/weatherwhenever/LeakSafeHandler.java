@@ -6,8 +6,8 @@ import android.os.Message;
 
 import java.lang.ref.WeakReference;
 
-import pro.xite.dev.weatherwhenever.owm.OwmData;
-import pro.xite.dev.weatherwhenever.owm.OwmDataProvider;
+import pro.xite.dev.weatherwhenever.data.owm.OwmData;
+import pro.xite.dev.weatherwhenever.data.owm.OwmDataProvider;
 
 /**
  * Created by Roman Syrchin on 3/27/18.

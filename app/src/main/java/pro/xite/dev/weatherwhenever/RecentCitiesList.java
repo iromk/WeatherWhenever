@@ -3,9 +3,9 @@ package pro.xite.dev.weatherwhenever;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import pro.xite.dev.weatherwhenever.owm.OwmCity;
-import pro.xite.dev.weatherwhenever.owm.OwmNearestForecast;
-import pro.xite.dev.weatherwhenever.owm.OwmWeather;
+import pro.xite.dev.weatherwhenever.data.owm.OwmCity;
+import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecast;
+import pro.xite.dev.weatherwhenever.data.owm.OwmWeather;
 
 /**
  * Created by Roman Syrchin on 3/30/18.
