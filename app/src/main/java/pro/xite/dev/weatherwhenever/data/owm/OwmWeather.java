@@ -6,10 +6,15 @@ package pro.xite.dev.weatherwhenever.data.owm;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
+import pro.xite.dev.weatherwhenever.data.WeatherInfo;
+import pro.xite.dev.weatherwhenever.data.Wind;
+
 /**
  * Represents data provided by the OWM service.
  */
-public class OwmWeather extends OwmCity {
+public class OwmWeather extends OwmData implements WeatherInfo {
 
 //    @SerializedName("id")
 //    private Integer id;
@@ -17,12 +22,11 @@ public class OwmWeather extends OwmCity {
     @SerializedName("cod")
     private Integer code;
 
-//    @SerializedName("name")
-//    private String name;
+    @SerializedName("name")
+    private String name;
 
     @SerializedName("main")
     private Main main;
-
 
     public class Main {
         @SerializedName("temp")
@@ -50,22 +54,45 @@ public class OwmWeather extends OwmCity {
         public String getDescription() { return description; }
     }
     public Float getTemp() {
-        return Float.valueOf(main.temp);
+        return main.temp;
     }
 
-    public String getPressure() {
-        return String.valueOf(main.pressure);
+    @Override
+    public float getTemperature() {
+        return main.temp;
+    }
+
+    @Override
+    public float getMinTemperature() {
+        return 0;
+    }
+
+    @Override
+    public float getMaxTemperature() {
+        return 0;
+    }
+
+    @Override
+    public Wind getWind() {
+        return null;
+    }
+
+    public int getPressure() {
+        return main.pressure.intValue();
+    }
+
+    @Override
+    public Date getDate() {
+        return null;
     }
 
     public String getHumidity() {
         return String.valueOf(main.humidity);
     }
 
-    public String getCity() { return name; }
-
     @Override
     public String toString() {
-        return String.format("Weather for %s is:\n  t = %s,\n  pressure = %s\n  humidity = %s%%",
-                super.toString(), getTemp(), getPressure(), getHumidity());
+        return String.format("Weather for %s, %s is:\n  t = %s,\n  pressure = %s\n  humidity = %s%%",
+                name, getTemp(), getPressure(), getHumidity());
     }
 }

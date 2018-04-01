@@ -3,6 +3,9 @@ package pro.xite.dev.weatherwhenever;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import pro.xite.dev.weatherwhenever.data.CityInfo;
+import pro.xite.dev.weatherwhenever.data.ForecastInfo;
+import pro.xite.dev.weatherwhenever.data.WeatherInfo;
 import pro.xite.dev.weatherwhenever.data.owm.OwmCity;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecast;
 import pro.xite.dev.weatherwhenever.data.owm.OwmWeather;
@@ -14,12 +17,12 @@ public class RecentCitiesList implements Serializable {
 
     private static final int MAX_RECENT_CITIES = 5;
 
-    private ArrayList<OwmCity> cities = new ArrayList<>();
-    private ArrayList<OwmWeather> weathers = new ArrayList<>();
-    private ArrayList<OwmNearestForecast> forecasts = new ArrayList<>();
+    private ArrayList<CityInfo> cities = new ArrayList<>();
+    private ArrayList<WeatherInfo> weathers = new ArrayList<>();
+    private ArrayList<ForecastInfo> forecasts = new ArrayList<>();
     private int counter = 0;
 
-    public void add(OwmCity city, OwmWeather weather, OwmNearestForecast forecast) {
+    public void add(CityInfo city, WeatherInfo weather, ForecastInfo forecast) {
         if(counter == MAX_RECENT_CITIES) {
             cities.remove(0);
             weathers.remove(0);
@@ -32,26 +35,26 @@ public class RecentCitiesList implements Serializable {
         forecasts.add(forecast);
     }
 
-    public ArrayList<OwmCity> getCities() {
+    public ArrayList<CityInfo> getCities() {
         return cities;
     }
 
-    public OwmCity getLatestCity() {
+    public CityInfo getLatestCity() {
         return cities.get(cities.size()-1);
     }
 
-    public OwmWeather getLatestWeather() {
+    public WeatherInfo getLatestWeather() {
         return weathers.get(weathers.size()-1);
     }
 
-    public OwmNearestForecast getLatestForecast() {
+    public ForecastInfo getLatestForecast() {
         return forecasts.get(forecasts.size()-1);
     }
 
     private int indexForCityByName(String cityName) {
         if(counter > 0) {
             int n = 0;
-            for(OwmCity city : cities) {
+            for(CityInfo city : cities) {
                 if (city.getName().equals(cityName))
                     return n;
                 else n++;
@@ -60,27 +63,27 @@ public class RecentCitiesList implements Serializable {
         return -1;
     }
 
-    public OwmCity getCity(CharSequence cityName) {
+    public CityInfo getCity(CharSequence cityName) {
         int n = indexForCityByName(cityName.toString());
         if(n > -1) {
             return cities.get(n);
         }
-        return new OwmCity();
+        return null;//new OwmCity();
     }
 
-    public OwmWeather getWeatherForCity(CharSequence cityName) {
+    public WeatherInfo getWeatherForCity(CharSequence cityName) {
         int n = indexForCityByName(cityName.toString());
         if(n > -1) {
             return weathers.get(n);
         }
-        return new OwmWeather();
+        return null;//new OwmWeather();
     }
 
-    public OwmNearestForecast getForecastForCity(CharSequence cityName) {
+    public ForecastInfo getForecastForCity(CharSequence cityName) {
         int n = indexForCityByName(cityName.toString());
         if(n > -1) {
             return forecasts.get(n);
         }
-        return new OwmNearestForecast();
+        return null;//new OwmNearestForecast();
     }
 }

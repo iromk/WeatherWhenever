@@ -17,11 +17,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import pro.xite.dev.weatherwhenever.data.CityInfo;
+import pro.xite.dev.weatherwhenever.data.ForecastInfo;
+import pro.xite.dev.weatherwhenever.data.WeatherInfo;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmCity;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecast;
@@ -41,9 +45,9 @@ public class MainActivity extends AppCompatActivity implements
 
     private PrefsManager prefsManager;
     private RecentCitiesList recentCitiesList;
-    private OwmWeather owmWeather;
-    private OwmNearestForecast owmNearestForecast;
-    private OwmCity owmCity;
+    private WeatherInfo owmWeather;
+    private ForecastInfo owmNearestForecast;
+    private CityInfo owmCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             NavigationView navView = findViewById(R.id.nav_view);
             Menu menu = navView.getMenu();
-            for (OwmCity city : recentCitiesList.getCities()) {
+            for (CityInfo city : recentCitiesList.getCities()) {
                 menu.add(city.getName());
             }
 
@@ -69,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements
 
             TextView textView = findViewById(R.id.textview_wheather_now);
             TextView textViewTemp = findViewById(R.id.textview_temp);
-            textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
+            textViewTemp.setText(String.valueOf(owmWeather.getTemperature()));
             textView.setText(owmWeather.toString());
         }
 //            ForecastProvider.create(this);
@@ -174,19 +178,25 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG_TRACER, Helpers.getMethodName());
         TextView textView = findViewById(R.id.textview_wheather_now);
         TextView textViewTemp = findViewById(R.id.textview_temp);
-        if(owm instanceof OwmWeather) {
-            owmWeather = (OwmWeather) owm;
-            textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
+        if(owm instanceof CityInfo) {
+            owmCity = (CityInfo) owm;
+            Log.d(TAG_TRACER, String.format("Got new CityInfo %s of %s", owmCity.getName(), owmCity.getCountryCode()));
+        } else if(owm instanceof WeatherInfo) {
+            owmWeather = (WeatherInfo) owm;
+            textViewTemp.setText(String.valueOf(owmWeather.getTemperature()));
             textView.setText(owmWeather.toString());
-        } else if (owm instanceof OwmNearestForecast) {
-            owmNearestForecast = (OwmNearestForecast) owm;
+            Log.d(TAG_TRACER, String.format("Got new Weather t==%d", (int)owmWeather.getTemperature()));
+        } else if (owm instanceof ForecastInfo) {
+            owmNearestForecast = (ForecastInfo) owm;
+            Log.d(TAG_TRACER, String.format("Got new ForecastInfo %d", (int)owmNearestForecast.getLatestForecast().getTemperature()));
+
         }
         tryToSavePreferences();
     }
 
     private void tryToSavePreferences() {
-        if(owmWeather != null && owmNearestForecast != null) {
-            owmCity = owmWeather.getOWMCity();
+        if(owmCity != null && owmWeather != null && owmNearestForecast != null) {
+//            owmCity = owmWeather.getOWMCity();
             recentCitiesList.add(owmCity, owmWeather, owmNearestForecast);
             prefsManager.savePrefs(recentCitiesList);
 
@@ -203,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements
         owmNearestForecast = recentCitiesList.getForecastForCity(item.getTitle());
         TextView textView = findViewById(R.id.textview_wheather_now);
         TextView textViewTemp = findViewById(R.id.textview_temp);
-        textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
+        textViewTemp.setText(String.valueOf(owmWeather.getTemperature()));
         textView.setText(owmWeather.toString());
         return true;
     }

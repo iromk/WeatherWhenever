@@ -2,8 +2,11 @@ package pro.xite.dev.weatherwhenever.data.owm;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 import pro.xite.dev.weatherwhenever.data.CityInfo;
 import pro.xite.dev.weatherwhenever.data.GeoLocation;
+import pro.xite.dev.weatherwhenever.data.WeatherInfo;
 
 /**
  * Created by Roman Syrchin on 3/26/18.
@@ -59,6 +62,11 @@ public class OwmCity extends OwmData implements CityInfo {
         return id;
     }
 
+    @Override
+    public String getPlaceId() {
+        return null;
+    }
+
     public String getName() {
         return name;
     }
@@ -70,6 +78,16 @@ public class OwmCity extends OwmData implements CityInfo {
     @Override
     public GeoLocation getGeoLocation() {
         return coord;
+    }
+
+    @Override
+    public WeatherInfo getCurrentWeather() {
+        return null;
+    }
+
+    @Override
+    public WeatherInfo getForecasetOn(Date date) {
+        return null;
     }
 
     public Long getPopulation() {

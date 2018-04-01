@@ -6,6 +6,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
 
@@ -16,6 +17,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import pro.xite.dev.weatherwhenever.Helpers;
+import pro.xite.dev.weatherwhenever.data.CityInfo;
+import pro.xite.dev.weatherwhenever.data.ForecastInfo;
+import pro.xite.dev.weatherwhenever.data.InterfaceAdapter;
+import pro.xite.dev.weatherwhenever.data.WeatherInfo;
 
 /**
  * Created by Roman Syrchin on 3/26/18.
