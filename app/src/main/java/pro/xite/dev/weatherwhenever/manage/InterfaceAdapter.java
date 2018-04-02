@@ -16,6 +16,13 @@ import java.lang.reflect.Type;
 /**
  * Created by Roman Syrchin on 3/31/18.
  */
+
+/**
+ * Solving the problem with (de)serializing entities represented by interfaces.
+ * When serializing it marks every such object with full class name.
+ * When deserializing it tells actual class to the Gson deserializer.
+ * @param <T>
+ */
 public class InterfaceAdapter<T> implements JsonSerializer, JsonDeserializer {
 
     private static final String TAG_CLASS_NAME = "TAG_CLASS_NAME";

@@ -3,6 +3,7 @@ package pro.xite.dev.weatherwhenever.manage;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import pro.xite.dev.weatherwhenever.data.Wherever;
@@ -23,24 +24,22 @@ public class PrefsManager {
 
     public RecentCitiesList loadRecentCitiesList() {
         final String gson = sharedPreferences.getString(RECENT_CITIES_LIST, "");
-        GsonBuilder gsonBuilder = new GsonBuilder()
-                .registerTypeAdapter(Wherever.class, new InterfaceAdapter<>())
-                .registerTypeAdapter(Whenever.class, new InterfaceAdapter<>())
-                .registerTypeAdapter(Weather.class, new InterfaceAdapter<>())
-                ;
-        return gsonBuilder.create().fromJson(gson, RecentCitiesList.class);
+        return buildGsonWithAdapters().fromJson(gson, RecentCitiesList.class);
     }
 
     public void savePrefs(@NonNull final RecentCitiesList recentCitiesList) {
         final SharedPreferences.Editor editor = sharedPreferences.edit();
-        GsonBuilder gsonBuilder = new GsonBuilder()
+        final String gson = buildGsonWithAdapters().toJson(recentCitiesList);
+        editor.putString(RECENT_CITIES_LIST, gson);
+        editor.apply();
+    }
+
+    private Gson buildGsonWithAdapters() {
+        return new GsonBuilder()
                 .registerTypeAdapter(Wherever.class, new InterfaceAdapter<>())
                 .registerTypeAdapter(Whenever.class, new InterfaceAdapter<>())
                 .registerTypeAdapter(Weather.class, new InterfaceAdapter<>())
-                ;
-        final String gson = gsonBuilder.create().toJson(recentCitiesList);
-        editor.putString(RECENT_CITIES_LIST, gson);
-        editor.apply();
+                .create();
     }
 
 }
