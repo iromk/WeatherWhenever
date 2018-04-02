@@ -1,5 +1,6 @@
-package pro.xite.dev.weatherwhenever.owm;
+package pro.xite.dev.weatherwhenever.data.owm;
 
+import android.net.http.HttpResponseCache;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,16 +13,19 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.CacheResponse;
 import java.net.HttpURLConnection;
+import java.net.ResponseCache;
 import java.net.URL;
 
 import pro.xite.dev.weatherwhenever.Helpers;
+import pro.xite.dev.weatherwhenever.data.Weather;
 
 /**
  * Created by Roman Syrchin on 3/26/18.
  */
 
-abstract public class OWMDataProvider {
+abstract public class OwmDataProvider {
 
     /**
      * OWM API definitions
@@ -44,17 +48,17 @@ abstract public class OWMDataProvider {
 
     private static final String TAG_TRACER = "TRACER/OWMDP";
 
-    public static final String OWM_DATA_KEY = "owmData";
-
     abstract protected String getApiAction();
     protected String getExtraGetParams() { return OWM_EXTRA_GET_PARAMS; }
 
-    protected <T> T loadData(String city, Class<T> owmObjectClass) {
+    <T> T loadData(String city, Class<T> owmObjectClass) {
 
         try {
 
             URL url = new URL(String.format(OWM_API_BASE_URL, getApiAction(), OWM_API_KEY, city, getExtraGetParams()));
             Log.d(Helpers.getMethodName(), url.toString());
+            HttpResponseCache cache = HttpResponseCache.getInstalled();
+            Log.d("CAHCE", String.format("requests %d", cache.getRequestCount()));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -71,6 +75,8 @@ abstract public class OWMDataProvider {
                 return null;
             }
 
+            Log.d("JSON", jsonObject.toString());
+
             return new Gson().fromJson(jsonObject.toString(), owmObjectClass);
 
         } catch (Exception e) {
@@ -79,19 +85,19 @@ abstract public class OWMDataProvider {
         }
     }
 
-    public <T extends Serializable> void requestOWM(final String city, final Class<T> d, final Handler handler) {
+    <T extends Serializable> void requestOwmService(final String city, final Class<T> klass, final Handler handler) {
 
         Log.d(TAG_TRACER, Helpers.getMethodName());
 
         new Thread() {
             public void run() {
                 Log.d(TAG_TRACER, Helpers.getMethodName());
-                T owmData = loadData(city, d);
+                T owmData = loadData(city, klass);
                 Log.d(TAG_TRACER, "Data loaded");
                 if(owmData != null) {
                     Message msgObj = handler.obtainMessage();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(OWM_DATA_KEY, owmData);
+                    bundle.putSerializable(Weather.DATA_KEY, owmData);
                     msgObj.setData(bundle);
                     handler.sendMessage(msgObj);
                 }

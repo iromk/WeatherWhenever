@@ -1,16 +1,21 @@
-package pro.xite.dev.weatherwhenever.owm;
+package pro.xite.dev.weatherwhenever.data.owm;
 
 /**
  * Created by Roman Syrchin on 3/26/18.
  */
 
-import java.io.Serializable;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
+
+import pro.xite.dev.weatherwhenever.data.Weather;
+import pro.xite.dev.weatherwhenever.data.Whenever;
+import pro.xite.dev.weatherwhenever.data.Wherever;
 
 /**
  * Represents data provided by the OWM service.
  */
-public class OWMWeather extends OWMCity implements Serializable {
+public class OwmWeather extends OwmData implements Weather {
 
 //    @SerializedName("id")
 //    private Integer id;
@@ -21,9 +26,10 @@ public class OWMWeather extends OWMCity implements Serializable {
 //    @SerializedName("name")
 //    private String name;
 
+    private Wherever owmCity;
+
     @SerializedName("main")
     private Main main;
-
 
     public class Main {
         @SerializedName("temp")
@@ -51,22 +57,55 @@ public class OWMWeather extends OWMCity implements Serializable {
         public String getDescription() { return description; }
     }
     public Float getTemp() {
-        return Float.valueOf(main.temp);
+        return main.temp;
     }
 
-    public String getPressure() {
-        return String.valueOf(main.pressure);
+    @Override
+    public float getTemperature() {
+        return main.temp;
+    }
+
+    @Override
+    public float getMinTemperature() {
+        return 0;
+    }
+
+    @Override
+    public float getMaxTemperature() {
+        return 0;
+    }
+
+    public int getPressure() {
+        return main.pressure.intValue();
+    }
+
+    @Override
+    public Date getDate() {
+        return null;
+    }
+
+    @Override
+    public Wherever where() {
+        return null;
+    }
+
+    @Override
+    public Weather on(Date date) {
+        return null;
+    }
+
+    @Override
+    public Whenever whenever() {
+        return null;
     }
 
     public String getHumidity() {
         return String.valueOf(main.humidity);
     }
 
-    public String getCity() { return name; }
-
     @Override
     public String toString() {
-        return String.format("Weather for %s is:\n  t = %s,\n  pressure = %s\n  humidity = %s%%",
-                super.toString(), getTemp(), getPressure(), getHumidity());
+        return String.format("\n  t = %s,\n  pressure = %s\n  humidity = %s%%",
+                getTemp(), getPressure(), getHumidity());
     }
 }

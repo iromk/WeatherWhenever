@@ -2,6 +2,7 @@ package pro.xite.dev.weatherwhenever;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.http.HttpResponseCache;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -16,81 +17,89 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import pro.xite.dev.weatherwhenever.owm.OWMActualWeatherProvider;
-import pro.xite.dev.weatherwhenever.owm.OWMCity;
-import pro.xite.dev.weatherwhenever.owm.OWMNearestForecast;
-import pro.xite.dev.weatherwhenever.owm.OWMNearestForecastProvider;
-import pro.xite.dev.weatherwhenever.owm.OWMWeather;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+
+import pro.xite.dev.weatherwhenever.data.Whenever;
+import pro.xite.dev.weatherwhenever.data.Wherever;
+import pro.xite.dev.weatherwhenever.data.Weather;
+import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
+import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
+import pro.xite.dev.weatherwhenever.manage.DataReceiver;
+import pro.xite.dev.weatherwhenever.manage.PrefsManager;
+import pro.xite.dev.weatherwhenever.manage.RecentCitiesList;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener, Spinner.OnItemSelectedListener, ViewUpdatable {
+        View.OnClickListener, DataReceiver {
 
     public static final String LATEST_FORECAST_KEY = "latest_forecast";
     public static final String FRIENDS_RESPONSE = "friends_response";
     public static final String TAG_TRACER = "TRACER";
 
-    private Spinner spinnerCityList;
-    private Forecast reliableForecast = null;
+    private NavigationView navigationView;
+    private EditText editTextCity;
+    private TextView textViewDescription;
+    private TextView textViewTemperature;
+    private DrawerLayout drawerLayout;
 
     private PrefsManager prefsManager;
     private RecentCitiesList recentCitiesList;
-    private OWMWeather owmWeather;
-    private OWMNearestForecast owmNearestForecast;
-    private OWMCity owmCity;
+
+    private Weather weather;
+    private Whenever whenever;
+    private Wherever wherever;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
+
+        textViewDescription = findViewById(R.id.textview_wheather_now);
+        textViewTemperature = findViewById(R.id.textview_temp);
+        editTextCity = findViewById(R.id.edittext_cityname);
+        navigationView = findViewById(R.id.nav_view);
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        try {
+            File httpCacheDir = new File(getCacheDir(), "http");
+            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+        } catch (IOException e) {
+            Log.i(TAG_TRACER, "HTTP response cache installation failed:" + e);
+        }
+
         prefsManager  = new PrefsManager(getSharedPreferences(
                                             getString(R.string.preference_file_key),
                                             Context.MODE_PRIVATE));
-//        recentCitiesList = new RecentCitiesList();
         recentCitiesList = prefsManager.loadRecentCitiesList();
         if(recentCitiesList == null) {
             recentCitiesList = new RecentCitiesList();
         } else {
-            NavigationView navView = findViewById(R.id.nav_view);
-            Menu menu = navView.getMenu();
-            for (OWMCity city : recentCitiesList.getCities()) {
+            Menu menu = navigationView.getMenu();
+            for (Wherever city : recentCitiesList.getCities()) {
                 menu.add(city.getName());
             }
 
-            owmCity = recentCitiesList.getLatestCity();
-            owmWeather = recentCitiesList.getLatestWeather();
-            owmNearestForecast = recentCitiesList.getLatestForecast();
-
-            TextView textView = findViewById(R.id.textview_wheather_now);
-            TextView textViewTemp = findViewById(R.id.textview_temp);
-            textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
-            textView.setText(owmWeather.toString());
+            wherever = recentCitiesList.getLatestCity();
+            weather = recentCitiesList.getLatestWeather();
+            whenever = recentCitiesList.getLatestForecast();
+            updateViews();
         }
-//            ForecastProvider.create(this);
+
         initDrawer();
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     private void initDrawer() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,50 +110,36 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void addCityAndLoadWeather() {
-        EditText editText = findViewById(R.id.edittext_cityname);
-        final String city = editText.getText().toString();
-        owmNearestForecast = null;
-        owmWeather = null;
-        owmCity = null;
-        new OWMActualWeatherProvider().request(city, this);
-        new OWMNearestForecastProvider().request(city, this);
+        final String city = editTextCity.getText().toString();
+        whenever = null;
+        weather = null;
+        wherever = null;
+        new OwmActualWeatherProvider().request(city, this);
+        new OwmNearestForecastProvider().request(city, this);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(LATEST_FORECAST_KEY, reliableForecast);
     }
 
     @Override
     public void onClick(View view) {
-        Log.d(TAG_TRACER, Helpers.getMethodName());
-        int id = view.getId();
-        if(id == R.id.button_get_forecast) {
-            Log.d(TAG_TRACER, "The button has been clicked");
-            addCityAndLoadWeather();
-//            reliableForecast = ForecastProvider.makeReliableForecast(getSelectedCityName());
-//            setForecastText(reliableForecast.getWeather());
-//            Intent intent = new Intent(this, ForecastActivity.class);
-//            intent.putExtra(ForecastActivity.FORECAST_OBJECT, reliableForecast);
-//            startActivityForResult(intent, 1);
-        }
+        Log.d(TAG_TRACER, "onClick: not implemented");
     }
 
     @Override
     protected void onPause() {
-//        saveSelectionInPreferences();
+        Log.d(TAG_TRACER, "onPause: not implemented");
         super.onPause();
     }
 
@@ -160,51 +155,86 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        Log.d(TAG_TRACER, spinnerCityList.getSelectedItem().toString());
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
-
-    @Override
-    public <T> void updateViews(T owm) {
+    public void serializedDataReceiver(Serializable data) {
         Log.d(TAG_TRACER, Helpers.getMethodName());
-        TextView textView = findViewById(R.id.textview_wheather_now);
-        TextView textViewTemp = findViewById(R.id.textview_temp);
-        if(owm instanceof OWMWeather) {
-            owmWeather = (OWMWeather) owm;
-            textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
-            textView.setText(owmWeather.toString());
-        } else if (owm instanceof OWMNearestForecast) {
-            owmNearestForecast = (OWMNearestForecast) owm;
+        if(data instanceof Wherever) {
+            wherever = (Wherever) data;
+            Log.d(TAG_TRACER, String.format("Got new Wherever %s of %s", wherever.getName(), wherever.getCountryCode()));
+        } else if(data instanceof Weather) {
+            weather = (Weather) data;
+            Log.d(TAG_TRACER, String.format("Got new Weather t==%d", (int) weather.getTemperature()));
+        } else if (data instanceof Whenever) {
+            whenever = (Whenever) data;
+            Log.d(TAG_TRACER, String.format("Got new Whenever %d", (int) whenever.getLatestForecast().getTemperature()));
         }
+        updateViews();
         tryToSavePreferences();
     }
 
+    private void updateViews() {
+        String weatherDescription = "";
+        if(weather != null) {
+            textViewTemperature.setText(String.valueOf((int) weather.getTemperature()));
+            weatherDescription = weather.toString();
+        }
+        if(wherever != null) {
+            weatherDescription = String.format("%s of %s:\n%s", wherever.getName(), wherever.getCountryCode(), weatherDescription);
+        }
+        textViewDescription.setText(weatherDescription);
+    }
+
     private void tryToSavePreferences() {
-        if(owmWeather != null && owmNearestForecast != null) {
-            owmCity = owmWeather.getOWMCity();
-            recentCitiesList.add(owmCity, owmWeather, owmNearestForecast);
+        if(wherever != null && weather != null && whenever != null) {
+            recentCitiesList.add(wherever, weather, whenever);
             prefsManager.savePrefs(recentCitiesList);
 
             NavigationView navView = findViewById(R.id.nav_view);
             Menu menu = navView.getMenu();
-            menu.add(owmCity.getName());
+            menu.add(wherever.getName());
         }
     }
 
     @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.drawer, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        owmCity = recentCitiesList.getCity(item.getTitle());
-        owmWeather = recentCitiesList.getWeatherForCity(item.getTitle());
-        owmNearestForecast = recentCitiesList.getForecastForCity(item.getTitle());
-        TextView textView = findViewById(R.id.textview_wheather_now);
-        TextView textViewTemp = findViewById(R.id.textview_temp);
-        textViewTemp.setText(String.valueOf(owmWeather.getTemp().intValue()));
-        textView.setText(owmWeather.toString());
+        //int id = item.getItemId();
+        final CharSequence cityName = item.getTitle();
+        wherever = recentCitiesList.getCity(cityName);
+        weather = recentCitiesList.getWeatherForCity(cityName);
+        whenever = recentCitiesList.getForecastForCity(cityName);
+        drawerLayout.closeDrawer(GravityCompat.START);
+        updateViews();
         return true;
     }
 }
