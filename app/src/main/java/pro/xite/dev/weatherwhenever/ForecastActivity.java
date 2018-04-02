@@ -10,12 +10,16 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
+
+import pro.xite.dev.weatherwhenever.data.fake.Forecast;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecast;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmWeather;
+import pro.xite.dev.weatherwhenever.manage.DataReceiver;
 
-public class ForecastActivity extends AppCompatActivity implements ViewUpdatable {
+public class ForecastActivity extends AppCompatActivity implements DataReceiver {
 
     public static final String TAG_LIFECYCLE = "LIFETIME";
     public static final String TAG_TRACER = "TRACER";
@@ -38,7 +42,7 @@ public class ForecastActivity extends AppCompatActivity implements ViewUpdatable
     }
 
     @Override
-    public <T> void updateViews(T owm) {
+    public void serializedDataReceiver(Serializable owm) {
         if(owm instanceof OwmWeather) {
             OwmWeather owmWeather = (OwmWeather) owm;
             setCityText(owmWeather.toString());

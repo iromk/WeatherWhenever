@@ -5,13 +5,12 @@ import java.util.Date;
 /**
  * Created by Roman Syrchin on 3/31/18.
  */
-public interface CityInfo {
+public interface Wherever {
 
     String getPlaceId();
     String getName();
     String getCountryCode();
-    GeoLocation getGeoLocation();
 
-    WeatherInfo getCurrentWeather();
-    WeatherInfo getForecasetOn(Date date);
+    Weather getCurrentWeather();
+    Weather getForecasetOn(Date date);
 }

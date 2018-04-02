@@ -4,15 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-import pro.xite.dev.weatherwhenever.data.CityInfo;
-import pro.xite.dev.weatherwhenever.data.GeoLocation;
-import pro.xite.dev.weatherwhenever.data.WeatherInfo;
+import pro.xite.dev.weatherwhenever.data.Weather;
+import pro.xite.dev.weatherwhenever.data.Wherever;
 
 /**
  * Created by Roman Syrchin on 3/26/18.
  */
 
-public class OwmCity extends OwmData implements CityInfo {
+public class OwmCity extends OwmData implements Wherever {
 
     @SerializedName("id")
     Integer id;
@@ -23,18 +22,15 @@ public class OwmCity extends OwmData implements CityInfo {
     @SerializedName("coord")
     Coord coord;
 
-    private class Coord implements GeoLocation {
+    private class Coord {
         @SerializedName("lat")
         Float lat;
         @SerializedName("lon")
         Float lon;
 
-        @Override
         public float getLatitude() {
             return lat;
         }
-
-        @Override
         public float getLongitude() {
             return lon;
         }
@@ -76,19 +72,15 @@ public class OwmCity extends OwmData implements CityInfo {
     }
 
     @Override
-    public GeoLocation getGeoLocation() {
-        return coord;
-    }
-
-    @Override
-    public WeatherInfo getCurrentWeather() {
+    public Weather getCurrentWeather() {
         return null;
     }
 
     @Override
-    public WeatherInfo getForecasetOn(Date date) {
+    public Weather getForecasetOn(Date date) {
         return null;
     }
+
 
     public Long getPopulation() {
         return population;

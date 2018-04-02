@@ -8,13 +8,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-import pro.xite.dev.weatherwhenever.data.WeatherInfo;
-import pro.xite.dev.weatherwhenever.data.Wind;
+import pro.xite.dev.weatherwhenever.data.Weather;
+import pro.xite.dev.weatherwhenever.data.Whenever;
+import pro.xite.dev.weatherwhenever.data.Wherever;
 
 /**
  * Represents data provided by the OWM service.
  */
-public class OwmWeather extends OwmData implements WeatherInfo {
+public class OwmWeather extends OwmData implements Weather {
 
 //    @SerializedName("id")
 //    private Integer id;
@@ -22,8 +23,10 @@ public class OwmWeather extends OwmData implements WeatherInfo {
     @SerializedName("cod")
     private Integer code;
 
-    @SerializedName("name")
-    private String name;
+//    @SerializedName("name")
+//    private String name;
+
+    private Wherever owmCity;
 
     @SerializedName("main")
     private Main main;
@@ -72,11 +75,6 @@ public class OwmWeather extends OwmData implements WeatherInfo {
         return 0;
     }
 
-    @Override
-    public Wind getWind() {
-        return null;
-    }
-
     public int getPressure() {
         return main.pressure.intValue();
     }
@@ -86,13 +84,28 @@ public class OwmWeather extends OwmData implements WeatherInfo {
         return null;
     }
 
+    @Override
+    public Wherever where() {
+        return null;
+    }
+
+    @Override
+    public Weather on(Date date) {
+        return null;
+    }
+
+    @Override
+    public Whenever whenever() {
+        return null;
+    }
+
     public String getHumidity() {
         return String.valueOf(main.humidity);
     }
 
     @Override
     public String toString() {
-        return String.format("Weather for %s, %s is:\n  t = %s,\n  pressure = %s\n  humidity = %s%%",
-                name, getTemp(), getPressure(), getHumidity());
+        return String.format("\n  t = %s,\n  pressure = %s\n  humidity = %s%%",
+                getTemp(), getPressure(), getHumidity());
     }
 }

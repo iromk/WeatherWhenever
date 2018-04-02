@@ -1,4 +1,4 @@
-package pro.xite.dev.weatherwhenever;
+package pro.xite.dev.weatherwhenever.data.fake;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,8 +1,10 @@
-package pro.xite.dev.weatherwhenever;
+package pro.xite.dev.weatherwhenever.data.fake;
 
 import android.content.Context;
 
 import java.io.Serializable;
+
+import pro.xite.dev.weatherwhenever.R;
 
 /**
  * Created by Roman Syrchin on 3/24/18.
