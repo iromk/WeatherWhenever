@@ -207,8 +207,7 @@ public class MainActivity extends AppCompatActivity implements
             recentCitiesList.add(wherever, weather, whenever);
             prefsManager.savePrefs(recentCitiesList);
 
-            NavigationView navView = findViewById(R.id.nav_view);
-            Menu menu = navView.getMenu();
+            Menu menu = navigationView.getMenu();
             menu.add(wherever.getName());
         }
     }
@@ -221,7 +220,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
