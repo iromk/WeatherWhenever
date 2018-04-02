@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -23,8 +22,11 @@ import pro.xite.dev.weatherwhenever.data.Wherever;
  */
 public class DbManager {
 
-    public static final String TAG_CLASS_NAME = "TAG_CLASS_NAME";
-    public static final String TAG_OBJECT_CONTENT = "TAG_OBJECT_CONTENT";
+    private static final String TAG_CLASS_NAME = "TAG_CLASS_NAME";
+    private static final String TAG_OBJECT_CONTENT = "TAG_OBJECT_CONTENT";
+
+    private static final String CIPHER = "Ave, Imperator, morituri te salutant";
+
     private DatabaseHelper dbHelper;
     private SQLiteDatabase database;
     final private String LOG_TAG = "DB";
@@ -78,7 +80,7 @@ public class DbManager {
                     null
                     );
             Log.d(LOG_TAG, "updateData: data updated");
-            if (!city.toString().equals(deserialize(serialize(city)).toString())) throw new AssertionError();
+            if (!city.toString().equals(deserialize(decrypt(encrypt(serialize(city)))).toString())) throw new AssertionError();
         } else { // add
             addData(city, weather, forecast);
             Log.d(LOG_TAG, "updateData: data added");
@@ -143,10 +145,32 @@ public class DbManager {
         return (T) new Gson().fromJson(jsonObject.get(TAG_OBJECT_CONTENT), klass);
     }
 
-    // TODO encryption
-    /** does noting for now */
+    /**
+     *
+     * @param plain
+     * @return
+     */
     private String encrypt(String plain) {
-        return plain;
+        final char[] encrypted = plain.toCharArray();
+        final char[] key = CIPHER.toCharArray();
+        final int cipherLength = key.length;
+
+        for(int i = 0; i < encrypted.length; i++)
+            encrypted[i] += key[i % cipherLength];
+        return String.copyValueOf(encrypted);
+    }
+
+    /**
+     *
+     */
+    private String decrypt(String encrypted) {
+        final char[] plain = encrypted.toCharArray();
+        final char[] key = CIPHER.toCharArray();
+        final int cipherLength = key.length;
+
+        for(int i = 0; i < plain.length; i++)
+            plain[i] -= key[i % cipherLength];
+        return String.copyValueOf(plain);
     }
 
     private Class getClassByString(String className) {
