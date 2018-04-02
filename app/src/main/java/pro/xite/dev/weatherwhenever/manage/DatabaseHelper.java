@@ -1,4 +1,4 @@
-package pro.xite.dev.weatherwhenever.db;
+package pro.xite.dev.weatherwhenever.manage;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

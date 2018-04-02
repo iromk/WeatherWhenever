@@ -8,17 +8,23 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 
 import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.Whenever;
 import pro.xite.dev.weatherwhenever.data.Wherever;
-import pro.xite.dev.weatherwhenever.db.DatabaseHelper;
 
 /**
  * Created by Roman Syrchin on 4/2/18.
  */
 public class DbManager {
 
+    public static final String TAG_CLASS_NAME = "TAG_CLASS_NAME";
+    public static final String TAG_OBJECT_CONTENT = "TAG_OBJECT_CONTENT";
     private DatabaseHelper dbHelper;
     private SQLiteDatabase database;
     final private String LOG_TAG = "DB";
@@ -72,6 +78,7 @@ public class DbManager {
                     null
                     );
             Log.d(LOG_TAG, "updateData: data updated");
+            if (!city.toString().equals(deserialize(serialize(city)).toString())) throw new AssertionError();
         } else { // add
             addData(city, weather, forecast);
             Log.d(LOG_TAG, "updateData: data added");
@@ -108,14 +115,47 @@ public class DbManager {
         return rowId;
     }
 
+    /**          * ∆
+     * Maaagic..  \O_
+     * @param object
+     * @param <T>
+     * @return
+     */
     private <T> String serialize(T object) {
-        return new Gson().toJson(object);
+        final JsonElement objectJsonTree = new Gson().toJsonTree(object);
+        final JsonObject jsonMeta = new JsonObject();
+        jsonMeta.addProperty(TAG_CLASS_NAME, object.getClass().getName());
+        jsonMeta.add(TAG_OBJECT_CONTENT, objectJsonTree);
+        return jsonMeta.toString();
+    }
+
+    /**
+     * Dispell magic :)
+     * @param jsonString
+     * @param <T>
+     * @return
+     */
+    private <T> T deserialize(String jsonString) {
+        final JsonParser parser = new JsonParser();
+        final JsonObject jsonObject = parser.parse(jsonString).getAsJsonObject();
+        String className = jsonObject.get(TAG_CLASS_NAME).getAsJsonPrimitive().getAsString();
+        Class klass = getClassByString(className);
+        return (T) new Gson().fromJson(jsonObject.get(TAG_OBJECT_CONTENT), klass);
     }
 
     // TODO encryption
     /** does noting for now */
     private String encrypt(String plain) {
         return plain;
+    }
+
+    private Class getClassByString(String className) {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            Log.e("InterfaceAdapter", e.getLocalizedMessage());
+            throw new JsonParseException(e.getMessage());
+        }
     }
 
 
