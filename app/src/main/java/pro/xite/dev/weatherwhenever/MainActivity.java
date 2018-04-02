@@ -31,6 +31,7 @@ import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
 import pro.xite.dev.weatherwhenever.manage.DataReceiver;
+import pro.xite.dev.weatherwhenever.manage.DbManager;
 import pro.xite.dev.weatherwhenever.manage.PrefsManager;
 import pro.xite.dev.weatherwhenever.manage.RecentCitiesList;
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout drawerLayout;
 
     private PrefsManager prefsManager;
+    private DbManager dbManager;
     private RecentCitiesList recentCitiesList;
 
     private Weather weather;
@@ -73,6 +75,9 @@ public class MainActivity extends AppCompatActivity implements
         } catch (IOException e) {
             Log.i(TAG_TRACER, "HTTP response cache installation failed:" + e);
         }
+
+        dbManager = new DbManager(this);
+        dbManager.open();
 
         prefsManager  = new PrefsManager(getSharedPreferences(
                                             getString(R.string.preference_file_key),
@@ -144,6 +149,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbManager.close();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
@@ -169,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements
         }
         updateViews();
         tryToSavePreferences();
+        tryToUpdateDb();
     }
 
     private void updateViews() {
@@ -191,6 +203,12 @@ public class MainActivity extends AppCompatActivity implements
             NavigationView navView = findViewById(R.id.nav_view);
             Menu menu = navView.getMenu();
             menu.add(wherever.getName());
+        }
+    }
+
+    private void tryToUpdateDb() {
+        if(wherever != null && weather != null && whenever != null) {
+            dbManager.addData(wherever, weather, whenever);
         }
     }
 

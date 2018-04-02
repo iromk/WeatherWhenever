@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "weatherwhenever.db";
-    static final String WEATHER_INFO = "weather_info";
+    public static final String TABLE_WEATHER_INFO = "weather_info";
     private static final int DATABASE_VERSION = 1;
 
     // db columns
@@ -27,7 +27,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE notes (" +
+        db.execSQL("CREATE TABLE " + TABLE_WEATHER_INFO +
+                " (" +
                 " " + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " " + COLUMN_CITY_NAME + " TEXT," +
                 " " + COLUMN_CITY + " TEXT," +
@@ -40,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /** just recreate the database */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + WEATHER_INFO);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEATHER_INFO);
         onCreate(db);
     }
 }
