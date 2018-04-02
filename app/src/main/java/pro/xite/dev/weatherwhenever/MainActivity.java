@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         View.OnClickListener, DataReceiver {
 
-    public static final String LATEST_FORECAST_KEY = "latest_forecast";
     public static final String FRIENDS_RESPONSE = "friends_response";
     public static final String TAG_TRACER = "TRACER";
 
@@ -56,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements
     private Weather weather;
     private Whenever whenever;
     private Wherever wherever;
+
+    final private boolean USE_DATABASE = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +80,19 @@ public class MainActivity extends AppCompatActivity implements
         dbManager = new DbManager(this);
         dbManager.open();
 
-        prefsManager  = new PrefsManager(getSharedPreferences(
-                                            getString(R.string.preference_file_key),
-                                            Context.MODE_PRIVATE));
-        recentCitiesList = prefsManager.loadRecentCitiesList();
-        if(recentCitiesList == null) {
+        prefsManager = new PrefsManager(getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE));
+
+        if(USE_DATABASE)
+            recentCitiesList = dbManager.loadRecentCitiesList();
+        else
+            recentCitiesList = prefsManager.loadRecentCitiesList();
+
+        if (recentCitiesList == null)
             recentCitiesList = new RecentCitiesList();
-        } else {
+
+        if(recentCitiesList.getCounter() > 0) {
             Menu menu = navigationView.getMenu();
             for (Wherever city : recentCitiesList.getCities()) {
                 menu.add(city.getName());
@@ -166,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void serializedDataReceiver(Serializable data) {
+    public void onSerializedDataReceived(Serializable data) {
         Log.d(TAG_TRACER, Helpers.getMethodName());
         if(data instanceof Wherever) {
             wherever = (Wherever) data;

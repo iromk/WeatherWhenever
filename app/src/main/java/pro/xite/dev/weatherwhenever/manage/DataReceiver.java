@@ -8,6 +8,6 @@ import java.io.Serializable;
 
 public interface DataReceiver {
 
-    void serializedDataReceiver(Serializable object);
+    void onSerializedDataReceived(Serializable object);
 
 }

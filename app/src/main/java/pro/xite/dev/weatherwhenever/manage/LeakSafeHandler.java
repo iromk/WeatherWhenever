@@ -27,7 +27,7 @@ public class LeakSafeHandler<T extends Serializable> extends Handler {
         if(activity != null) {
             final Bundle bundle = msg.getData();
             final T object = (T) bundle.getSerializable(Weather.DATA_KEY); // TODO check cast
-            activity.serializedDataReceiver(object);
+            activity.onSerializedDataReceived(object);
             super.handleMessage(msg);
         }
     }

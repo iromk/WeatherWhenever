@@ -13,6 +13,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
+import java.util.List;
+
 import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.Whenever;
 import pro.xite.dev.weatherwhenever.data.Wherever;
@@ -115,6 +117,37 @@ public class DbManager {
         cursor.close();
 
         return rowId;
+    }
+
+    public RecentCitiesList loadRecentCitiesList() {
+        final RecentCitiesList citiesList = new RecentCitiesList();
+
+        final String[] cityNameColumn = {
+                DatabaseHelper.COLUMN_ID,
+                DatabaseHelper.COLUMN_CITY_NAME,
+                DatabaseHelper.COLUMN_CITY,
+                DatabaseHelper.COLUMN_WEATHER,
+                DatabaseHelper.COLUMN_FORECAST,
+            };
+
+        Cursor cursor = database.query(
+                DatabaseHelper.TABLE_WEATHER_INFO, // from
+                cityNameColumn, // columns
+                null,
+                null,null, null, null );
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Wherever city = deserialize(decrypt(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CITY))));
+            Weather weather = deserialize(decrypt(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_WEATHER))));
+            Whenever forecast = deserialize(decrypt(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FORECAST))));
+            citiesList.add(city, weather, forecast);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        return citiesList;
     }
 
     /**          * ∆

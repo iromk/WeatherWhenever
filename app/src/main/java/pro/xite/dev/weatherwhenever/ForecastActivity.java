@@ -42,7 +42,7 @@ public class ForecastActivity extends AppCompatActivity implements DataReceiver 
     }
 
     @Override
-    public void serializedDataReceiver(Serializable owm) {
+    public void onSerializedDataReceived(Serializable owm) {
         if(owm instanceof OwmWeather) {
             OwmWeather owmWeather = (OwmWeather) owm;
             setCityText(owmWeather.toString());
