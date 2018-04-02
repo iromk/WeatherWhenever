@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void tryToUpdateDb() {
         if(wherever != null && weather != null && whenever != null) {
-            dbManager.addData(wherever, weather, whenever);
+            dbManager.updateData(wherever, weather, whenever);
         }
     }
 
