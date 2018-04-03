@@ -18,19 +18,6 @@ public class OwmNearestForecast extends OwmData implements Whenever {
     @SerializedName("list")
     List<OwmWeather> mainList;
 
-    class ListItem {
-
-        @SerializedName("dt")
-        String dt;
-
-        @SerializedName("main")
-        OwmWeather main;
-
-        @SerializedName("weather")
-        List<OwmWeather.WeatherItem> weather;
-    }
-
-
     @Override
     public Weather getNearestForecast() {
         return mainList.get(0);

@@ -17,19 +17,14 @@ import pro.xite.dev.weatherwhenever.data.Wherever;
  */
 public class OwmWeather extends OwmData implements Weather {
 
-//    @SerializedName("id")
-//    private Integer id;
-
     @SerializedName("cod")
     private Integer code;
 
-//    @SerializedName("name")
-//    private String name;
-
-    private Wherever owmCity;
-
     @SerializedName("main")
     private Main main;
+
+    @SerializedName("dt")
+    private long utcTime;
 
     public class Main {
         @SerializedName("temp")
@@ -44,7 +39,10 @@ public class OwmWeather extends OwmData implements Weather {
         Float temp_max;
     }
 
-    public class WeatherItem {
+    @SerializedName("weather")
+    private Descriptive[] descriptive;
+
+    public class Descriptive {
         @SerializedName("id")
         Integer id;
         @SerializedName("main")

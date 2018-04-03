@@ -21,6 +21,11 @@ public class RecentCitiesList implements Serializable {
     private ArrayList<Wherever> cities = new ArrayList<>();
     private ArrayList<Weather> weathers = new ArrayList<>();
     private ArrayList<Whenever> forecasts = new ArrayList<>();
+
+    public int getCounter() {
+        return counter;
+    }
+
     private int counter = 0;
 
     public void add(Wherever city, Weather weather, Whenever forecast) {

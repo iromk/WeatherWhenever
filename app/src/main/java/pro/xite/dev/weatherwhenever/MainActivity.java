@@ -30,15 +30,15 @@ import pro.xite.dev.weatherwhenever.data.Wherever;
 import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
-import pro.xite.dev.weatherwhenever.manage.DataReceiver;
+import pro.xite.dev.weatherwhenever.manage.DataProviderListener;
+import pro.xite.dev.weatherwhenever.manage.DbManager;
 import pro.xite.dev.weatherwhenever.manage.PrefsManager;
 import pro.xite.dev.weatherwhenever.manage.RecentCitiesList;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener, DataReceiver {
+        View.OnClickListener, DataProviderListener {
 
-    public static final String LATEST_FORECAST_KEY = "latest_forecast";
     public static final String FRIENDS_RESPONSE = "friends_response";
     public static final String TAG_TRACER = "TRACER";
 
@@ -49,11 +49,14 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout drawerLayout;
 
     private PrefsManager prefsManager;
+    private DbManager dbManager;
     private RecentCitiesList recentCitiesList;
 
     private Weather weather;
     private Whenever whenever;
     private Wherever wherever;
+
+    final private boolean USE_DATABASE = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +77,22 @@ public class MainActivity extends AppCompatActivity implements
             Log.i(TAG_TRACER, "HTTP response cache installation failed:" + e);
         }
 
-        prefsManager  = new PrefsManager(getSharedPreferences(
-                                            getString(R.string.preference_file_key),
-                                            Context.MODE_PRIVATE));
-        recentCitiesList = prefsManager.loadRecentCitiesList();
-        if(recentCitiesList == null) {
+        dbManager = new DbManager(this);
+        dbManager.open();
+
+        prefsManager = new PrefsManager(getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE));
+
+        if(USE_DATABASE)
+            recentCitiesList = dbManager.loadRecentCitiesList();
+        else
+            recentCitiesList = prefsManager.loadRecentCitiesList();
+
+        if (recentCitiesList == null)
             recentCitiesList = new RecentCitiesList();
-        } else {
+
+        if(recentCitiesList.getCounter() > 0) {
             Menu menu = navigationView.getMenu();
             for (Wherever city : recentCitiesList.getCities()) {
                 menu.add(city.getName());
@@ -144,6 +156,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbManager.close();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
@@ -155,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void serializedDataReceiver(Serializable data) {
+    public void onSerializedDataReceived(Serializable data) {
         Log.d(TAG_TRACER, Helpers.getMethodName());
         if(data instanceof Wherever) {
             wherever = (Wherever) data;
@@ -169,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements
         }
         updateViews();
         tryToSavePreferences();
+        tryToUpdateDb();
     }
 
     private void updateViews() {
@@ -188,15 +207,19 @@ public class MainActivity extends AppCompatActivity implements
             recentCitiesList.add(wherever, weather, whenever);
             prefsManager.savePrefs(recentCitiesList);
 
-            NavigationView navView = findViewById(R.id.nav_view);
-            Menu menu = navView.getMenu();
+            Menu menu = navigationView.getMenu();
             menu.add(wherever.getName());
+        }
+    }
+
+    private void tryToUpdateDb() {
+        if(wherever != null && weather != null && whenever != null) {
+            dbManager.updateData(wherever, weather, whenever);
         }
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {

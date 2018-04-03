@@ -6,8 +6,8 @@ import java.io.Serializable;
  * Created by Roman Syrchin on 3/27/18.
  */
 
-public interface DataReceiver {
+public interface DataProviderListener {
 
-    void serializedDataReceiver(Serializable object);
+    void onSerializedDataReceived(Serializable object);
 
 }
