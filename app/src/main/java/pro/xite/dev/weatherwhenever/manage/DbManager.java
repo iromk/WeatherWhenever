@@ -184,7 +184,12 @@ public class DbManager {
      * @return
      */
     private String encrypt(String plain) {
-        final char[] encrypted = plain.toCharArray();
+        final int half = plain.length() / 2 + plain.length() % 2;
+        final String half0 = plain.substring(0, half);
+        final String half1 = plain.substring(half);
+        final String shuffled = half1 + half0;
+
+        final char[] encrypted = shuffled.toCharArray();
         final char[] key = CIPHER.toCharArray();
         final int cipherLength = key.length;
 
@@ -203,7 +208,12 @@ public class DbManager {
 
         for(int i = 0; i < plain.length; i++)
             plain[i] -= key[i % cipherLength];
-        return String.copyValueOf(plain);
+
+        final String plainString = String.copyValueOf(plain);
+        final int half = plainString.length() / 2;
+        final String half0 = plainString.substring(0, half);
+        final String half1 = plainString.substring(half);
+        return half1 + half0;
     }
 
     private Class getClassByString(String className) {
