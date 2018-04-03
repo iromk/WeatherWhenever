@@ -15,15 +15,15 @@ import pro.xite.dev.weatherwhenever.data.Weather;
 
 public class LeakSafeHandler<T extends Serializable> extends Handler {
 
-    private WeakReference<DataReceiver> weakReference;
+    private WeakReference<DataProviderListener> weakReference;
 
-    public LeakSafeHandler(DataReceiver activity) {
+    public LeakSafeHandler(DataProviderListener activity) {
         weakReference = new WeakReference<>(activity);
     }
 
     @Override
     public void handleMessage(Message msg) {
-        DataReceiver activity = weakReference.get();
+        DataProviderListener activity = weakReference.get();
         if(activity != null) {
             final Bundle bundle = msg.getData();
             final T object = (T) bundle.getSerializable(Weather.DATA_KEY); // TODO check cast

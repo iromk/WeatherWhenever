@@ -30,14 +30,14 @@ import pro.xite.dev.weatherwhenever.data.Wherever;
 import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
-import pro.xite.dev.weatherwhenever.manage.DataReceiver;
+import pro.xite.dev.weatherwhenever.manage.DataProviderListener;
 import pro.xite.dev.weatherwhenever.manage.DbManager;
 import pro.xite.dev.weatherwhenever.manage.PrefsManager;
 import pro.xite.dev.weatherwhenever.manage.RecentCitiesList;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener, DataReceiver {
+        View.OnClickListener, DataProviderListener {
 
     public static final String FRIENDS_RESPONSE = "friends_response";
     public static final String TAG_TRACER = "TRACER";
