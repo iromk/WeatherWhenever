@@ -10,11 +10,14 @@
 
     <EditText
         android:id="@+id/edittext_cityname"
-        style="@style/textEdit"
         android:layout_width="300dp"
-        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/hint_cityname"
         android:textSize="36sp"
-        android:hint="@string/hint_cityname"/>
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

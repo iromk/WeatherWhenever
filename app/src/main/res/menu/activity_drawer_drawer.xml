@@ -22,7 +22,6 @@
             <!--android:icon="@drawable/ic_menu_manage"-->
             <!--android:title="Tools" />-->
     </group>
-<!--
 
     <item android:title="Communicate">
         <menu>
@@ -36,6 +35,5 @@
                 android:title="Send" />
         </menu>
     </item>
--->
 
 </menu>
