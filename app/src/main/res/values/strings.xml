@@ -55,5 +55,7 @@
     <string name="hint_temp_42">-42</string>
     <string name="find_city_activity_title">Find a city</string>
     <string name="find_city_button">Find a city</string>
+    <string name="search_city_prompt_description">It looks like no favourite cities yet. You need to do search a city first.</string>
+    <string name="search_city_prompt_title">Search city</string>
 
 </resources>

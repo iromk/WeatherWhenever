@@ -3,6 +3,8 @@ package pro.xite.dev.weatherwhenever;
 import android.content.Context;
 import android.content.Intent;
 import android.net.http.HttpResponseCache;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -11,10 +13,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -28,15 +30,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
+import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.Whenever;
 import pro.xite.dev.weatherwhenever.data.Wherever;
-import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
 import pro.xite.dev.weatherwhenever.manage.DataProviderListener;
 import pro.xite.dev.weatherwhenever.manage.DbManager;
 import pro.xite.dev.weatherwhenever.manage.PrefsManager;
 import pro.xite.dev.weatherwhenever.manage.RecentCitiesList;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements
 
     public static final String FRIENDS_RESPONSE = "friends_response";
     public static final String TAG_TRACER = "TRACER";
+    private static final int PROMPT_AFTER_3_SEC = 3000;
+    private static final int PROMPT_INSTANT = 0;
 
     private NavigationView navigationView;
     private EditText editTextCity;
@@ -60,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements
     private Wherever wherever;
 
     final private boolean USE_DATABASE = true;
+
+    MaterialTapTargetPrompt mFabPrompt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +118,27 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         initDrawer();
+
+        // TODO if (favorites == 0)
+        promptUseSearchCity(PROMPT_AFTER_3_SEC);
+    }
+
+    private void promptUseSearchCity(int delayMillis) {
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                        .setPrimaryText(R.string.search_city_prompt_title)
+                        .setSecondaryText(R.string.search_city_prompt_description)
+                        .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                        .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                        .setIcon(R.drawable.ic_search)
+                        .setTarget(R.id.add_city)
+                        .show();
+            }
+        }, delayMillis);
+
     }
 
     private void initDrawer() {
@@ -124,6 +152,8 @@ public class MainActivity extends AppCompatActivity implements
                 Snackbar.make(view, "Requesting owm", Snackbar.LENGTH_INDEFINITE)
 //                        .setAction("Action", vol)
                         .show();
+                promptUseSearchCity(PROMPT_INSTANT); // for test only
+
 //                loadFragment(R.id.fragment_top, AddCity.newInstance("", ""), true);
 //                addCityAndLoadWeather();
             }

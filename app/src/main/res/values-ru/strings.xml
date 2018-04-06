@@ -29,5 +29,7 @@
     <string name="owm_switch_label">Open Weather Map</string>
     <string name="fids_switch_label">Finger in da sky</string>
     <string name="hint_cityname">gorod</string>
+    <string name="search_city_prompt_description">Похоже список избранных город пуст. Предлагаю поискать для начала какой-нибудь город.</string>
+    <string name="search_city_prompt_title">Найди город</string>
 
 </resources>
