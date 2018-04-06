@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+<!--
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +20,10 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+-->
+
+    <include layout="@layout/toolbar_main"
+        android:id="@+id/toolbar"/>
 
     <!--<include layout="@layout/content_drawer" />-->
     <include layout="@layout/activity_main" />
@@ -29,11 +34,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_marginTop="60dp"
-        android:backgroundTint="@color/colorNotWhite"
-        android:tint="@color/colorDP"
-        app:srcCompat="@android:drawable/ic_dialog_info" />
+        app:srcCompat="@android:drawable/ic_popup_sync"
+        />
+        <!--app:srcCompat="@android:drawable/ic_menu_search" -->
         <!--android:background="@drawable/ic_button_weather"/>-->
         <!--app:backgroundTintMode="screen"-->
         <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:backgroundTint="@color/colorNotWhite"-->
+        <!--android:tint="@color/colorDP"-->
 
 </android.support.design.widget.CoordinatorLayout>

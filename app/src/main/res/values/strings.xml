@@ -53,5 +53,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_temp_42">-42</string>
+    <string name="find_city_activity_title">Find a city</string>
+    <string name="find_city_button">Find a city</string>
 
 </resources>

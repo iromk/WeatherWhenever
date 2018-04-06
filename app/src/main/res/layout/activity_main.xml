@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
 
     <FrameLayout
         android:id="@+id/fragment_top"
@@ -14,55 +12,6 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <!--
-    <TextView
-        style="@style/CodeFont"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:id="@+id/cities_forecast_title"
-        android:text="@string/cities_forecasts_title"/>
--->
-
-    <!--
-    <EditText
-        android:id="@+id/edittext_cityname"
-        style="@style/textEdit"
-        android:layout_width="300dp"
-        android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:textSize="36sp"
-        android:hint="@string/hint_cityname"/>
--->
-    <!--android:text="piu piu piu"/>-->
-    <!--android:textColor="@color/colorWhite"-->
-    <!--android:textColorHint="@color/colorNotWhite"-->
-    <!--android:layout_below="@+id/cities_forecast_title"-->
-
-    <!--
-    <Spinner
-        android:id="@+id/spinner_city_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/setting_layout"
-        android:layout_marginTop="15dp"
-        android:entries="@array/city_list"/>
--->
-    <!--
-
-    <Button
-        android:id="@+id/button_get_forecast"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_toEndOf="@id/edittext_cityname"
-        android:background="@drawable/round_b"
-        android:gravity="center_vertical|center_horizontal"
-        android:onClick="onClick"
-        android:textColor="@color/colorWhite"
-        android:text="@string/button_forecast" />
--->
-    <!--android:layout_marginTop="15dp"-->
 
     <TextView
         android:id="@+id/textview_wheather_now"
@@ -72,15 +21,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="84dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="52dp"
         android:text="@string/hint_cityname"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.025"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <!--android:layout_marginLeft="-60dp"-->
-    <!--android:layout_below="@id/setting_layout"-->
 
     <TextView
         android:id="@+id/textview_temp"
@@ -94,47 +41,5 @@
         android:textSize="75sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_wheather_now" />
-
-
-    <!--
-    <TextView
-        android:id="@+id/textview_tipoftheday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textview_forecast"
-        android:text="@string/tip_of_the_day"
-        android:textSize="25sp"/>
-
--->
-    <!--
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/setting_layout"
-        android:layout_below="@+id/edittext_cityname">
-        &lt;!&ndash;android:layout_marginTop="45dp"&ndash;&gt;
-        <Switch
-            style="@style/textEdit"
-            android:id="@+id/switch_forecast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/owm_switch_label" />
--->
-    <!--
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="70dp"
-            android:layout_alignParentTop="true"
--->
-    <!--
-        <Switch
-            style="@style/textEdit"
-            android:layout_toRightOf="@id/switch_forecast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/fids_switch_label"/>
-    </RelativeLayout>
--->
 
 </android.support.constraint.ConstraintLayout>

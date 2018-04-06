@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -65,9 +68,12 @@ public class MainActivity extends AppCompatActivity implements
 
         textViewDescription = findViewById(R.id.textview_wheather_now);
         textViewTemperature = findViewById(R.id.textview_temp);
-        editTextCity = findViewById(R.id.edittext_cityname);
+//        editTextCity = findViewById(R.id.edittext_cityname);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
+
+        View fragmentContainer = findViewById(R.id.fragment_top);
+
 
         try {
             File httpCacheDir = new File(getCacheDir(), "http");
@@ -118,7 +124,8 @@ public class MainActivity extends AppCompatActivity implements
                 Snackbar.make(view, "Requesting owm", Snackbar.LENGTH_INDEFINITE)
 //                        .setAction("Action", vol)
                         .show();
-                addCityAndLoadWeather();
+//                loadFragment(R.id.fragment_top, AddCity.newInstance("", ""), true);
+//                addCityAndLoadWeather();
             }
         });
 
@@ -128,6 +135,14 @@ public class MainActivity extends AppCompatActivity implements
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void loadFragment(int containerID, Fragment fragment, boolean isPutToBackstack) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(containerID, fragment);
+        if (isPutToBackstack) transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void addCityAndLoadWeather() {
@@ -242,9 +257,9 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

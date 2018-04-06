@@ -12,30 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- android:theme="@style/AppTheme"> -->
-        <!--<activity android:name=".MainActivity">-->
-<!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
--->
-        <!--</activity>-->
         <activity
-            android:name=".ForecastActivity"
-            android:configChanges="uiMode|orientation|keyboard|keyboardHidden"
-            android:label="@string/title_activity_forecast">
-
-            <!-- android:theme="@style/AppTheme.NoActionBar"> -->
-            <!-- <intent-filter> -->
-            <!-- <action android:name= "android.intent.action.SEND" /> -->
-            <!-- <category android:name= "android.intent.category.DEFAULT" /> -->
-            <!-- <data android:mimeType= "text/plain" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-        <!--<activity-->
-            <!--android:name=".DrawerActivity"-->
-        <activity android:name=".MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -44,6 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".FindCity"
+            android:label="@string/find_city_activity_title">
+        </activity>
+
     </application>
 
 </manifest>
