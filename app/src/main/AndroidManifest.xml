@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".FindCity"
+        <activity android:name=".FindCityActivity"
             android:label="@string/find_city_activity_title">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

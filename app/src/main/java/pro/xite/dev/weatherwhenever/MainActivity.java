@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements
                         .setAnimationInterpolator(new FastOutSlowInInterpolator())
                         .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                         .setIcon(R.drawable.ic_search)
-                        .setTarget(R.id.add_city)
+                        .setTarget(R.id.find_city_button)
                         .show();
             }
         }, delayMillis);
@@ -286,13 +286,11 @@ public class MainActivity extends AppCompatActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        Intent intent = new Intent(this, FindCity.class);
-//        intent.putExtra("w", reliableForecast);
-        startActivityForResult(intent, 1);
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
+        if (id == R.id.find_city_button) {
+            Intent intent = new Intent(this, FindCityActivity.class);
+            startActivityForResult(intent, FindCityActivity.REQUEST_CODE);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

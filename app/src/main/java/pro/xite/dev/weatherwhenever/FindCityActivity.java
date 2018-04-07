@@ -10,9 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-public class FindCity extends AppCompatActivity {
+public class FindCityActivity extends AppCompatActivity {
 
-    private static final String TAG = "FindCity/TRACER";
+    private static final String TAG = "FindCityActivity/TRACER";
+    static final int REQUEST_CODE = 22;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
