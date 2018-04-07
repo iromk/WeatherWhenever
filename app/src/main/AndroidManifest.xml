@@ -25,6 +25,9 @@
 
         <activity android:name=".FindCity"
             android:label="@string/find_city_activity_title">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
         </activity>
 
     </application>

@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements
 
         textViewDescription = findViewById(R.id.textview_wheather_now);
         textViewTemperature = findViewById(R.id.textview_temp);
-//        editTextCity = findViewById(R.id.edittext_cityname);
+        editTextCity = findViewById(R.id.edittext_cityname);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -286,6 +286,9 @@ public class MainActivity extends AppCompatActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        Intent intent = new Intent(this, FindCity.class);
+//        intent.putExtra("w", reliableForecast);
+        startActivityForResult(intent, 1);
         //noinspection SimplifiableIfStatement
 //        if (id == R.id.action_settings) {
 //            return true;
