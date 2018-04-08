@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 
 import pro.xite.dev.weatherwhenever.data.Weather;
+import pro.xite.dev.weatherwhenever.data.WebJsonDataProvider;
 
 /**
  * Created by Roman Syrchin on 3/27/18.
@@ -26,7 +27,7 @@ public class LeakSafeHandler<T extends Serializable> extends Handler {
         DataProviderListener activity = weakReference.get();
         if(activity != null) {
             final Bundle bundle = msg.getData();
-            final T object = (T) bundle.getSerializable(Weather.DATA_KEY); // TODO check cast
+            final Serializable object = bundle.getSerializable(WebJsonDataProvider.DATA_KEY);
             activity.onSerializedDataReceived(object);
             super.handleMessage(msg);
         }

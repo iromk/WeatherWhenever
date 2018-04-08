@@ -52,7 +52,7 @@ public class OdsCityProvider extends WebJsonDataProvider {
         getRequestUrl.append(String.format(Locale.getDefault(), GET_PARAMS_TEMPLATE,
                             ODS_DATASET_ID,
                             ODS_RESULT_ROWS_LIMIT,
-                            getExtraGetParams()));
+                            ODS_EXTRA_GET_PARAMS));
 
         if(criteria.length > 0) {
             getRequestUrl.append(String.format(GET_CRITERIA_TEMPLATE, criteria[0]));
@@ -69,31 +69,11 @@ public class OdsCityProvider extends WebJsonDataProvider {
         }
     }
 
-    protected String getExtraGetParams() {
-        return ODS_EXTRA_GET_PARAMS;
+    public static void request(String city, DataProviderListener activity) {
+        getInstance().request(city, new LeakSafeHandler<>(activity));
     }
 
-    public static void request(final String criteria, @NonNull final Handler callbackHandler) {
-        final OdsCityProvider ods = OdsCityProvider.getInstance();
-        new Thread() {
-            public void run() {
-                Log.d(TAG_TRACER, Helpers.getMethodName());
-                JSONObject jsonObject = ods.loadData(criteria);
-                Log.d(TAG_TRACER, "Data loaded");
-                if(jsonObject != null) {
-                    Message msgObj = callbackHandler.obtainMessage();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(Weather.DATA_KEY, jsonObject.toString());
-                    msgObj.setData(bundle);
-                    callbackHandler.sendMessage(msgObj);
-                }
-            }
-        }.start();
-    }
-    public static void request(String city, DataProviderListener activity) {
-        request(city, new LeakSafeHandler<>(activity));
-    }
-    private static OdsCityProvider getInstance() {
-        return new OdsCityProvider(); // it could be more sophisticated if needed.
+    private static WebJsonDataProvider getInstance() {
+        return new OdsCityProvider(); // it could be more sophisticated when needed.
     }
 }

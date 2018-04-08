@@ -152,10 +152,10 @@ public class MainActivity extends AppCompatActivity implements
                 Snackbar.make(view, "Requesting owm", Snackbar.LENGTH_INDEFINITE)
 //                        .setAction("Action", vol)
                         .show();
-                promptUseSearchCity(PROMPT_INSTANT); // for test only
+//                promptUseSearchCity(PROMPT_INSTANT); // for test only
 
 //                loadFragment(R.id.fragment_top, AddCity.newInstance("", ""), true);
-//                addCityAndLoadWeather();
+                addCityAndLoadWeather();
             }
         });
 
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void addCityAndLoadWeather() {
-        final String city = editTextCity.getText().toString();
+        final String city = "yekaterinburg"; //editTextCity.getText().toString();
         whenever = null;
         weather = null;
         wherever = null;

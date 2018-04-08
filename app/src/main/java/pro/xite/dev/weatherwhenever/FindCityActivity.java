@@ -8,11 +8,17 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import pro.xite.dev.weatherwhenever.data.ods.OdsCityProvider;
+import pro.xite.dev.weatherwhenever.data.ods.OdsResponse;
 import pro.xite.dev.weatherwhenever.manage.DataProviderListener;
 
 public class FindCityActivity extends AppCompatActivity
@@ -20,6 +26,7 @@ public class FindCityActivity extends AppCompatActivity
 
     private static final String TAG = "FindCityActivity/TRACER";
     static final int REQUEST_CODE = 22;
+    private ArrayAdapter<String> listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,11 @@ public class FindCityActivity extends AppCompatActivity
 
             }
         });
+
+        listAdapter = new ArrayAdapter<>( this,
+                android.R.layout.simple_list_item_1, citi.cities);
+        ListView listCities = findViewById(R.id.list_view);
+        listCities.setAdapter(listAdapter);
     }
 
     private void suggestCities(Editable text) {
@@ -58,6 +70,23 @@ public class FindCityActivity extends AppCompatActivity
 
     @Override
     public void onSerializedDataReceived(Serializable object) {
-        Log.d(TAG, "onSerializedDataReceived: .");
+        citi.clear();
+        OdsResponse odsResponse = (OdsResponse) object;
+        for (OdsResponse.OdsCity city: odsResponse.getCities()) {
+            citi.add(city.getName());
+        }
+        listAdapter.notifyDataSetChanged();
+    }
+
+    City citi = new City();
+    private class City {
+        ArrayList<String> cities = new ArrayList<>(Arrays.asList("dasd", "aqweqe", "poopor", "ngvs"));
+        public void add(String s) {
+            cities.add(s);
+        }
+        public void clear() {
+            cities.clear();
+        }
+
     }
 }
