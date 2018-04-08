@@ -10,7 +10,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-public class FindCityActivity extends AppCompatActivity {
+import java.io.Serializable;
+
+import pro.xite.dev.weatherwhenever.data.ods.OdsCityProvider;
+import pro.xite.dev.weatherwhenever.manage.DataProviderListener;
+
+public class FindCityActivity extends AppCompatActivity
+        implements DataProviderListener {
 
     private static final String TAG = "FindCityActivity/TRACER";
     static final int REQUEST_CODE = 22;
@@ -46,6 +52,12 @@ public class FindCityActivity extends AppCompatActivity {
     }
 
     private void suggestCities(Editable text) {
+        OdsCityProvider.request(text.toString(), this);
 
+    }
+
+    @Override
+    public void onSerializedDataReceived(Serializable object) {
+        Log.d(TAG, "onSerializedDataReceived: .");
     }
 }
