@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import pro.xite.dev.weatherwhenever.Helpers;
 import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
-import pro.xite.dev.weatherwhenever.manage.DataProviderListener;
+import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
 import pro.xite.dev.weatherwhenever.manage.LeakSafeHandler;
 
 /**
@@ -63,8 +63,8 @@ public class OdsCityProvider extends WebJsonProvider {
         return OdsResponse.class.getName();
     }
 
-    public static void request(String city, DataProviderListener activity) {
-        getInstance().request(city, new LeakSafeHandler<>(activity));
+    public static void request(String city, IDataProviderListener activity) {
+        getInstance().request(city, new LeakSafeHandler(activity));
     }
     public void request(String city) {
         Log.d(TAG_TRACER, Helpers.getMethodName());

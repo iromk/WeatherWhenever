@@ -23,10 +23,10 @@ import pro.xite.dev.weatherwhenever.data.IDataProvider;
 import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
 import pro.xite.dev.weatherwhenever.data.ods.OdsCityProvider;
 import pro.xite.dev.weatherwhenever.data.ods.OdsResponse;
-import pro.xite.dev.weatherwhenever.manage.DataProviderListener;
+import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
 
 public class FindCityActivity extends AppCompatActivity
-        implements DataProviderListener {
+        implements IDataProviderListener {
 
     private static final String TAG = "FindCityActivity/TRACER";
     static final int REQUEST_CODE = 22;

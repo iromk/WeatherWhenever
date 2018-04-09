@@ -18,6 +18,7 @@ import java.net.URL;
 
 import pro.xite.dev.weatherwhenever.Helpers;
 import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
+import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
 
 /**
  * Created by Roman Syrchin on 3/26/18.
@@ -95,7 +96,7 @@ abstract public class OwmDataProvider {//extends WebJsonProvider {
                 if(owmData != null) {
                     Message msgObj = handler.obtainMessage();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(WebJsonProvider.DATA_KEY, owmData);
+                    bundle.putSerializable(IDataProviderListener.KEY_SERIALIZABLE, owmData);
                     msgObj.setData(bundle);
                     handler.sendMessage(msgObj);
                 }

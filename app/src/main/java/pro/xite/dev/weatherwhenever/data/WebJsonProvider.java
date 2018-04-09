@@ -14,16 +14,15 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import pro.xite.dev.weatherwhenever.Helpers;
-import pro.xite.dev.weatherwhenever.manage.DataProviderListener;
+import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
 import pro.xite.dev.weatherwhenever.manage.LeakSafeHandler;
 
 /**
@@ -32,80 +31,65 @@ import pro.xite.dev.weatherwhenever.manage.LeakSafeHandler;
 abstract public class WebJsonProvider extends Service implements IDataProvider {
 
     final private static String TAG_TRACER = "WebJsonProvider";
-    final public static String DATA_KEY = "WebJsonData";
     private static final String TAG_TRACER_SERVICE = "ODS/SERVICE";
     static final int WHAT_CODE_FOR_REQUEST_QUEUE = 5;
     static final String KEY_QUEUE_CRITERIA_ARRAY = "ARGH";
     private ServiceHandler serviceHandler;
     private long requestRate;
 
-    protected boolean isServiceMode() {
-        return serviceMode;
-    }
 
-    protected void setServiceMode(boolean mode) {
-        serviceMode = mode;
-    }
+    private IDataProviderListener listener;
 
-    private boolean serviceMode = false;
-
-    abstract protected String getTargetClass();
-
-    private DataProviderListener listener;
-
-    public void setListener(DataProviderListener listener) {
+    public void setListener(IDataProviderListener listener) {
         this.listener = listener;
     }
 
+    abstract protected String getTargetClass();
+    abstract protected URL getRequestUrl(String... criteria);
 
-    protected JSONObject loadData(String... criteria) {
+    protected String loadData(URL url) {
 
         try {
-
-            URL url = getRequestUrl(criteria);
 
             Log.d(Helpers.getMethodName(), url.toString());
 
             HttpResponseCache cache = HttpResponseCache.getInstalled();
-            Log.d("CAHCE", String.format("requests %d", cache.getRequestCount()));
+            Log.d("CACHE", String.format("requests %d", cache.getRequestCount()));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder rawData = new StringBuilder(1024);
             String nextLine;
             while ((nextLine = reader.readLine()) != null) {
-                rawData.append(nextLine);
+                rawData.append(nextLine).append('\n');
             }
             reader.close();
 
-            JSONObject jsonObject = new JSONObject(rawData.toString());
-            return jsonObject;
+            return rawData.toString();
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             return null;
         }
-     }
+    }
 
-    abstract protected URL getRequestUrl(String... criteria);
 
     public void request(final String criteria, @NonNull final Handler callbackHandler) {
         new Thread() {
             public void run() {
                 Log.d(TAG_TRACER, Helpers.getMethodName());
-                JSONObject jsonObject = loadData(criteria);
-                Serializable response = null;
                 try {
-                    response = (Serializable) new Gson().fromJson(jsonObject.toString(), Class.forName(getTargetClass()));
+                    String rawString = loadData(getRequestUrl(criteria));
+                    Serializable response = (Serializable) new Gson().fromJson(rawString, Class.forName(getTargetClass()));
+                    Log.d(TAG_TRACER, "Data loaded");
+                    if (response != null) {
+                        Message msgObj = callbackHandler.obtainMessage();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(IDataProviderListener.KEY_SERIALIZABLE, response);
+                        msgObj.setData(bundle);
+                        callbackHandler.sendMessage(msgObj);
+                    }
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
-                }
-                Log.d(TAG_TRACER, "Data loaded");
-                if(response != null) {
-                    Message msgObj = callbackHandler.obtainMessage();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(DATA_KEY, response);
-                    msgObj.setData(bundle);
-                    callbackHandler.sendMessage(msgObj);
                 }
             }
         }.start();
@@ -135,14 +119,13 @@ abstract public class WebJsonProvider extends Service implements IDataProvider {
             Bundle bundle = msg.getData();
             String[] criteria = bundle.getStringArray(KEY_QUEUE_CRITERIA_ARRAY);
             super.handleMessage(msg);
-            request(criteria[0], new LeakSafeHandler<>(listener));
+            request(criteria[0], new LeakSafeHandler(listener));
         }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        setServiceMode(true);
         serviceHandler = new ServiceHandler();
         Log.d(TAG_TRACER_SERVICE, Helpers.getMethodName());
     }
@@ -186,8 +169,6 @@ abstract public class WebJsonProvider extends Service implements IDataProvider {
             return WebJsonProvider.this;
         }
     }
-
-
 
 
 }

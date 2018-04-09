@@ -35,7 +35,7 @@ import pro.xite.dev.weatherwhenever.data.Whenever;
 import pro.xite.dev.weatherwhenever.data.Wherever;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
-import pro.xite.dev.weatherwhenever.manage.DataProviderListener;
+import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
 import pro.xite.dev.weatherwhenever.manage.DbManager;
 import pro.xite.dev.weatherwhenever.manage.PrefsManager;
 import pro.xite.dev.weatherwhenever.manage.RecentCitiesList;
@@ -43,7 +43,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener, DataProviderListener {
+        View.OnClickListener, IDataProviderListener {
 
     public static final String FRIENDS_RESPONSE = "friends_response";
     public static final String TAG_TRACER = "TRACER";

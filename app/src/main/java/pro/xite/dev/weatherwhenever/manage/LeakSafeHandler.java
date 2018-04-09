@@ -7,26 +7,24 @@ import android.os.Message;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 
-import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
-
 /**
  * Created by Roman Syrchin on 3/27/18.
  */
 
-public class LeakSafeHandler<T extends Serializable> extends Handler {
+public class LeakSafeHandler extends Handler {
 
-    private WeakReference<DataProviderListener> weakReference;
+    private WeakReference<IDataProviderListener> weakReference;
 
-    public LeakSafeHandler(DataProviderListener activity) {
-        weakReference = new WeakReference<>(activity);
+    public LeakSafeHandler(IDataProviderListener listener) {
+        weakReference = new WeakReference<>(listener);
     }
 
     @Override
     public void handleMessage(Message msg) {
-        DataProviderListener activity = weakReference.get();
+        IDataProviderListener activity = weakReference.get();
         if(activity != null) {
             final Bundle bundle = msg.getData();
-            final Serializable object = bundle.getSerializable(WebJsonProvider.DATA_KEY);
+            final Serializable object = bundle.getSerializable(IDataProviderListener.KEY_SERIALIZABLE);
             activity.onSerializedDataReceived(object);
             super.handleMessage(msg);
         }
