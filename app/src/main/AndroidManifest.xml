@@ -30,6 +30,7 @@
                 android:value=".MainActivity"/>
         </activity>
 
+        <service android:name=".data.ods.OdsCityProvider" />
     </application>
 
 </manifest>

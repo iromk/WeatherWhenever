@@ -1,10 +1,15 @@
 package pro.xite.dev.weatherwhenever.data;
 
+import android.app.Service;
+import android.content.Intent;
 import android.net.http.HttpResponseCache;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -22,7 +27,7 @@ import pro.xite.dev.weatherwhenever.data.ods.OdsResponse;
 /**
  * Created by Roman Syrchin on 4/7/18.
  */
-public class WebJsonDataProvider {
+public class WebJsonDataProvider extends Service {
 
     final private static String TAG_TRACER = "WebJsonDataProvider";
     final public static String DATA_KEY = "WebJsonData";
@@ -79,4 +84,9 @@ public class WebJsonDataProvider {
         }.start();
     }
 
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 }
