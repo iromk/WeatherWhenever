@@ -17,14 +17,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import pro.xite.dev.weatherwhenever.Helpers;
-import pro.xite.dev.weatherwhenever.data.Weather;
-import pro.xite.dev.weatherwhenever.data.WebJsonDataProvider;
+import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
 
 /**
  * Created by Roman Syrchin on 3/26/18.
  */
 
-abstract public class OwmDataProvider extends WebJsonDataProvider {
+abstract public class OwmDataProvider {//extends WebJsonProvider {
 
     /**
      * OWM API definitions
@@ -96,7 +95,7 @@ abstract public class OwmDataProvider extends WebJsonDataProvider {
                 if(owmData != null) {
                     Message msgObj = handler.obtainMessage();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(WebJsonDataProvider.DATA_KEY, owmData);
+                    bundle.putSerializable(WebJsonProvider.DATA_KEY, owmData);
                     msgObj.setData(bundle);
                     handler.sendMessage(msgObj);
                 }

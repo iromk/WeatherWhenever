@@ -19,7 +19,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import pro.xite.dev.weatherwhenever.data.WebJsonDataProvider;
+import pro.xite.dev.weatherwhenever.data.IDataProvider;
+import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
 import pro.xite.dev.weatherwhenever.data.ods.OdsCityProvider;
 import pro.xite.dev.weatherwhenever.data.ods.OdsResponse;
 import pro.xite.dev.weatherwhenever.manage.DataProviderListener;
@@ -31,16 +32,17 @@ public class FindCityActivity extends AppCompatActivity
     static final int REQUEST_CODE = 22;
     private ArrayAdapter<String> listAdapter;
 
-    private OdsCityProvider odsService;
+    private IDataProvider odsService;
     private boolean bound = false;
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            OdsCityProvider.DataProviderBinder odsServiceBinder =
-                    (OdsCityProvider.DataProviderBinder) service;
+            WebJsonProvider.DataProviderServiceBinder odsServiceBinder =
+                    (WebJsonProvider.DataProviderServiceBinder) service;
             odsService = odsServiceBinder.getDataProviderService();
             odsService.setListener(FindCityActivity.this);
+            odsService.setRequestRate(1500);
             bound = true;
             Log.d(TAG, "onServiceConnected");
         }
@@ -90,7 +92,8 @@ public class FindCityActivity extends AppCompatActivity
     }
 
     private void suggestCities(Editable text) {
-        odsService.suggest(text.toString()); // request service
+        odsService.request(text.toString()); // request service
+
 //        OdsCityProvider.request(text.toString(), this); // request in a thread
 
     }
