@@ -35,8 +35,8 @@ import pro.xite.dev.weatherwhenever.data.Whenever;
 import pro.xite.dev.weatherwhenever.data.Wherever;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
-import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
 import pro.xite.dev.weatherwhenever.manage.DbManager;
+import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
 import pro.xite.dev.weatherwhenever.manage.PrefsManager;
 import pro.xite.dev.weatherwhenever.manage.RecentCitiesList;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
@@ -155,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements
 //                promptUseSearchCity(PROMPT_INSTANT); // for test only
 
 //                loadFragment(R.id.fragment_top, AddCity.newInstance("", ""), true);
-                addCityAndLoadWeather();
             }
         });
 
@@ -173,15 +172,6 @@ public class MainActivity extends AppCompatActivity implements
         transaction.replace(containerID, fragment);
         if (isPutToBackstack) transaction.addToBackStack(null);
         transaction.commit();
-    }
-
-    private void addCityAndLoadWeather() {
-        final String city = "yekaterinburg"; //editTextCity.getText().toString();
-        whenever = null;
-        weather = null;
-        wherever = null;
-        new OwmActualWeatherProvider().request(city, this);
-        new OwmNearestForecastProvider().request(city, this);
     }
 
     @Override
@@ -211,6 +201,11 @@ public class MainActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
             String response = data.getStringExtra(FindCityActivity.RESULT_CITYNAME);
+            whenever = null;
+            weather = null;
+            wherever = null;
+            new OwmActualWeatherProvider().asyncRequest(this, response);
+            new OwmNearestForecastProvider().asyncRequest(this, response);
             Toast.makeText(this, response, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Friend wouldn't know", Toast.LENGTH_LONG).show();

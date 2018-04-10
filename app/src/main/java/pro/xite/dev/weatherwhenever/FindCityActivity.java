@@ -117,7 +117,7 @@ public class FindCityActivity extends AppCompatActivity
 
 
 
-    City citi = new City();
+    CityItem citi = new CityItem();
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -127,7 +127,7 @@ public class FindCityActivity extends AppCompatActivity
         finish();
     }
 
-    private class City {
+    private class CityItem {
         ArrayList<String> cities = new ArrayList<>();
         public void add(String s) {
             cities.add(s);

@@ -1,8 +1,5 @@
 package pro.xite.dev.weatherwhenever.data.owm;
 
-import pro.xite.dev.weatherwhenever.manage.LeakSafeHandler;
-import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
-
 /**
  * Created by Roman Syrchin on 3/26/18.
  */
@@ -23,10 +20,8 @@ public class OwmNearestForecastProvider extends OwmDataProvider {
         return super.getExtraGetParams() + OWM_LANG_RU;
     }
 
-    public void request(String city, IDataProviderListener activity) {
-        requestOwmService(city, OwmNearestForecast.class,
-                new LeakSafeHandler(activity));
+    @Override
+    protected Class<?> getTargetClass() {
+        return OwmNearestForecast.class;
     }
-
-
 }

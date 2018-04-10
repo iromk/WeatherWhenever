@@ -5,10 +5,8 @@ import android.util.Log;
 import java.net.URL;
 import java.util.Locale;
 
-import pro.xite.dev.weatherwhenever.Helpers;
 import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
 import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
-import pro.xite.dev.weatherwhenever.manage.LeakSafeHandler;
 
 /**
  * Created by Roman Syrchin on 4/8/18.

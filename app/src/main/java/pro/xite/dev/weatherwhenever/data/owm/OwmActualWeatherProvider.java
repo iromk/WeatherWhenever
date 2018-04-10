@@ -4,9 +4,6 @@ package pro.xite.dev.weatherwhenever.data.owm;
  * Created by Roman Syrchin on 3/26/18.
  */
 
-import pro.xite.dev.weatherwhenever.manage.LeakSafeHandler;
-import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
-
 /**
  * Data loader and parser for Current weather data provided by OWM.
  */
@@ -20,11 +17,16 @@ public class OwmActualWeatherProvider extends OwmDataProvider {
     @Override
     protected String getApiAction() { return OWM_ACTION_WEATHER; }
 
+    @Override
+    protected Class<?> getTargetClass() {
+        return OwmWeather.class;
+    }
+/*
     public void request(String city, IDataProviderListener activity) {
         requestOwmService(city, OwmCity.class,
                 new LeakSafeHandler(activity));
         requestOwmService(city, OwmWeather.class,
                 new LeakSafeHandler(activity));
     }
-
+*/
 }
