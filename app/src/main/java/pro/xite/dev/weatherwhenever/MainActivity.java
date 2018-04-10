@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
-            String response = data.getStringExtra(FRIENDS_RESPONSE);
+            String response = data.getStringExtra(FindCityActivity.RESULT_CITYNAME);
             Toast.makeText(this, response, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Friend wouldn't know", Toast.LENGTH_LONG).show();

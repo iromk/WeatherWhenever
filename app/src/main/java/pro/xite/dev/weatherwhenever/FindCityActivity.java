@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -25,10 +26,11 @@ import pro.xite.dev.weatherwhenever.data.ods.OdsResponse;
 import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
 
 public class FindCityActivity extends AppCompatActivity
-        implements IDataProviderListener {
+        implements IDataProviderListener, AdapterView.OnItemClickListener {
 
     private static final String TAG = "FindCityActivity/TRACER";
     static final int REQUEST_CODE = 22;
+    static final String RESULT_CITYNAME = "CITYNAME";
     private ArrayAdapter<String> listAdapter;
 
     private IDataProvider odsService;
@@ -41,7 +43,7 @@ public class FindCityActivity extends AppCompatActivity
                     (WebJsonProvider.DataProviderServiceBinder) service;
             odsService = odsServiceBinder.getDataProviderService();
             odsService.setListener(FindCityActivity.this);
-            odsService.setDelayedRequestTimeout(1500);
+            odsService.setDelayedRequestTimeout(1200);
             bound = true;
             Log.d(TAG, "onServiceConnected");
         }
@@ -71,8 +73,11 @@ public class FindCityActivity extends AppCompatActivity
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                suggestCities(editTextCityname.getText());
-                Log.d(TAG, String.format("onTextChanged: %s", editTextCityname.getText()));
+                String userInput = editTextCityname.getText().toString();
+                odsService.delayedRequest(userInput); // overriding service request
+//                odsService.queuedRequest(userInput); // queued service request
+//                OdsCityProvider.asyncRequest(FindCityActivity.this, userInput); // request in a thread
+                Log.d(TAG, String.format("onTextChanged: %s", userInput));
             }
 
             @Override
@@ -88,13 +93,7 @@ public class FindCityActivity extends AppCompatActivity
                 android.R.layout.simple_list_item_1, citi.cities);
         ListView listCities = findViewById(R.id.list_view);
         listCities.setAdapter(listAdapter);
-    }
-
-    private void suggestCities(Editable text) {
-        odsService.delayedRequest(text.toString()); // overriding service request
-//        odsService.queuedRequest(text.toString()); // queued service request
-//        OdsCityProvider.asyncRequest(this, text.toString()); // request in a thread
-
+        listCities.setOnItemClickListener(this);
     }
 
     @Override
@@ -116,7 +115,18 @@ public class FindCityActivity extends AppCompatActivity
         listAdapter.notifyDataSetChanged();
     }
 
+
+
     City citi = new City();
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent selection = new Intent();
+        selection.putExtra(RESULT_CITYNAME, citi.get(position));
+        setResult(RESULT_OK, selection);
+        finish();
+    }
+
     private class City {
         ArrayList<String> cities = new ArrayList<>();
         public void add(String s) {
@@ -125,6 +135,7 @@ public class FindCityActivity extends AppCompatActivity
         public void clear() {
             cities.clear();
         }
+        public String get(int id) { return cities.get(id); }
 
     }
 }
