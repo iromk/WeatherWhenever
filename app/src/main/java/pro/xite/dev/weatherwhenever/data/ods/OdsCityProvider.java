@@ -59,14 +59,15 @@ public class OdsCityProvider extends WebJsonProvider {
     }
 
     @Override
-    protected String getTargetClass() {
-        return OdsResponse.class.getName();
+    protected Class<?> getTargetClass() {
+        return OdsResponse.class;
     }
 
     public static void request(String city, IDataProviderListener activity) {
         getInstance().request(city, new LeakSafeHandler(activity));
     }
-    public void request(String city) {
+
+    public void request(IDataProviderListener listener, String city) {
         Log.d(TAG_TRACER, Helpers.getMethodName());
         queueRequest(city);
     }

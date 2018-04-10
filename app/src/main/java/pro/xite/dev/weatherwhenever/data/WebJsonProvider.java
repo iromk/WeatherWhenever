@@ -30,21 +30,23 @@ import pro.xite.dev.weatherwhenever.manage.LeakSafeHandler;
  */
 abstract public class WebJsonProvider extends Service implements IDataProvider {
 
-    final private static String TAG_TRACER = "WebJsonProvider";
-    private static final String TAG_TRACER_SERVICE = "ODS/SERVICE";
-    static final int WHAT_CODE_FOR_REQUEST_QUEUE = 5;
+    static final int WHAT_CODE_FOR_REQUEST_QUEUE = 22;
+    static final int WHAT_CODE_FOR_DELAYED_REQUEST = 5;
+
+    final private static String TAG_TRACER = "WJP";
+    private static final String TAG_TRACER_SERVICE = "WJP/SERVICE";
+
     static final String KEY_QUEUE_CRITERIA_ARRAY = "ARGH";
     private ServiceHandler serviceHandler;
-    private long requestRate;
-
-
+    private long requestTimeout;
     private IDataProviderListener listener;
 
     public void setListener(IDataProviderListener listener) {
         this.listener = listener;
     }
 
-    abstract protected String getTargetClass();
+    abstract protected Class<?> getTargetClass();
+
     abstract protected URL getRequestUrl(String... criteria);
 
     protected String loadData(URL url) {
@@ -72,44 +74,48 @@ abstract public class WebJsonProvider extends Service implements IDataProvider {
         }
     }
 
-
     public void request(final String criteria, @NonNull final Handler callbackHandler) {
         new Thread() {
             public void run() {
                 Log.d(TAG_TRACER, Helpers.getMethodName());
-                try {
-                    String rawString = loadData(getRequestUrl(criteria));
-                    Serializable response = (Serializable) new Gson().fromJson(rawString, Class.forName(getTargetClass()));
-                    Log.d(TAG_TRACER, "Data loaded");
-                    if (response != null) {
-                        Message msgObj = callbackHandler.obtainMessage();
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(IDataProviderListener.KEY_SERIALIZABLE, response);
-                        msgObj.setData(bundle);
-                        callbackHandler.sendMessage(msgObj);
-                    }
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                String rawString = loadData(getRequestUrl(criteria));
+                Serializable response = (Serializable) new Gson().fromJson(rawString, getTargetClass());
+                Log.d(TAG_TRACER, "Data loaded");
+                if (response != null) {
+                    Message msgObj = callbackHandler.obtainMessage();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(IDataProviderListener.KEY_SERIALIZABLE, response);
+                    msgObj.setData(bundle);
+                    callbackHandler.sendMessage(msgObj);
                 }
             }
         }.start();
     }
 
-    public void queueRequest(String... criteria) {
-        serviceHandler.removeMessages(WHAT_CODE_FOR_REQUEST_QUEUE);
+    public void delayedRequest(IDataProviderListener listener, String... criteria) {
+        serviceHandler.removeMessages(WHAT_CODE_FOR_DELAYED_REQUEST);
 
-        Bundle bundle = new Bundle();
-        bundle.putStringArray(KEY_QUEUE_CRITERIA_ARRAY, criteria);
-
-        Message msg = serviceHandler.obtainMessage();
-        msg.setData(bundle);
-        msg.what = WHAT_CODE_FOR_REQUEST_QUEUE;
-
-        serviceHandler.sendMessageDelayed(msg, requestRate);
+        serviceHandler.sendMessageDelayed(
+                prepareMessage(WHAT_CODE_FOR_DELAYED_REQUEST, criteria),
+                requestTimeout);
     }
 
-    public void setRequestRate(long millis) {
-        requestRate = millis;
+    public void queueRequest(String... criteria) {
+        serviceHandler.sendMessage(prepareMessage(WHAT_CODE_FOR_REQUEST_QUEUE, criteria));
+    }
+
+    private Message prepareMessage(int what, String... content) {
+        Bundle bundle = new Bundle();
+        bundle.putStringArray(KEY_QUEUE_CRITERIA_ARRAY, content);
+
+        Message msg = serviceHandler.obtainMessage();
+        msg.what = what;
+        msg.setData(bundle);
+        return msg;
+    }
+
+    public void setRequestTimeout(long millis) {
+        requestTimeout = millis;
     }
 
     private class ServiceHandler extends Handler {

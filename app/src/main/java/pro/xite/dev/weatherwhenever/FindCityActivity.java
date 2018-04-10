@@ -42,7 +42,7 @@ public class FindCityActivity extends AppCompatActivity
                     (WebJsonProvider.DataProviderServiceBinder) service;
             odsService = odsServiceBinder.getDataProviderService();
             odsService.setListener(FindCityActivity.this);
-            odsService.setRequestRate(1500);
+            odsService.setRequestTimeout(1500);
             bound = true;
             Log.d(TAG, "onServiceConnected");
         }
@@ -92,7 +92,8 @@ public class FindCityActivity extends AppCompatActivity
     }
 
     private void suggestCities(Editable text) {
-        odsService.request(text.toString()); // request service
+//        odsService.request(text.toString()); // request service
+        odsService.delayedRequest(this, text.toString()); // request service
 
 //        OdsCityProvider.request(text.toString(), this); // request in a thread
 
