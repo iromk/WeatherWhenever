@@ -38,7 +38,7 @@ public class OdsResponse implements Serializable {
         @SerializedName("fields")
         private Fields fields;
 
-        private class Fields {
+        private class Fields implements Serializable {
 
             @SerializedName("country")
             String country;
@@ -86,6 +86,11 @@ public class OdsResponse implements Serializable {
         @Override
         public Weather getForecasetOn(Date date) {
             return null;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s, %s", getName(), fields.country);
         }
     }
 

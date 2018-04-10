@@ -21,12 +21,5 @@ public class OwmActualWeatherProvider extends OwmDataProvider {
     protected Class<?> getTargetClass() {
         return OwmWeather.class;
     }
-/*
-    public void request(String city, IDataProviderListener activity) {
-        requestOwmService(city, OwmCity.class,
-                new LeakSafeHandler(activity));
-        requestOwmService(city, OwmWeather.class,
-                new LeakSafeHandler(activity));
-    }
-*/
+
 }

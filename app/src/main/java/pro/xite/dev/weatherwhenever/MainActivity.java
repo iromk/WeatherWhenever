@@ -200,13 +200,13 @@ public class MainActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
-            String response = data.getStringExtra(FindCityActivity.RESULT_CITYNAME);
             whenever = null;
             weather = null;
             wherever = null;
-            new OwmActualWeatherProvider().asyncRequest(this, response);
-            new OwmNearestForecastProvider().asyncRequest(this, response);
-            Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+            wherever = (Wherever) data.getSerializableExtra(FindCityActivity.RESULT_CITY);
+            new OwmActualWeatherProvider().asyncRequest(this, wherever.getName());
+            new OwmNearestForecastProvider().asyncRequest(this, wherever.getName());
+            Toast.makeText(this, wherever.getName(), Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Friend wouldn't know", Toast.LENGTH_LONG).show();
         }
@@ -215,10 +215,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onSerializedDataReceived(Serializable data) {
         Log.d(TAG_TRACER, Helpers.getMethodName());
-        if(data instanceof Wherever) {
-            wherever = (Wherever) data;
-            Log.d(TAG_TRACER, String.format("Got new Wherever %s of %s", wherever.getName(), wherever.getCountryCode()));
-        } else if(data instanceof Weather) {
+        if(data instanceof Weather) {
             weather = (Weather) data;
             Log.d(TAG_TRACER, String.format("Got new Weather t==%d", (int) weather.getTemperature()));
         } else if (data instanceof Whenever) {

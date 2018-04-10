@@ -30,8 +30,8 @@ public class FindCityActivity extends AppCompatActivity
 
     private static final String TAG = "FindCityActivity/TRACER";
     static final int REQUEST_CODE = 22;
-    static final String RESULT_CITYNAME = "CITYNAME";
-    private ArrayAdapter<String> listAdapter;
+    static final String RESULT_CITY = "CITYENTITY";
+    private ArrayAdapter<OdsResponse.OdsCity> listAdapter;
 
     private IDataProvider odsService;
     private boolean bound = false;
@@ -90,7 +90,7 @@ public class FindCityActivity extends AppCompatActivity
         bindService(intent, connection, BIND_AUTO_CREATE);
 
         listAdapter = new ArrayAdapter<>( this,
-                android.R.layout.simple_list_item_1, citi.cities);
+                android.R.layout.simple_list_item_1, odsCities);
         ListView listCities = findViewById(R.id.list_view);
         listCities.setAdapter(listAdapter);
         listCities.setOnItemClickListener(this);
@@ -107,35 +107,19 @@ public class FindCityActivity extends AppCompatActivity
 
     @Override
     public void onSerializedDataReceived(Serializable object) {
-        citi.clear();
         OdsResponse odsResponse = (OdsResponse) object;
-        for (OdsResponse.OdsCity city: odsResponse.getCities()) {
-            citi.add(city.getName());
-        }
+        odsCities.clear();
+        odsCities.addAll(odsResponse.getCities());
         listAdapter.notifyDataSetChanged();
     }
 
-
-
-    CityItem citi = new CityItem();
+    final private ArrayList<OdsResponse.OdsCity> odsCities = new ArrayList<>();
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent selection = new Intent();
-        selection.putExtra(RESULT_CITYNAME, citi.get(position));
+        selection.putExtra(RESULT_CITY, odsCities.get(position));
         setResult(RESULT_OK, selection);
         finish();
-    }
-
-    private class CityItem {
-        ArrayList<String> cities = new ArrayList<>();
-        public void add(String s) {
-            cities.add(s);
-        }
-        public void clear() {
-            cities.clear();
-        }
-        public String get(int id) { return cities.get(id); }
-
     }
 }
