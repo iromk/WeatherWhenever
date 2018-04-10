@@ -17,7 +17,6 @@ import android.widget.ListView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import pro.xite.dev.weatherwhenever.data.IDataProvider;
 import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
@@ -42,7 +41,7 @@ public class FindCityActivity extends AppCompatActivity
                     (WebJsonProvider.DataProviderServiceBinder) service;
             odsService = odsServiceBinder.getDataProviderService();
             odsService.setListener(FindCityActivity.this);
-            odsService.setRequestTimeout(1500);
+            odsService.setDelayedRequestTimeout(1500);
             bound = true;
             Log.d(TAG, "onServiceConnected");
         }
@@ -92,10 +91,9 @@ public class FindCityActivity extends AppCompatActivity
     }
 
     private void suggestCities(Editable text) {
-//        odsService.request(text.toString()); // request service
-        odsService.delayedRequest(this, text.toString()); // request service
-
-//        OdsCityProvider.request(text.toString(), this); // request in a thread
+        odsService.delayedRequest(text.toString()); // overriding service request
+//        odsService.queuedRequest(text.toString()); // queued service request
+//        OdsCityProvider.asyncRequest(this, text.toString()); // request in a thread
 
     }
 
@@ -120,7 +118,7 @@ public class FindCityActivity extends AppCompatActivity
 
     City citi = new City();
     private class City {
-        ArrayList<String> cities = new ArrayList<>(Arrays.asList("dasd", "aqweqe", "poopor", "ngvs"));
+        ArrayList<String> cities = new ArrayList<>();
         public void add(String s) {
             cities.add(s);
         }

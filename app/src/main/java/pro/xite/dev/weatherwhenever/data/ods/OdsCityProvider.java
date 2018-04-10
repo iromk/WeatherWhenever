@@ -63,13 +63,8 @@ public class OdsCityProvider extends WebJsonProvider {
         return OdsResponse.class;
     }
 
-    public static void request(String city, IDataProviderListener activity) {
-        getInstance().request(city, new LeakSafeHandler(activity));
-    }
-
-    public void request(IDataProviderListener listener, String city) {
-        Log.d(TAG_TRACER, Helpers.getMethodName());
-        queueRequest(city);
+    public static void asyncRequest(IDataProviderListener listener, String cityname) {
+        getInstance().asyncRequest(listener, cityname);
     }
 
     private static WebJsonProvider getInstance() {

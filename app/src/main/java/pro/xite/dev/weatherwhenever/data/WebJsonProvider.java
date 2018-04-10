@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -38,7 +37,7 @@ abstract public class WebJsonProvider extends Service implements IDataProvider {
 
     static final String KEY_QUEUE_CRITERIA_ARRAY = "ARGH";
     private ServiceHandler serviceHandler;
-    private long requestTimeout;
+    private long delayedRequestTimeout;
     private IDataProviderListener listener;
 
     public void setListener(IDataProviderListener listener) {
@@ -74,7 +73,8 @@ abstract public class WebJsonProvider extends Service implements IDataProvider {
         }
     }
 
-    public void request(final String criteria, @NonNull final Handler callbackHandler) {
+    private void request(final String... criteria) {
+        final Handler callbackHandler = new LeakSafeHandler(listener);
         new Thread() {
             public void run() {
                 Log.d(TAG_TRACER, Helpers.getMethodName());
@@ -92,15 +92,21 @@ abstract public class WebJsonProvider extends Service implements IDataProvider {
         }.start();
     }
 
-    public void delayedRequest(IDataProviderListener listener, String... criteria) {
+    @Override
+    public void asyncRequest(IDataProviderListener listener, String... criteria) {
+        setListener(listener);
+        request(criteria);
+    }
+
+    public void delayedRequest(String... criteria) {
         serviceHandler.removeMessages(WHAT_CODE_FOR_DELAYED_REQUEST);
 
         serviceHandler.sendMessageDelayed(
                 prepareMessage(WHAT_CODE_FOR_DELAYED_REQUEST, criteria),
-                requestTimeout);
+                delayedRequestTimeout);
     }
 
-    public void queueRequest(String... criteria) {
+    public void queuedRequest(String... criteria) {
         serviceHandler.sendMessage(prepareMessage(WHAT_CODE_FOR_REQUEST_QUEUE, criteria));
     }
 
@@ -114,8 +120,8 @@ abstract public class WebJsonProvider extends Service implements IDataProvider {
         return msg;
     }
 
-    public void setRequestTimeout(long millis) {
-        requestTimeout = millis;
+    public void setDelayedRequestTimeout(long millis) {
+        delayedRequestTimeout = millis;
     }
 
     private class ServiceHandler extends Handler {
@@ -125,7 +131,7 @@ abstract public class WebJsonProvider extends Service implements IDataProvider {
             Bundle bundle = msg.getData();
             String[] criteria = bundle.getStringArray(KEY_QUEUE_CRITERIA_ARRAY);
             super.handleMessage(msg);
-            request(criteria[0], new LeakSafeHandler(listener));
+            request(criteria);
         }
     }
 

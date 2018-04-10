@@ -8,8 +8,9 @@ import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
 public interface IDataProvider {
 
     void setListener(IDataProviderListener dataProviderListener);
-    void request(IDataProviderListener listener, String criteria);
-    void delayedRequest(IDataProviderListener listener, String... criteria);
-    void setRequestTimeout(long millis);
+    void asyncRequest(IDataProviderListener listener, String... criteria);
+    void delayedRequest(String... criteria);
+    void queuedRequest(String... criteria);
+    void setDelayedRequestTimeout(long millis);
 
 }
