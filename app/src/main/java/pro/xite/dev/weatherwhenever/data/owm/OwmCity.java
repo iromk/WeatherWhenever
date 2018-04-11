@@ -72,6 +72,11 @@ public class OwmCity extends OwmData implements Wherever {
     }
 
     @Override
+    public String getCountryName() {
+        return getCountryCode();
+    }
+
+    @Override
     public Weather getCurrentWeather() {
         return null;
     }

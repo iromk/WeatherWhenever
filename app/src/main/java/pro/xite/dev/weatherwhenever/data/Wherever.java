@@ -11,7 +11,9 @@ public interface Wherever extends Serializable {
     String getPlaceId();
     String getName();
     String getCountryCode();
+    String getCountryName();
 
     Weather getCurrentWeather();
     Weather getForecasetOn(Date date);
+
 }

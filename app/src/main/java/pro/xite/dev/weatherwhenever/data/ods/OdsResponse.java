@@ -79,6 +79,11 @@ public class OdsResponse implements Serializable {
         }
 
         @Override
+        public String getCountryName() {
+            return fields.country;
+        }
+
+        @Override
         public Weather getCurrentWeather() {
             return null;
         }

@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements
     private static final int PROMPT_INSTANT = 0;
 
     private NavigationView navigationView;
-    private EditText editTextCity;
-    private TextView textViewDescription;
+    private TextView textViewWhereverCity;
+    private TextView textViewWhereverCountry;
     private TextView textViewTemperature;
     private DrawerLayout drawerLayout;
 
@@ -73,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
 
-        textViewDescription = findViewById(R.id.textview_wheather_now);
+        textViewWhereverCity = findViewById(R.id.textview_wherever_city);
+        textViewWhereverCountry = findViewById(R.id.textview_wherever_country);
         textViewTemperature = findViewById(R.id.textview_temp);
-        editTextCity = findViewById(R.id.edittext_cityname);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -232,15 +232,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void updateViews() {
-        String weatherDescription = "";
         if(weather != null) {
             textViewTemperature.setText(String.valueOf((int) weather.getTemperature()));
-            weatherDescription = weather.toString();
         }
         if(wherever != null) {
-            weatherDescription = String.format("%s of %s:\n%s", wherever.getName(), wherever.getCountryCode(), weatherDescription);
+            textViewWhereverCity.setText(wherever.getName());
+            textViewWhereverCountry.setText(wherever.getCountryName());
         }
-        textViewDescription.setText(weatherDescription);
     }
 
     private void tryToSavePreferences() {
