@@ -57,5 +57,6 @@
     <string name="find_city_button">Find a city</string>
     <string name="search_city_prompt_description">It looks like no favourite cities yet. You need to do search a city first.</string>
     <string name="search_city_prompt_title">Search city</string>
+    <string name="temp_scale_celsius">˚C</string>
 
 </resources>

@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements
     private TextView textViewWhereverCity;
     private TextView textViewWhereverCountry;
     private TextView textViewTemperature;
+    private TextView textViewDescriptive;
     private DrawerLayout drawerLayout;
 
     private PrefsManager prefsManager;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements
         textViewWhereverCity = findViewById(R.id.textview_wherever_city);
         textViewWhereverCountry = findViewById(R.id.textview_wherever_country);
         textViewTemperature = findViewById(R.id.textview_temp);
+        textViewDescriptive = findViewById(R.id.textview_descriptive);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -234,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements
     private void updateViews() {
         if(weather != null) {
             textViewTemperature.setText(Helpers.tempToString(weather.getTemperature()));
+            textViewDescriptive.setText(weather.getDescription());
         }
         if(wherever != null) {
             textViewWhereverCity.setText(wherever.getName());

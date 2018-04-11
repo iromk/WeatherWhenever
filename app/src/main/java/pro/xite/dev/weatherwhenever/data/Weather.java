@@ -13,6 +13,7 @@ public interface Weather {
     float getTemperature();
     float getMinTemperature();
     float getMaxTemperature();
+    String getDescription();
     int getPressure();
     Date getDate();
 

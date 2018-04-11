@@ -52,11 +52,13 @@ public class OwmWeather extends OwmData implements Weather {
         @SerializedName("icon")
         String icon;
 
-        public String getDescription() { return description; }
     }
     public Float getTemp() {
         return main.temp;
     }
+
+    @Override
+    public String getDescription() { return descriptive[0].description; }
 
     @Override
     public float getTemperature() {
