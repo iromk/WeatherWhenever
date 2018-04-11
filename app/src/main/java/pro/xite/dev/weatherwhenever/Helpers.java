@@ -27,4 +27,13 @@ public class Helpers {
         return getMethodName(2);
     }
 
+    public static String tempToString(float tFloat) {
+        final String tIntStr = String.valueOf((int)Math.abs(tFloat));
+        String tPrefix = " ";
+        if(tFloat > 0 ) tPrefix = "+";
+        if(tFloat < 0 ) tPrefix = "-";
+        return String.format("%s%s", tPrefix, tIntStr);
+    }
+
+
 }

@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void updateViews() {
         if(weather != null) {
-            textViewTemperature.setText(String.valueOf((int) weather.getTemperature()));
+            textViewTemperature.setText(Helpers.tempToString(weather.getTemperature()));
         }
         if(wherever != null) {
             textViewWhereverCity.setText(wherever.getName());
