@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements
         if(recentCitiesList.getCounter() > 0) {
             Menu menu = navigationView.getMenu();
             for (Wherever city : recentCitiesList.getCities()) {
-                menu.add(city.getName());
+                menu.getItem(0).getSubMenu().add(city.getName());
             }
 
             wherever = recentCitiesList.getLatestCity();
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements
             prefsManager.savePrefs(recentCitiesList);
 
             Menu menu = navigationView.getMenu();
-            menu.add(wherever.getName());
+            menu.getItem(0).getSubMenu().add(wherever.getName());
         }
     }
 

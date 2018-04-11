@@ -31,5 +31,7 @@
     <string name="hint_cityname">gorod</string>
     <string name="search_city_prompt_description">Похоже список избранных городов пуст. Предлагаю поискать для начала какой-нибудь город.</string>
     <string name="search_city_prompt_title">Найди город</string>
+    <string name="nav_header_title"   >Погода по/ходу</string>
+    <string name="nav_header_subtitle">гик проект</string>
 
 </resources>
