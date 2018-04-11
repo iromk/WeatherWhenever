@@ -106,10 +106,7 @@ public class MainActivity extends AppCompatActivity implements
             recentCitiesList = new RecentCitiesList();
 
         if(recentCitiesList.getCounter() > 0) {
-            Menu menu = navigationView.getMenu();
-            for (Wherever city : recentCitiesList.getCities()) {
-                menu.getItem(0).getSubMenu().add(city.getName());
-            }
+            addCityToNavigationMenu(recentCitiesList);
 
             wherever = recentCitiesList.getLatestCity();
             weather = recentCitiesList.getLatestWeather();
@@ -121,6 +118,13 @@ public class MainActivity extends AppCompatActivity implements
 
         // TODO if (favorites == 0)
         promptUseSearchCity(PROMPT_AFTER_3_SEC);
+    }
+
+    private void addCityToNavigationMenu(RecentCitiesList citiesList) {
+        Menu menu = navigationView.getMenu();
+        menu.getItem(0).getSubMenu().clear();
+        for (Wherever city : recentCitiesList.getCities())
+            menu.getItem(0).getSubMenu().add(city.getName());
     }
 
     private void promptUseSearchCity(int delayMillis) {
@@ -243,9 +247,7 @@ public class MainActivity extends AppCompatActivity implements
         if(wherever != null && weather != null && whenever != null) {
             recentCitiesList.add(wherever, weather, whenever);
             prefsManager.savePrefs(recentCitiesList);
-
-            Menu menu = navigationView.getMenu();
-            menu.getItem(0).getSubMenu().add(wherever.getName());
+            addCityToNavigationMenu(recentCitiesList);
         }
     }
 
