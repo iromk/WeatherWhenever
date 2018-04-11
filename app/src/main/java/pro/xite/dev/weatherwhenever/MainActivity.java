@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements
     private TextView textViewWhereverCountry;
     private TextView textViewTemperature;
     private TextView textViewDescriptive;
+    private TextView textViewTimestamp;
     private DrawerLayout drawerLayout;
 
     private PrefsManager prefsManager;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements
         textViewWhereverCountry = findViewById(R.id.textview_wherever_country);
         textViewTemperature = findViewById(R.id.textview_temp);
         textViewDescriptive = findViewById(R.id.textview_descriptive);
+        textViewTimestamp = findViewById(R.id.textview_timestamp);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -236,7 +238,14 @@ public class MainActivity extends AppCompatActivity implements
     private void updateViews() {
         if(weather != null) {
             textViewTemperature.setText(Helpers.tempToString(weather.getTemperature()));
-            textViewDescriptive.setText(weather.getDescription());
+            textViewDescriptive.setText(String.format("%s\n%s..%s",
+                    weather.getDescription(),
+                    Helpers.tempToString(weather.getMinTemperature()),
+                    Helpers.tempToString(weather.getMaxTemperature())
+                    ));
+            textViewTimestamp.setText(String.format("%d mins ago",
+                    (System.currentTimeMillis() - weather.getDate().getTime()) / (1000 * 60)
+            ));
         }
         if(wherever != null) {
             textViewWhereverCity.setText(wherever.getName());

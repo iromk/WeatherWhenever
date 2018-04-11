@@ -67,12 +67,12 @@ public class OwmWeather extends OwmData implements Weather {
 
     @Override
     public float getMinTemperature() {
-        return 0;
+        return main.temp_min;
     }
 
     @Override
     public float getMaxTemperature() {
-        return 0;
+        return main.temp_max;
     }
 
     public int getPressure() {
@@ -81,7 +81,7 @@ public class OwmWeather extends OwmData implements Weather {
 
     @Override
     public Date getDate() {
-        return null;
+        return new Date(utcTime * 1000);
     }
 
     @Override
