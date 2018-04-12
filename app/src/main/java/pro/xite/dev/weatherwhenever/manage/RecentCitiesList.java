@@ -16,7 +16,7 @@ import pro.xite.dev.weatherwhenever.data.Weather;
  */
 public class RecentCitiesList implements Serializable {
 
-    private static final int MAX_RECENT_CITIES = 5;
+    public static final int MAX_RECENT_CITIES = 5;
 
     private ArrayList<Wherever> cities = new ArrayList<>();
     private ArrayList<Weather> weathers = new ArrayList<>();

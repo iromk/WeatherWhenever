@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -85,8 +86,26 @@ public class DbManager {
             if (!city.toString().equals(deserialize(decrypt(encrypt(serialize(city)))).toString())) throw new AssertionError();
         } else { // add
             addData(city, weather, forecast);
+            removeObsoleteRows();
             Log.d(LOG_TAG, "updateData: data added");
         }
+    }
+
+    private void removeObsoleteRows() { // actually only the first row
+        Cursor cursor = database.query(
+                DatabaseHelper.TABLE_WEATHER_INFO,
+                new String[] { DatabaseHelper.COLUMN_ID },
+                null, null, null, null, null);
+        if(cursor.getCount() > RecentCitiesList.MAX_RECENT_CITIES) {
+            cursor.moveToFirst();
+            final long beyondLastOne = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
+            database.delete(
+                    DatabaseHelper.TABLE_WEATHER_INFO,
+                    DatabaseHelper.COLUMN_ID + "=?",
+                    new String[]{String.valueOf(beyondLastOne)}
+            );
+        }
+        cursor.close();
     }
 
     /**
