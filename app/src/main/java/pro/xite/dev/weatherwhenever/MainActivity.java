@@ -120,8 +120,8 @@ public class MainActivity extends AppCompatActivity implements
 
         initDrawer();
 
-        // TODO if (favorites == 0)
-        promptUseSearchCity(PROMPT_AFTER_3_SEC);
+        if(recentCitiesList.getCounter() == 0)
+            promptUseSearchCity(PROMPT_AFTER_3_SEC);
     }
 
     private void addCityToNavigationMenu(RecentCitiesList citiesList) {
