@@ -5,14 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/fragment_top"
+    <fragment
+        android:id="@+id/fragment_t_now"
+        android:name="pro.xite.dev.weatherwhenever.OneDayWeatherFragment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
+        android:layout_height="86dp"
+        android:layout_marginStart="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_timestamp" />
+
+    <fragment
+        android:id="@+id/fragment_t_later"
+        android:name="pro.xite.dev.weatherwhenever.OneDayWeatherFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="86dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="36dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_t_now" />
 
     <TextView
         android:id="@+id/textview_wherever_city"
@@ -30,19 +40,6 @@
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textview_temp"
-        android:layout_width="127dp"
-        android:layout_height="80dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:textAlignment="textEnd"
-        android:textSize="75sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_wherever_country" />
 
     <TextView
         android:id="@+id/textview_wherever_country"
@@ -64,17 +61,7 @@
         android:textSize="20sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textview_tscale"
-        app:layout_constraintTop_toBottomOf="@+id/textview_wherever_country" />
-
-    <TextView
-        android:id="@+id/textview_tscale"
-        android:layout_width="50dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="28dp"
-        android:text="@string/temp_scale_celsius"
-        android:textSize="32sp"
-        app:layout_constraintStart_toEndOf="@+id/textview_temp"
+        app:layout_constraintStart_toEndOf="@+id/fragment_t_now"
         app:layout_constraintTop_toBottomOf="@+id/textview_wherever_country" />
 
     <TextView

@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements
     private NavigationView navigationView;
     private TextView textViewWhereverCity;
     private TextView textViewWhereverCountry;
-    private TextView textViewTemperature;
     private TextView textViewDescriptive;
     private TextView textViewTimestamp;
     private DrawerLayout drawerLayout;
@@ -69,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements
     final private boolean USE_DATABASE = true;
 
     MaterialTapTargetPrompt mFabPrompt;
+    private OneDayWeatherFragment fragTempNow;
+    private OneDayWeatherFragment fragTempLater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +77,12 @@ public class MainActivity extends AppCompatActivity implements
 
         textViewWhereverCity = findViewById(R.id.textview_wherever_city);
         textViewWhereverCountry = findViewById(R.id.textview_wherever_country);
-        textViewTemperature = findViewById(R.id.textview_temp);
         textViewDescriptive = findViewById(R.id.textview_descriptive);
         textViewTimestamp = findViewById(R.id.textview_timestamp);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
-
-        View fragmentContainer = findViewById(R.id.fragment_top);
-
+        fragTempNow = (OneDayWeatherFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_t_now);
+        fragTempLater = (OneDayWeatherFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_t_later);
 
         try {
             File httpCacheDir = new File(getCacheDir(), "http");
@@ -122,6 +120,9 @@ public class MainActivity extends AppCompatActivity implements
 
         if(recentCitiesList.getCounter() == 0)
             promptUseSearchCity(PROMPT_AFTER_3_SEC);
+
+        updateViews();
+
     }
 
     private void addCityToNavigationMenu(RecentCitiesList citiesList) {
@@ -237,7 +238,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private void updateViews() {
         if(weather != null) {
-            textViewTemperature.setText(Helpers.tempToString(weather.getTemperature()));
+//            textViewTemperature.setText(Helpers.tempToString(weather.getTemperature()));
+            fragTempNow.setWeather(weather);
             textViewDescriptive.setText(String.format("%s\n%s..%s",
                     weather.getDescription(),
                     Helpers.tempToString(weather.getMinTemperature()),
@@ -250,6 +252,9 @@ public class MainActivity extends AppCompatActivity implements
         if(wherever != null) {
             textViewWhereverCity.setText(wherever.getName());
             textViewWhereverCountry.setText(wherever.getCountryName());
+        }
+        if(whenever != null) {
+            fragTempLater.setWeather(whenever.getLatestForecast());
         }
     }
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <!--tools:context=".OneDayWeatherFragment"-->
+
+    <TextView
+        android:id="@+id/textview_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:textAlignment="textEnd"
+        android:textSize="75sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textview_tscale"
+        android:layout_width="50dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/temp_scale_celsius"
+        android:textSize="32sp"
+        app:layout_constraintStart_toEndOf="@+id/textview_temp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textview_timestamp"
+        android:layout_width="126dp"
+        android:layout_height="22dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textview_temp" />
+
+</android.support.constraint.ConstraintLayout>
