@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -13,8 +12,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-
-import java.util.List;
 
 import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.Whenever;

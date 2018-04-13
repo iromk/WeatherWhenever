@@ -58,5 +58,6 @@
     <string name="search_city_prompt_description">It looks like no favourite cities yet. You need to do search a city first.</string>
     <string name="search_city_prompt_title">Search city</string>
     <string name="temp_scale_celsius">˚C</string>
+    <string name="snack_text_updating_weather">Updating weather</string>
 
 </resources>

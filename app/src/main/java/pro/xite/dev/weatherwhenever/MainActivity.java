@@ -22,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         initDrawer();
+        initFloatActionButton();
 
         if(recentCitiesList.getCounter() == 0)
             promptUseSearchCity(PROMPT_AFTER_3_SEC);
@@ -156,23 +156,30 @@ public class MainActivity extends AppCompatActivity implements
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Requesting owm", Snackbar.LENGTH_INDEFINITE)
-//                        .setAction("Action", vol)
-                        .show();
-//                promptUseSearchCity(PROMPT_INSTANT); // for test only
-            }
-        });
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    Snackbar snack = null;
+
+    private void dismissSnack() {
+        if(snack != null && snack.isShown()) snack.dismiss();
+    }
+
+    private void initFloatActionButton() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snack = Snackbar.make(view, R.string.snack_text_updating_weather, Snackbar.LENGTH_INDEFINITE);
+                snack.show();
+                requestOwm();
+            }
+        });
     }
 
     private void loadFragment(int containerID, Fragment fragment) {
@@ -212,12 +219,13 @@ public class MainActivity extends AppCompatActivity implements
             weather = null;
             wherever = null;
             wherever = (Wherever) data.getSerializableExtra(FindCityActivity.RESULT_CITY);
-            new OwmActualWeatherProvider().asyncRequest(this, wherever.getName());
-            new OwmNearestForecastProvider().asyncRequest(this, wherever.getName());
-            Toast.makeText(this, wherever.getName(), Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "Friend wouldn't know", Toast.LENGTH_LONG).show();
+            requestOwm();
         }
+    }
+
+    private void requestOwm() {
+        new OwmActualWeatherProvider().asyncRequest(this, wherever.getName());
+        new OwmNearestForecastProvider().asyncRequest(this, wherever.getName());
     }
 
     @Override
@@ -231,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements
             Log.d(TAG_TRACER, String.format("Got new Whenever %d", (int) whenever.getLatestForecast().getTemperature()));
         }
         updateViews();
+        dismissSnack();
         tryToSavePreferences();
         tryToUpdateDb();
     }
@@ -258,7 +267,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private void tryToSavePreferences() {
         if(wherever != null && weather != null && whenever != null) {
-            recentCitiesList.add(wherever, weather, whenever);
             recentCitiesList.addUnique(wherever, weather, whenever);
             prefsManager.savePrefs(recentCitiesList);
             addCityToNavigationMenu(recentCitiesList);

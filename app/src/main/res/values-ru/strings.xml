@@ -33,5 +33,6 @@
     <string name="search_city_prompt_title">Найди город</string>
     <string name="nav_header_title"   >Погода по/ходу</string>
     <string name="nav_header_subtitle">гик проект</string>
+    <string name="snack_text_updating_weather">Обновление данных</string>
 
 </resources>
