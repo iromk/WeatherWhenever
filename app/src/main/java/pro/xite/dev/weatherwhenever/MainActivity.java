@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void loadFragment(int containerID, Fragment fragment) {
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(containerID, fragment);
+        ft.replace(containerID, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
     }
@@ -271,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements
             weather = null;
             wherever = null;
             wherever = (Wherever) data.getSerializableExtra(FindCityActivity.RESULT_CITY);
+            recentCitiesList.addUnique(wherever, weather, whenever);
             requestOwm();
         }
     }
