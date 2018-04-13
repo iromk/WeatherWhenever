@@ -10,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -81,8 +80,11 @@ public class MainActivity extends AppCompatActivity implements
         textViewTimestamp = findViewById(R.id.textview_timestamp);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
-        fragTempNow = (OneDayWeatherFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_t_now);
-        fragTempLater = (OneDayWeatherFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_t_later);
+
+        fragTempNow = OneDayWeatherFragment.newInstance("1", "2");
+        loadFragment(R.id.fragment_t_now, fragTempNow);
+        fragTempLater = OneDayWeatherFragment.newInstance("4", "5");
+        loadFragment(R.id.fragment_t_later, fragTempLater );
 
         try {
             File httpCacheDir = new File(getCacheDir(), "http");
@@ -162,8 +164,6 @@ public class MainActivity extends AppCompatActivity implements
 //                        .setAction("Action", vol)
                         .show();
 //                promptUseSearchCity(PROMPT_INSTANT); // for test only
-
-//                loadFragment(R.id.fragment_top, AddCity.newInstance("", ""), true);
             }
         });
 
@@ -175,12 +175,11 @@ public class MainActivity extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void loadFragment(int containerID, Fragment fragment, boolean isPutToBackstack) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.replace(containerID, fragment);
-        if (isPutToBackstack) transaction.addToBackStack(null);
-        transaction.commit();
+    private void loadFragment(int containerID, Fragment fragment) {
+        final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(containerID, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
     }
 
     @Override
@@ -238,7 +237,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private void updateViews() {
         if(weather != null) {
-//            textViewTemperature.setText(Helpers.tempToString(weather.getTemperature()));
             fragTempNow.setWeather(weather);
             textViewDescriptive.setText(String.format("%s\n%s..%s",
                     weather.getDescription(),

@@ -82,12 +82,24 @@ public class OneDayWeatherFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateViews();
+    }
+
+    public void updateViews() {
+        if(getView() != null) {
+            TextView t = getView().findViewById(R.id.textview_temp);
+            t.setText(Helpers.tempToString(weather.getTemperature()));
+            TextView time = getView().findViewById(R.id.textview_timestamp);
+            time.setText(String.format("%1$tm %1$te,%1$tY", weather.getDate()));
+        }
+    }
+
     public void setWeather(Weather weather) {
         this.weather = weather;
-        TextView t = getView().findViewById(R.id.textview_temp);
-        t.setText(Helpers.tempToString(weather.getTemperature()));
-        TextView time = getView().findViewById(R.id.textview_timestamp);
-        time.setText(String.format("%1$tm %1$te,%1$tY", weather.getDate()));
+        updateViews();
     }
 
     @Override
