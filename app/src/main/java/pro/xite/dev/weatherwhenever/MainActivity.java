@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity implements
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        fragTempNow = OneDayWeatherFragment.newInstance("1", "2");
+        fragTempNow = OneDayWeatherFragment.newInstance(OneDayWeatherFragment.SIZE_L);
         loadFragment(R.id.fragment_t_now, fragTempNow);
-        fragTempLater = OneDayWeatherFragment.newInstance("4", "5");
+        fragTempLater = OneDayWeatherFragment.newInstance(OneDayWeatherFragment.SIZE_XS);
         loadFragment(R.id.fragment_t_later, fragTempLater );
 
         try {

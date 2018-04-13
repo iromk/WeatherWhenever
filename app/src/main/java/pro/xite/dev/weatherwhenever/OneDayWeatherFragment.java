@@ -23,11 +23,16 @@ import pro.xite.dev.weatherwhenever.data.Weather;
 public class OneDayWeatherFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM1 = "widgetScaleFactor";
     private static final String ARG_PARAM2 = "param2";
+    public static final float SIZE_L = 1f;
+    public static final float SIZE_XL = 1.25f;
+    public static final float SIZE_M = 0.75f;
+    public static final float SIZE_S = 0.5f;
+    public static final float SIZE_XS = 0.25f;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private Float widgetScaleFactor;
     private String mParam2;
 
     private Weather weather;
@@ -47,11 +52,10 @@ public class OneDayWeatherFragment extends Fragment {
      * @return A new instance of fragment OneDayWeatherFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static OneDayWeatherFragment newInstance(String param1, String param2) {
+    public static OneDayWeatherFragment newInstance(float param1) {//}, String param2) {
         OneDayWeatherFragment fragment = new OneDayWeatherFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putFloat(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,8 +64,8 @@ public class OneDayWeatherFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            widgetScaleFactor = getArguments().getFloat(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -70,8 +74,8 @@ public class OneDayWeatherFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_one_day_weather, container, false);
-        view.setScaleX(1f);
-        view.setScaleY(1f);
+        view.setScaleX(widgetScaleFactor);
+        view.setScaleY(widgetScaleFactor);
         return view;
     }
 
