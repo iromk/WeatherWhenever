@@ -28,17 +28,23 @@ public class RecentCitiesList implements Serializable {
 
     private int counter = 0;
 
-    public void add(Wherever city, Weather weather, Whenever forecast) {
-        if(counter == MAX_RECENT_CITIES) {
-            cities.remove(0);
-            weathers.remove(0);
-            forecasts.remove(0);
-            counter--;
+    public void addUnique(Wherever city, Weather weather, Whenever forecast) {
+        int n = indexForCityByName(city.getName());
+        if(n > -1) { // update existing city
+            weathers.set(n, weather);
+            forecasts.set(n, forecast);
+        } else { // it is a new city
+            if (counter == MAX_RECENT_CITIES) {
+                cities.remove(0);
+                weathers.remove(0);
+                forecasts.remove(0);
+                counter--;
+            }
+            counter++;
+            cities.add(city);
+            weathers.add(weather);
+            forecasts.add(forecast);
         }
-        counter++;
-        cities.add(city);
-        weathers.add(weather);
-        forecasts.add(forecast);
     }
 
     public ArrayList<Wherever> getCities() {

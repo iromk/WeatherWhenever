@@ -160,7 +160,7 @@ public class DbManager {
             Wherever city = deserialize(decrypt(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CITY))));
             Weather weather = deserialize(decrypt(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_WEATHER))));
             Whenever forecast = deserialize(decrypt(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FORECAST))));
-            citiesList.add(city, weather, forecast);
+            citiesList.addUnique(city, weather, forecast);
             cursor.moveToNext();
         }
 

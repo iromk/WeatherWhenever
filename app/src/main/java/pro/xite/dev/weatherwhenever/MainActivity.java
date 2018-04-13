@@ -259,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements
     private void tryToSavePreferences() {
         if(wherever != null && weather != null && whenever != null) {
             recentCitiesList.add(wherever, weather, whenever);
+            recentCitiesList.addUnique(wherever, weather, whenever);
             prefsManager.savePrefs(recentCitiesList);
             addCityToNavigationMenu(recentCitiesList);
         }
