@@ -11,16 +11,21 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.TextView;
 
 import java.io.File;
@@ -67,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements
     MaterialTapTargetPrompt mFabPrompt;
     private OneDayWeatherFragment fragTempNow;
     private OneDayWeatherFragment fragTempLater;
+    private FloatingActionButton fabUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements
         loadFragment(R.id.fragment_t_now, fragTempNow);
         fragTempLater = OneDayWeatherFragment.newInstance(OneDayWeatherFragment.SIZE_XS);
         loadFragment(R.id.fragment_t_later, fragTempLater );
+
+        initDrawer();
+        initFloatActionButton();
 
         try {
             File httpCacheDir = new File(getCacheDir(), "http");
@@ -114,14 +123,7 @@ public class MainActivity extends AppCompatActivity implements
             wherever = recentCitiesList.getLatestCity();
             weather = recentCitiesList.getLatestWeather();
             whenever = recentCitiesList.getLatestForecast();
-            updateViews();
         }
-
-        initDrawer();
-        initFloatActionButton();
-
-        if(recentCitiesList.getCounter() == 0)
-            promptUseSearchCity(PROMPT_AFTER_3_SEC);
 
         updateViews();
 
@@ -152,6 +154,54 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    private void promptUseReloadData(int delayMillis) {
+        Animation anim = android.view.animation.AnimationUtils.loadAnimation(fabUpdate.getContext(),  R.anim.shake_shake);
+        anim.setDuration(200L);
+        fabUpdate.startAnimation(anim);
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                if (mFabPrompt != null)
+                {
+                    return;
+                }
+                SpannableStringBuilder secondaryText = new SpannableStringBuilder(getString(R.string.prompt_update_description));
+                secondaryText.setSpan(new ForegroundColorSpan(ContextCompat.getColor(MainActivity.this, R.color.colorAccent)),
+                        getResources().getInteger(R.integer.accent_start_update_description),
+                        getResources().getInteger(R.integer.accent_end_update_description),
+                        Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                SpannableStringBuilder primaryText = new SpannableStringBuilder(getString(R.string.prompt_update_title));
+                mFabPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                        .setTarget(findViewById(R.id.fab))
+//                        .setFocalPadding(R.dimen.dp40)
+                        .setPrimaryText(primaryText)
+//                        .setFocalRadius(15f)
+
+                        .setSecondaryText(secondaryText)
+                        .setBackButtonDismissEnabled(true)
+                        .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+                        {
+                            @Override
+                            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
+                            {
+                                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
+                                        || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
+                                {
+                                    mFabPrompt = null;
+                                    //Do something such as storing a value so that this prompt is never shown again
+                                }
+                            }
+                        })
+                        .create();
+                mFabPrompt.show();
+            }
+        }, delayMillis);
+
+    }
+
     private void initDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -171,8 +221,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void initFloatActionButton() {
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabUpdate = findViewById(R.id.fab);
+        fabUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 snack = Snackbar.make(view, R.string.snack_text_updating_weather, Snackbar.LENGTH_INDEFINITE);
@@ -263,6 +313,14 @@ public class MainActivity extends AppCompatActivity implements
         if(whenever != null) {
             fragTempLater.setWeather(whenever.getLatestForecast());
         }
+
+        if(recentCitiesList.getCounter() == 0)
+            promptUseSearchCity(PROMPT_AFTER_3_SEC);
+
+        if((System.currentTimeMillis() - weather.getDate().getTime()) / (1000 * 60) > 60) {
+            promptUseReloadData(PROMPT_AFTER_3_SEC);
+        }
+
     }
 
     private void tryToSavePreferences() {

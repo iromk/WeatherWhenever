@@ -59,5 +59,9 @@
     <string name="search_city_prompt_title">Search city</string>
     <string name="temp_scale_celsius">˚C</string>
     <string name="snack_text_updating_weather">Updating weather</string>
+    <string name="prompt_update_description">You\'re looking at weather info received more than an hour ago.  Touch the update button to update weather and forecast info.</string>
+    <string name="prompt_update_title">It\'s a good time to update data from the web.</string>
+    <integer name="accent_start_update_description">73</integer>
+    <integer name="accent_end_update_description">79</integer>
 
 </resources>
