@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import java.io.File;
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements
     private OneDayWeatherFragment fragTempNow;
     private OneDayWeatherFragment fragTempLater;
     private FloatingActionButton fabUpdate;
+    private boolean skipPromptUseUpdateData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements
         fragTempNow = OneDayWeatherFragment.newInstance(OneDayWeatherFragment.SIZE_L);
         loadFragment(R.id.fragment_t_now, fragTempNow);
         fragTempLater = OneDayWeatherFragment.newInstance(OneDayWeatherFragment.SIZE_XS);
-        loadFragment(R.id.fragment_t_later, fragTempLater );
+        loadFragment(R.id.fragment_t_later, fragTempLater);
 
         initDrawer();
         initFloatActionButton();
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements
                 getString(R.string.preference_file_key),
                 Context.MODE_PRIVATE));
 
-        if(USE_DATABASE)
+        if (USE_DATABASE)
             recentCitiesList = dbManager.loadRecentCitiesList();
         else
             recentCitiesList = prefsManager.loadRecentCitiesList();
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements
         if (recentCitiesList == null)
             recentCitiesList = new RecentCitiesList();
 
-        if(recentCitiesList.getCounter() > 0) {
+        if (recentCitiesList.getCounter() > 0) {
             addCityToNavigationMenu(recentCitiesList);
 
             wherever = recentCitiesList.getLatestCity();
@@ -154,51 +156,51 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    private void promptUseReloadData(int delayMillis) {
-        Animation anim = android.view.animation.AnimationUtils.loadAnimation(fabUpdate.getContext(),  R.anim.shake_shake);
-        anim.setDuration(200L);
-        fabUpdate.startAnimation(anim);
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                if (mFabPrompt != null)
-                {
-                    return;
+    private void promptUseUpdateData(int delayMillis) {
+        if (skipPromptUseUpdateData) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Animation animation = AnimationUtils.loadAnimation(fabUpdate.getContext(), R.anim.shake_shake);
+                    animation.setDuration(250L);
+                    fabUpdate.startAnimation(animation);
                 }
-                SpannableStringBuilder secondaryText = new SpannableStringBuilder(getString(R.string.prompt_update_description));
-                secondaryText.setSpan(new ForegroundColorSpan(ContextCompat.getColor(MainActivity.this, R.color.colorAccent)),
-                        getResources().getInteger(R.integer.accent_start_update_description),
-                        getResources().getInteger(R.integer.accent_end_update_description),
-                        Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                SpannableStringBuilder primaryText = new SpannableStringBuilder(getString(R.string.prompt_update_title));
-                mFabPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                        .setTarget(findViewById(R.id.fab))
-//                        .setFocalPadding(R.dimen.dp40)
-                        .setPrimaryText(primaryText)
-//                        .setFocalRadius(15f)
+            }, delayMillis);
+        } else {
+            new Handler().postDelayed(new Runnable() {
 
-                        .setSecondaryText(secondaryText)
-                        .setBackButtonDismissEnabled(true)
-                        .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
-                        {
-                            @Override
-                            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
-                            {
-                                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
-                                        || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                                {
-                                    mFabPrompt = null;
-                                    //Do something such as storing a value so that this prompt is never shown again
+                @Override
+                public void run() {
+                    if (mFabPrompt != null) {
+                        return;
+                    }
+                    SpannableStringBuilder secondaryText = new SpannableStringBuilder(getString(R.string.prompt_update_description));
+                    secondaryText.setSpan(new ForegroundColorSpan(ContextCompat.getColor(MainActivity.this, R.color.colorAccent)),
+                            getResources().getInteger(R.integer.accent_start_update_description),
+                            getResources().getInteger(R.integer.accent_end_update_description),
+                            Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    SpannableStringBuilder primaryText = new SpannableStringBuilder(getString(R.string.prompt_update_title));
+                    mFabPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                            .setTarget(findViewById(R.id.fab))
+                            .setPrimaryText(primaryText)
+                            .setSecondaryText(secondaryText)
+                            .setBackButtonDismissEnabled(true)
+                            .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                            .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                                @Override
+                                public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state) {
+                                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
+                                            || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
+                                        mFabPrompt = null;
+                                        skipPromptUseUpdateData = true;
+                                    }
                                 }
-                            }
-                        })
-                        .create();
-                mFabPrompt.show();
-            }
-        }, delayMillis);
+                            })
+                            .create();
+                    mFabPrompt.show();
+                }
+            }, delayMillis);
+        }
 
     }
 
@@ -217,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements
     Snackbar snack = null;
 
     private void dismissSnack() {
-        if(snack != null && snack.isShown()) snack.dismiss();
+        if (snack != null && snack.isShown()) snack.dismiss();
     }
 
     private void initFloatActionButton() {
@@ -264,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             whenever = null;
             weather = null;
             wherever = null;
@@ -281,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onSerializedDataReceived(Serializable data) {
         Log.d(TAG_TRACER, Helpers.getMethodName());
-        if(data instanceof Weather) {
+        if (data instanceof Weather) {
             weather = (Weather) data;
             Log.d(TAG_TRACER, String.format("Got new Weather t==%d", (int) weather.getTemperature()));
         } else if (data instanceof Whenever) {
@@ -295,36 +297,36 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void updateViews() {
-        if(weather != null) {
+        if (weather != null) {
             fragTempNow.setWeather(weather);
             textViewDescriptive.setText(String.format("%s\n%s..%s",
                     weather.getDescription(),
                     Helpers.tempToString(weather.getMinTemperature()),
                     Helpers.tempToString(weather.getMaxTemperature())
-                    ));
+            ));
             textViewTimestamp.setText(String.format("%d mins ago",
                     (System.currentTimeMillis() - weather.getDate().getTime()) / (1000 * 60)
             ));
         }
-        if(wherever != null) {
+        if (wherever != null) {
             textViewWhereverCity.setText(wherever.getName());
             textViewWhereverCountry.setText(wherever.getCountryName());
         }
-        if(whenever != null) {
+        if (whenever != null) {
             fragTempLater.setWeather(whenever.getLatestForecast());
         }
 
-        if(recentCitiesList.getCounter() == 0)
+        if (recentCitiesList.getCounter() == 0)
             promptUseSearchCity(PROMPT_AFTER_3_SEC);
 
-        if((System.currentTimeMillis() - weather.getDate().getTime()) / (1000 * 60) > 60) {
-            promptUseReloadData(PROMPT_AFTER_3_SEC);
+        if ((System.currentTimeMillis() - weather.getDate().getTime()) / (1000 * 60) > 60) {
+            promptUseUpdateData(PROMPT_AFTER_3_SEC);
         }
 
     }
 
     private void tryToSavePreferences() {
-        if(wherever != null && weather != null && whenever != null) {
+        if (wherever != null && weather != null && whenever != null) {
             recentCitiesList.addUnique(wherever, weather, whenever);
             prefsManager.savePrefs(recentCitiesList);
             addCityToNavigationMenu(recentCitiesList);
@@ -332,14 +334,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void tryToUpdateDb() {
-        if(wherever != null && weather != null && whenever != null) {
+        if (wherever != null && weather != null && whenever != null) {
             dbManager.updateData(wherever, weather, whenever);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
