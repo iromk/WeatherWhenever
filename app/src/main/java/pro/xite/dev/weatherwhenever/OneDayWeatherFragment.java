@@ -93,7 +93,7 @@ public class OneDayWeatherFragment extends Fragment {
     }
 
     public void updateViews() {
-        if(getView() != null) {
+        if(getView() != null && weather != null) {
             TextView t = getView().findViewById(R.id.textview_temp);
             t.setText(Helpers.tempToString(weather.getTemperature()));
             TextView time = getView().findViewById(R.id.textview_timestamp);

@@ -52,15 +52,15 @@ public class RecentCitiesList implements Serializable {
     }
 
     public Wherever getLatestCity() {
-        return cities.get(cities.size()-1);
+        return cities.size() > 0 ? cities.get(cities.size()-1) : null;
     }
 
     public Weather getLatestWeather() {
-        return weathers.get(weathers.size()-1);
+        return cities.size() > 0 ? weathers.get(weathers.size()-1) : null;
     }
 
     public Whenever getLatestForecast() {
-        return forecasts.get(forecasts.size()-1);
+        return cities.size() > 0 ? forecasts.get(forecasts.size()-1) : null;
     }
 
     private int indexForCityByName(String cityName) {

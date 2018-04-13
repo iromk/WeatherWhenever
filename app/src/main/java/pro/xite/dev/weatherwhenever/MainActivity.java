@@ -119,19 +119,19 @@ public class MainActivity extends AppCompatActivity implements
         if (recentCitiesList == null)
             recentCitiesList = new RecentCitiesList();
 
-        if (recentCitiesList.getCounter() > 0) {
-            addCityToNavigationMenu(recentCitiesList);
+//        if (recentCitiesList.getCounter() > 0) {
+            addCityToNavigationMenu();
 
             wherever = recentCitiesList.getLatestCity();
             weather = recentCitiesList.getLatestWeather();
             whenever = recentCitiesList.getLatestForecast();
-        }
+//        }
 
         updateViews();
 
     }
 
-    private void addCityToNavigationMenu(RecentCitiesList citiesList) {
+    private void addCityToNavigationMenu() {
         Menu menu = navigationView.getMenu();
         menu.getItem(0).getSubMenu().clear();
         for (Wherever city : recentCitiesList.getCities())
@@ -290,10 +290,10 @@ public class MainActivity extends AppCompatActivity implements
             whenever = (Whenever) data;
             Log.d(TAG_TRACER, String.format("Got new Whenever %d", (int) whenever.getLatestForecast().getTemperature()));
         }
-        updateViews();
         dismissSnack();
         tryToSavePreferences();
         tryToUpdateDb();
+        updateViews();
     }
 
     private void updateViews() {
@@ -307,6 +307,11 @@ public class MainActivity extends AppCompatActivity implements
             textViewTimestamp.setText(String.format("%d mins ago",
                     (System.currentTimeMillis() - weather.getDate().getTime()) / (1000 * 60)
             ));
+
+            if ((System.currentTimeMillis() - weather.getDate().getTime()) / (1000 * 60) > 60) {
+                promptUseUpdateData(PROMPT_AFTER_3_SEC);
+            }
+
         }
         if (wherever != null) {
             textViewWhereverCity.setText(wherever.getName());
@@ -319,17 +324,13 @@ public class MainActivity extends AppCompatActivity implements
         if (recentCitiesList.getCounter() == 0)
             promptUseSearchCity(PROMPT_AFTER_3_SEC);
 
-        if ((System.currentTimeMillis() - weather.getDate().getTime()) / (1000 * 60) > 60) {
-            promptUseUpdateData(PROMPT_AFTER_3_SEC);
-        }
-
     }
 
     private void tryToSavePreferences() {
         if (wherever != null && weather != null && whenever != null) {
             recentCitiesList.addUnique(wherever, weather, whenever);
             prefsManager.savePrefs(recentCitiesList);
-            addCityToNavigationMenu(recentCitiesList);
+            addCityToNavigationMenu();
         }
     }
 
