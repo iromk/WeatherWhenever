@@ -1,5 +1,10 @@
 package pro.xite.dev.weatherwhenever;
 
+import java.util.Calendar;
+import java.util.TimeZone;
+
+import pro.xite.dev.weatherwhenever.data.Wherever;
+
 /**
  * Created by Roman Syrchin on 3/25/18.
  */
@@ -37,4 +42,15 @@ public class Helpers {
     }
 
 
+    public static Calendar nextAfternoon(int daysShift) {
+        Calendar now = Calendar.getInstance();//wherever.getTimezone());
+        long msNow = now.getTimeInMillis();
+        long msShift = daysShift * 1_000 * 60 * 60 * 24;
+        now.setTimeInMillis(msNow + msShift);
+        now.set(Calendar.HOUR_OF_DAY, 13);
+        now.set(Calendar.MINUTE, 0);
+        now.set(Calendar.SECOND, 0);
+        now.set(Calendar.MILLISECOND, 0);
+        return now;
+    }
 }

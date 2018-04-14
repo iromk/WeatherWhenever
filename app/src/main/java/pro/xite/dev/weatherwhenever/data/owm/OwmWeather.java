@@ -6,7 +6,9 @@ package pro.xite.dev.weatherwhenever.data.owm;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.Whenever;
@@ -85,17 +87,20 @@ public class OwmWeather extends OwmData implements Weather {
     }
 
     @Override
+    public Calendar getCalendar() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(utcTime * 1000);
+//        calendar.setTimeZone(getTimezone());
+        return calendar;
+    }
+
+    @Override
     public Wherever where() {
         return null;
     }
 
     @Override
     public Weather on(Date date) {
-        return null;
-    }
-
-    @Override
-    public Whenever whenever() {
         return null;
     }
 

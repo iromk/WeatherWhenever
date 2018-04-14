@@ -1,7 +1,9 @@
 package pro.xite.dev.weatherwhenever.data.owm;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -31,6 +33,19 @@ public class OwmNearestForecast extends OwmData implements Whenever {
 
     @Override
     public Weather getWeatherOn(Date date) {
+        final long asked = date.getTime();
+        long lastDelta = Long.MAX_VALUE;
+
+        for(int i = 0; i < mainList.size(); i++) {
+            Weather weather = mainList.get(i);
+            long found = weather.getDate().getTime();
+            long delta = Math.abs(asked - found);
+            if(delta < lastDelta) {
+                lastDelta = delta;
+            } else {
+                return weather;
+            }
+        }
         return null;
     }
 

@@ -1,5 +1,6 @@
 package pro.xite.dev.weatherwhenever.data;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -16,9 +17,9 @@ public interface Weather {
     String getDescription();
     int getPressure();
     Date getDate();
+    Calendar getCalendar();
 
     Wherever where();
     Weather on(Date date);
-    Whenever whenever();
 
 }

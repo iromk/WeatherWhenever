@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.Wherever;
@@ -22,7 +23,6 @@ public class OdsResponse implements Serializable {
 
     @SerializedName("parameters.rows")
     private String requestedRows;
-
 
     public List<OdsCity> getCities() {
         return cities;
@@ -48,6 +48,8 @@ public class OdsResponse implements Serializable {
             String alternateNames;
             @SerializedName("country_code")
             String countryCode;
+            @SerializedName("timezone")
+            private String timezone;
 
         }
 
@@ -81,6 +83,11 @@ public class OdsResponse implements Serializable {
         @Override
         public String getCountryName() {
             return fields.country;
+        }
+
+        @Override
+        public TimeZone getTimezone() {
+            return TimeZone.getTimeZone(fields.timezone);
         }
 
         @Override

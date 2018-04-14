@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.TimeZone;
+
 import pro.xite.dev.weatherwhenever.data.Weather;
 
 
@@ -33,7 +35,7 @@ public class OneDayWeatherFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private Float widgetScaleFactor;
-    private String mParam2;
+//    private TimeZone timeZone;
 
     private Weather weather;
 
@@ -48,14 +50,15 @@ public class OneDayWeatherFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @para m param2 Parameter 2.
      * @return A new instance of fragment OneDayWeatherFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static OneDayWeatherFragment newInstance(float param1) {//}, String param2) {
+    public static OneDayWeatherFragment newInstance(float param1) {//}, TimeZone param2) {
         OneDayWeatherFragment fragment = new OneDayWeatherFragment();
         Bundle args = new Bundle();
         args.putFloat(ARG_PARAM1, param1);
+//        args.putSerializable(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,7 +68,6 @@ public class OneDayWeatherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             widgetScaleFactor = getArguments().getFloat(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -97,7 +99,7 @@ public class OneDayWeatherFragment extends Fragment {
             TextView t = getView().findViewById(R.id.textview_temp);
             t.setText(Helpers.tempToString(weather.getTemperature()));
             TextView time = getView().findViewById(R.id.textview_timestamp);
-            time.setText(String.format("%1$tm %1$te,%1$tY", weather.getDate()));
+            time.setText(String.format("%1$ta, %1$te %1$tb, %1$tR", weather.getCalendar()));
         }
     }
 

@@ -32,6 +32,10 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 
 import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.Whenever;
@@ -322,9 +326,9 @@ public class MainActivity extends AppCompatActivity implements
             textViewWhereverCountry.setText(wherever.getCountryName());
         }
         if (whenever != null) {
-            fragTempTomorrow.setWeather(whenever.getNearestForecast());
-            fragTempForecast1.setWeather(whenever.getLatestForecast());
-            fragTempForecast2.setWeather(whenever.getLatestForecast());
+            fragTempTomorrow.setWeather(whenever.getWeatherOn(Helpers.nextAfternoon(1).getTime()));
+            fragTempForecast1.setWeather(whenever.getWeatherOn(Helpers.nextAfternoon(2).getTime()));
+            fragTempForecast2.setWeather(whenever.getWeatherOn(Helpers.nextAfternoon(3).getTime()));
         }
 
         if (recentCitiesList.getCounter() == 0)

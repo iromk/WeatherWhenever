@@ -3,6 +3,7 @@ package pro.xite.dev.weatherwhenever.data.owm;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.Wherever;
@@ -74,6 +75,11 @@ public class OwmCity extends OwmData implements Wherever {
     @Override
     public String getCountryName() {
         return getCountryCode();
+    }
+
+    @Override
+    public TimeZone getTimezone() {
+        return TimeZone.getDefault();
     }
 
     @Override
