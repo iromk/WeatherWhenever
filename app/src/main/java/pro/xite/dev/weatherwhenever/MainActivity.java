@@ -71,7 +71,9 @@ public class MainActivity extends AppCompatActivity implements
 
     MaterialTapTargetPrompt mFabPrompt;
     private OneDayWeatherFragment fragTempNow;
-    private OneDayWeatherFragment fragTempLater;
+    private OneDayWeatherFragment fragTempTomorrow;
+    private OneDayWeatherFragment fragTempForecast1;
+    private OneDayWeatherFragment fragTempForecast2;
     private FloatingActionButton fabUpdate;
     private boolean skipPromptUseUpdateData;
 
@@ -89,8 +91,12 @@ public class MainActivity extends AppCompatActivity implements
 
         fragTempNow = OneDayWeatherFragment.newInstance(OneDayWeatherFragment.SIZE_L);
         loadFragment(R.id.fragment_t_now, fragTempNow);
-        fragTempLater = OneDayWeatherFragment.newInstance(OneDayWeatherFragment.SIZE_XS);
-        loadFragment(R.id.fragment_t_later, fragTempLater);
+        fragTempTomorrow = OneDayWeatherFragment.newInstance(OneDayWeatherFragment.SIZE_M);
+        loadFragment(R.id.fragment_t_later, fragTempTomorrow);
+        fragTempForecast1 = OneDayWeatherFragment.newInstance(OneDayWeatherFragment.SIZE_S);
+        loadFragment(R.id.fragment_forecast1, fragTempForecast1);
+        fragTempForecast2 = OneDayWeatherFragment.newInstance(OneDayWeatherFragment.SIZE_S);
+        loadFragment(R.id.fragment_forecast2, fragTempForecast2);
 
         initDrawer();
         initFloatActionButton();
@@ -118,13 +124,11 @@ public class MainActivity extends AppCompatActivity implements
         if (recentCitiesList == null)
             recentCitiesList = new RecentCitiesList();
 
-//        if (recentCitiesList.getCounter() > 0) {
-            addCityToNavigationMenu();
+        addCityToNavigationMenu();
 
-            wherever = recentCitiesList.getLatestCity();
-            weather = recentCitiesList.getLatestWeather();
-            whenever = recentCitiesList.getLatestForecast();
-//        }
+        wherever = recentCitiesList.getLatestCity();
+        weather = recentCitiesList.getLatestWeather();
+        whenever = recentCitiesList.getLatestForecast();
 
         updateViews();
 
@@ -318,7 +322,9 @@ public class MainActivity extends AppCompatActivity implements
             textViewWhereverCountry.setText(wherever.getCountryName());
         }
         if (whenever != null) {
-            fragTempLater.setWeather(whenever.getLatestForecast());
+            fragTempTomorrow.setWeather(whenever.getNearestForecast());
+            fragTempForecast1.setWeather(whenever.getLatestForecast());
+            fragTempForecast2.setWeather(whenever.getLatestForecast());
         }
 
         if (recentCitiesList.getCounter() == 0)
