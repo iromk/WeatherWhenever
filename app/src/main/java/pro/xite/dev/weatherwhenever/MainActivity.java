@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         View.OnClickListener, IDataProviderListener {
 
-    public static final String FRIENDS_RESPONSE = "friends_response";
     public static final String TAG_TRACER = "TRACER";
     private static final int PROMPT_AFTER_3_SEC = 3000;
     private static final int PROMPT_INSTANT = 0;
