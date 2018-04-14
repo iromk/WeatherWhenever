@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     >
     <!--tools:context=".OneDayWeatherFragment"-->
 
@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="textEnd"
         android:textSize="75sp"
-        app:layout_constraintStart_toEndOf="@+id/imageview_weather_icon"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_toEndOf="@+id/imageview_weather_icon"/>
 
     <TextView
         android:id="@+id/textview_tscale"
@@ -21,22 +20,18 @@
         android:layout_height="wrap_content"
         android:text="@string/temp_scale_celsius"
         android:textSize="32sp"
-        app:layout_constraintStart_toEndOf="@+id/textview_temp"
-        app:layout_constraintTop_toTopOf="parent" />
-        <!--android:layout_marginTop="16dp"-->
+        android:layout_toEndOf="@+id/textview_temp"/>
 
     <TextView
         android:id="@+id/textview_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textview_temp" />
+        android:text="TextView"/>
 
     <ImageView
         android:id="@+id/imageview_weather_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_below="@id/textview_timestamp"/>
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

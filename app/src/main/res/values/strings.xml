@@ -63,5 +63,8 @@
     <string name="prompt_update_title">It\'s a good time to update data from the web.</string>
     <integer name="accent_start_update_description">73</integer>
     <integer name="accent_end_update_description">79</integer>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

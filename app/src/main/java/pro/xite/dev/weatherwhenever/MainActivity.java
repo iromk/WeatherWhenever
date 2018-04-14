@@ -320,6 +320,14 @@ public class MainActivity extends AppCompatActivity implements
                 promptUseUpdateData(PROMPT_AFTER_3_SEC);
             }
 
+            Intent intent = new Intent(getApplicationContext(), WeatherWidget.class);
+            intent.setAction(WeatherWidget.UPDATE_WIDGET_ACTION);
+            int t = (int)weather.getTemperature();
+            intent.putExtra("TEMP", t);
+            intent.putExtra("WWW", (Serializable) weather);
+//            intent.putExtra("ICON", weather.getIconId());
+            sendBroadcast(intent);
+
         }
         if (wherever != null) {
             textViewWhereverCity.setText(wherever.getName());

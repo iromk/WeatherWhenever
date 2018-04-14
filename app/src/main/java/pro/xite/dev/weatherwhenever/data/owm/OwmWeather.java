@@ -6,6 +6,7 @@ package pro.xite.dev.weatherwhenever.data.owm;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -28,7 +29,7 @@ public class OwmWeather extends OwmData implements Weather {
     @SerializedName("dt")
     private long utcTime;
 
-    public class Main {
+    public class Main implements Serializable {
         @SerializedName("temp")
         Float temp;
         @SerializedName("pressure")
@@ -44,7 +45,7 @@ public class OwmWeather extends OwmData implements Weather {
     @SerializedName("weather")
     private Descriptive[] descriptive;
 
-    public class Descriptive {
+    public class Descriptive implements Serializable {
         @SerializedName("id")
         Integer id;
         @SerializedName("main")
