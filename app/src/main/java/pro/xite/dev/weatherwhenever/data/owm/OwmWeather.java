@@ -63,6 +63,11 @@ public class OwmWeather extends OwmData implements Weather {
     public String getDescription() { return descriptive[0].description; }
 
     @Override
+    public String getIconId() {
+        return descriptive[0].icon;
+    }
+
+    @Override
     public float getTemperature() {
         return main.temp;
     }

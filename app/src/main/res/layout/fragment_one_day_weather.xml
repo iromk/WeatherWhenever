@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="textEnd"
         android:textSize="75sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageview_weather_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -32,5 +32,11 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textview_temp" />
+
+    <ImageView
+        android:id="@+id/imageview_weather_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

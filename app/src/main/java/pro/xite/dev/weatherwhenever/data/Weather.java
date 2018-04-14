@@ -22,4 +22,5 @@ public interface Weather {
     Wherever where();
     Weather on(Date date);
 
+    String getIconId();
 }

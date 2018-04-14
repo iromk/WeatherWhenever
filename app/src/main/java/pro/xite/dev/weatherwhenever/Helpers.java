@@ -1,5 +1,6 @@
 package pro.xite.dev.weatherwhenever;
 
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -53,4 +54,16 @@ public class Helpers {
         now.set(Calendar.MILLISECOND, 0);
         return now;
     }
+
+    public static int getResIdByName(String resourceName, Class<?> klass) {
+        try {
+            final Field fieldId = klass.getDeclaredField(resourceName);
+            return fieldId.getInt(fieldId);
+        } catch (Exception e) {
+            throw new RuntimeException(
+                        String.format("No resource ID found for \"%s\" with class \"%s\"",
+                            resourceName, klass.toString()), e);
+        }
+    }
+
 }

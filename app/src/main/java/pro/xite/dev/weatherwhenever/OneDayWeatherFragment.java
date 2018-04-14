@@ -7,9 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.TimeZone;
+import java.lang.reflect.Field;
 
 import pro.xite.dev.weatherwhenever.data.Weather;
 
@@ -96,6 +97,8 @@ public class OneDayWeatherFragment extends Fragment {
 
     public void updateViews() {
         if(getView() != null && weather != null) {
+            ImageView imageView = getView().findViewById(R.id.imageview_weather_icon);
+            imageView.setImageResource(Helpers.getResIdByName("owm_"+weather.getIconId(), R.drawable.class));
             TextView t = getView().findViewById(R.id.textview_temp);
             t.setText(Helpers.tempToString(weather.getTemperature()));
             TextView time = getView().findViewById(R.id.textview_timestamp);
