@@ -37,6 +37,7 @@
 
     <string name="prompt_update_description">Эти сведения о погоде устарели. Нажмите кнопку обновить, чтобы получить с сервера свежий прогноз.</string>
     <string name="prompt_update_title">Пришло время обновить инфу.</string>
+    <string name="placeholder_no_data">Нет данных</string>
     <integer name="accent_start_update_description">47</integer>
     <integer name="accent_end_update_description">55</integer>
 

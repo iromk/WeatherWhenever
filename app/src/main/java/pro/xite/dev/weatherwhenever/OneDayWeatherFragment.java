@@ -94,13 +94,18 @@ public class OneDayWeatherFragment extends Fragment {
     }
 
     public void updateViews() {
-        if(getView() != null && weather != null) {
-            ImageView imageView = getView().findViewById(R.id.imageview_weather_icon);
-            imageView.setImageResource(Helpers.getResIdByName("owm_"+weather.getIconId(), R.drawable.class));
-            TextView t = getView().findViewById(R.id.textview_temp);
-            t.setText(Helpers.tempToString(weather.getTemperature()));
-            TextView time = getView().findViewById(R.id.textview_notes);
-            time.setText(String.format("%1$ta, %1$te %1$tb, %1$tR", weather.getCalendar()));
+        if (getView() != null) {
+            TextView tvTempScale = getView().findViewById(R.id.textview_tscale);
+            tvTempScale.setVisibility(View.INVISIBLE);
+            if (weather != null) {
+                        ImageView imageView = getView().findViewById(R.id.imageview_weather_icon);
+                imageView.setImageResource(Helpers.getResIdByName("owm_" + weather.getIconId(), R.drawable.class));
+                TextView t = getView().findViewById(R.id.textview_temp);
+                t.setText(Helpers.tempToString(weather.getTemperature()));
+                TextView time = getView().findViewById(R.id.textview_notes);
+                time.setText(String.format("%1$ta, %1$te %1$tb, %1$tR", weather.getCalendar()));
+                tvTempScale.setVisibility(View.VISIBLE);
+            }
         }
     }
 

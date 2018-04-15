@@ -24,7 +24,10 @@ public class PrefsManager {
 
     public RecentCitiesList loadRecentCitiesList() {
         final String gson = sharedPreferences.getString(RECENT_CITIES_LIST, "");
-        return buildGsonWithAdapters().fromJson(gson, RecentCitiesList.class);
+        if(gson.length() == 0)
+            return new RecentCitiesList();
+        else
+            return buildGsonWithAdapters().fromJson(gson, RecentCitiesList.class);
     }
 
     public void savePrefs(@NonNull final RecentCitiesList recentCitiesList) {

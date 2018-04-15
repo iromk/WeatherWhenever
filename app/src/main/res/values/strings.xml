@@ -66,5 +66,6 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
+    <string name="placeholder_no_data">No data</string>
 
 </resources>
