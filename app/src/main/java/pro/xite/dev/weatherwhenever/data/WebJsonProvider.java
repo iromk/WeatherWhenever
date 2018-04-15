@@ -55,7 +55,7 @@ abstract public class WebJsonProvider extends Service implements IDataProvider {
             Log.d(Helpers.getMethodName(), url.toString());
 
             HttpResponseCache cache = HttpResponseCache.getInstalled();
-            Log.d("CACHE", String.format("requests %d", cache.getRequestCount()));
+//            Log.d("CACHE", String.format("requests %d", cache.getRequestCount()));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
