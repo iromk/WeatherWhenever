@@ -36,8 +36,8 @@ public class Helpers {
     public static String tempToString(float tFloat) {
         final int tInt = (int)Math.abs(tFloat);
         String tPrefix = " ";
-        if(tInt > 0 ) tPrefix = "+";
-        if(tInt < 0 ) tPrefix = "-";
+        if(tFloat > 0 ) tPrefix = "+";
+        if(tFloat < 0 ) tPrefix = "-";
         final String tIntStr = String.valueOf(tInt);
         return String.format("%s%s", tPrefix, tIntStr);
     }
