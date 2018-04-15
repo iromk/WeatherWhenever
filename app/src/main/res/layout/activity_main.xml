@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/fragment_t_now"
-        android:layout_width="wrap_content"
+        android:layout_width="233dp"
         android:layout_height="86dp"
         android:layout_marginStart="12dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +27,6 @@
         android:id="@+id/fragment_forecast1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_t_later" />
 
@@ -34,9 +34,9 @@
         android:id="@+id/fragment_forecast2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/fragment_forecast1"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_t_later"/>
+        android:layout_marginStart="180dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_t_later" />
 
     <TextView
         android:id="@+id/textview_wherever_city"
@@ -67,14 +67,15 @@
 
     <TextView
         android:id="@+id/textview_descriptive"
-        android:layout_width="187dp"
+        android:layout_width="126dp"
         android:layout_height="68dp"
         android:layout_marginEnd="12dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="36dp"
         android:textSize="20sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/fragment_t_now"
         app:layout_constraintTop_toBottomOf="@+id/textview_wherever_country" />
 
