@@ -1,19 +1,15 @@
 package pro.xite.dev.weatherwhenever;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.RemoteViews;
 
-import java.util.Arrays;
-
 import pro.xite.dev.weatherwhenever.data.Weather;
+import pro.xite.dev.weatherwhenever.data.Wherever;
 
 
 /**
@@ -22,10 +18,14 @@ import pro.xite.dev.weatherwhenever.data.Weather;
  */
 public class WeatherWidget extends AppWidgetProvider {
 
-    private static String TAG = "LOG/WIDGET";
+    private static final int ABSOLUTE_ZERO = -273;
+    public static final String KEY_TEMPERATURE = "WIDGET/TEMP";
+    public static final String KEY_WEATHER = "WIDGET/Weather";
+    public static final String KEY_WHEREVER = "WIDGET/Wherever";
     public static final String UPDATE_WIDGET_ACTION = "android.appwidget.action.APPWIDGET_UPDATE";
+    private static String TAG = "LOG/WIDGET";
 
-    int temp=-274;
+    private int temp = ABSOLUTE_ZERO;
 
     void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -60,33 +60,24 @@ public class WeatherWidget extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive: !!");
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         String action = intent.getAction();
         if(action != null) {
-            temp = intent.getIntExtra("TEMP", -11);
-            Weather weather = (Weather) intent.getSerializableExtra("WWW");
-            int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context, WeatherWidget.class));
-            Log.e(TAG, "onReceive: " + Arrays.toString(ids));
-            Log.d(TAG, "onReceive: "+temp);
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.fragment_one_day_weather);
-//            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget_layout);
-            Log.d(TAG, "updateAppWidget: " + temp);
-//            views.setTextViewText(R.id.appwidget_text, String.valueOf(temp));
-            views.setTextViewText(R.id.textview_temp, String.valueOf(temp));
-            views.setImageViewResource(R.id.imageview_weather_icon,
-                    Helpers.getResIdByName("owm_"+weather.getIconId(), R.drawable.class));
+            final int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context, WeatherWidget.class));
+            final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.fragment_one_day_weather);
+            temp = intent.getIntExtra(KEY_TEMPERATURE, ABSOLUTE_ZERO);
+            Weather weather = (Weather) intent.getSerializableExtra(KEY_WEATHER);
+            Wherever wherever= (Wherever) intent.getSerializableExtra(KEY_WHEREVER);
+            if(weather != null) {
+                views.setTextViewText(R.id.textview_temp, Helpers.tempToString(weather.getTemperature()));
+                views.setImageViewResource(R.id.imageview_weather_icon,
+                        Helpers.getResIdByName("owm_" + weather.getIconId(), R.drawable.class));
+            }
+            if(wherever != null)
+                views.setTextViewText(R.id.textview_notes, wherever.getName());
             appWidgetManager.updateAppWidget(ids[0], views);
-//            FragmentTransaction fragmentTransaction = ((Activity)context).getFragmentManager().beginTransaction();
-//            fragmentTransaction.addToBackStack(null);
-//            OneDayWeatherFragment frag = OneDayWeatherFragment.newInstance(OneDayWeatherFragment.SIZE_S);
-//            frag.setTemp(temp);
-//            fragmentTransaction.replace(R.id.widget_frame, frag);
-//            fragmentTransaction.commit();
 //            appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.appwidget_text);
         }
-//        String temp = intent.getStringExtra("TEMP");
-//        Log.d(TAG, temp);
         super.onReceive(context, intent);
 
     }

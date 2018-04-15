@@ -3,7 +3,7 @@
     android:initialKeyguardLayout="@layout/weather_widget_layout"
     android:initialLayout="@layout/weather_widget_layout"
     android:minHeight="40dp"
-    android:minWidth="40dp"
+    android:minWidth="80dp"
     android:previewImage="@drawable/example_appwidget_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"

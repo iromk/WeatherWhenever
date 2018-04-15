@@ -23,7 +23,7 @@
         android:layout_toEndOf="@+id/textview_temp"/>
 
     <TextView
-        android:id="@+id/textview_timestamp"
+        android:id="@+id/textview_notes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"/>
@@ -32,6 +32,6 @@
         android:id="@+id/imageview_weather_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textview_timestamp"/>
+        android:layout_below="@id/textview_notes"/>
 
 </RelativeLayout>

@@ -9,10 +9,8 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 import pro.xite.dev.weatherwhenever.data.Weather;
-import pro.xite.dev.weatherwhenever.data.Whenever;
 import pro.xite.dev.weatherwhenever.data.Wherever;
 
 /**

@@ -2,9 +2,6 @@ package pro.xite.dev.weatherwhenever;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
-import java.util.TimeZone;
-
-import pro.xite.dev.weatherwhenever.data.Wherever;
 
 /**
  * Created by Roman Syrchin on 3/25/18.

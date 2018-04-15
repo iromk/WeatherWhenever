@@ -32,10 +32,6 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.time.Clock;
-import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
 
 import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.Whenever;
@@ -89,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements
         textViewWhereverCity = findViewById(R.id.textview_wherever_city);
         textViewWhereverCountry = findViewById(R.id.textview_wherever_country);
         textViewDescriptive = findViewById(R.id.textview_descriptive);
-        textViewTimestamp = findViewById(R.id.textview_timestamp);
+        textViewTimestamp = findViewById(R.id.textview_notes);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -323,9 +319,9 @@ public class MainActivity extends AppCompatActivity implements
             Intent intent = new Intent(getApplicationContext(), WeatherWidget.class);
             intent.setAction(WeatherWidget.UPDATE_WIDGET_ACTION);
             int t = (int)weather.getTemperature();
-            intent.putExtra("TEMP", t);
-            intent.putExtra("WWW", (Serializable) weather);
-//            intent.putExtra("ICON", weather.getIconId());
+            intent.putExtra(WeatherWidget.KEY_TEMPERATURE, t);
+            intent.putExtra(WeatherWidget.KEY_WEATHER, (Serializable) weather);
+            intent.putExtra(WeatherWidget.KEY_WHEREVER, wherever);
             sendBroadcast(intent);
 
         }
