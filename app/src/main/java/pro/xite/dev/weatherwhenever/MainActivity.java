@@ -116,19 +116,31 @@ public class MainActivity extends AppCompatActivity implements
                 getString(R.string.preference_file_key),
                 Context.MODE_PRIVATE));
 
-        if (USE_DATABASE)
-            recentCitiesList = dbManager.loadRecentCitiesList();
-        else
-            recentCitiesList = prefsManager.loadRecentCitiesList();
 
-        if (recentCitiesList == null)
+
+        if (USE_DATABASE) {
+            recentCitiesList = dbManager.loadRecentCitiesList();
+        }
+        else {
+            recentCitiesList = prefsManager.loadRecentCitiesList();
+        }
+
+        if (recentCitiesList == null) {
             recentCitiesList = new RecentCitiesList();
+        }
 
         addCityToNavigationMenu();
 
-        wherever = recentCitiesList.getLatestCity();
-        weather = recentCitiesList.getLatestWeather();
-        whenever = recentCitiesList.getLatestForecast();
+        final String lastViewedCityname = prefsManager.getLastCity();
+        if(lastViewedCityname.length() > 0) {
+            wherever = recentCitiesList.getCity(lastViewedCityname);
+            whenever = recentCitiesList.getForecastForCity(lastViewedCityname);
+            weather = recentCitiesList.getWeatherForCity(lastViewedCityname);
+        } else {
+            wherever = recentCitiesList.getLatestCity();
+            weather = recentCitiesList.getLatestWeather();
+            whenever = recentCitiesList.getLatestForecast();
+        }
 
         updateViews();
 
@@ -328,6 +340,7 @@ public class MainActivity extends AppCompatActivity implements
         if (wherever != null) {
             textViewWhereverCity.setText(wherever.getName());
             textViewWhereverCountry.setText(wherever.getCountryName());
+            prefsManager.saveLastCity(wherever.getName());
         }
         if (whenever != null) {
             fragTempTomorrow.setWeather(whenever.getWeatherOn(Helpers.nextAfternoon(1).getTime()));
@@ -393,6 +406,7 @@ public class MainActivity extends AppCompatActivity implements
         wherever = recentCitiesList.getCity(cityName);
         weather = recentCitiesList.getWeatherForCity(cityName);
         whenever = recentCitiesList.getForecastForCity(cityName);
+        prefsManager.saveLastCity(wherever.getName());
         drawerLayout.closeDrawer(GravityCompat.START);
         updateViews();
         return true;

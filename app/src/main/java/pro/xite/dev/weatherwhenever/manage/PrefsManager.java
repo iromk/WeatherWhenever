@@ -16,6 +16,7 @@ import pro.xite.dev.weatherwhenever.data.Weather;
 public class PrefsManager {
 
     private static final String RECENT_CITIES_LIST = "RecentCitiesList";
+    private static final String LAST_CITYNAME = "lastCity";
     private final SharedPreferences sharedPreferences;
 
     public PrefsManager(SharedPreferences sharedPreferences) {
@@ -35,6 +36,16 @@ public class PrefsManager {
         final String gson = buildGsonWithAdapters().toJson(recentCitiesList);
         editor.putString(RECENT_CITIES_LIST, gson);
         editor.apply();
+    }
+
+    public void saveLastCity(String cityname) {
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(LAST_CITYNAME, cityname);
+        editor.apply();
+    }
+
+    public String getLastCity() {
+        return sharedPreferences.getString(LAST_CITYNAME, "");
     }
 
     private Gson buildGsonWithAdapters() {
