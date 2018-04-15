@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.Wherever;
@@ -35,6 +36,7 @@ public class WeatherWidget extends AppWidgetProvider implements IDataProviderLis
     void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                          int appWidgetId) {
 
+        Log.d(TAG, String.format("%s at %tR", Helpers.getMethodName(), Calendar.getInstance()));
         RemoteViews rViews = new RemoteViews(context.getPackageName(), R.layout.fragment_one_day_weather);
         PrefsManager prefsManager = new PrefsManager(context.getSharedPreferences(
                 context.getString(R.string.preference_file_key),
@@ -69,7 +71,7 @@ public class WeatherWidget extends AppWidgetProvider implements IDataProviderLis
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        Log.d(TAG, "onUpdate: ");
+        Log.d(TAG, String.format("onUpdate received %1$tR", Calendar.getInstance()));
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
@@ -113,6 +115,9 @@ public class WeatherWidget extends AppWidgetProvider implements IDataProviderLis
     @Override
     public void onSerializedDataReceived(Serializable object) {
         Log.d(TAG, "onSerializedDataReceived:");
+        if(object instanceof Weather) {
+            Weather weather = (Weather) object;
+        }
     }
 }
 

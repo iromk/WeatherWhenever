@@ -33,7 +33,7 @@ abstract public class WebJsonProvider extends Service implements IDataProvider {
     static final int WHAT_CODE_FOR_DELAYED_REQUEST = 5;
 
     final private static String TAG_TRACER = "WJP";
-    private static final String TAG_TRACER_SERVICE = "WJP/SERVICE";
+    private static final String TAG_TRACER_SERVICE = "LOG/WJP/SERVICE";
 
     static final String KEY_QUEUE_CRITERIA_ARRAY = "ARGH";
     private ServiceHandler serviceHandler;

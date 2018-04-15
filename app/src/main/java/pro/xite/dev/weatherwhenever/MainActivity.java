@@ -1,10 +1,13 @@
 package pro.xite.dev.weatherwhenever;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.http.HttpResponseCache;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -32,10 +35,14 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Calendar;
 
+import pro.xite.dev.weatherwhenever.data.IDataProvider;
 import pro.xite.dev.weatherwhenever.data.Weather;
+import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
 import pro.xite.dev.weatherwhenever.data.Whenever;
 import pro.xite.dev.weatherwhenever.data.Wherever;
+import pro.xite.dev.weatherwhenever.data.ods.OdsCityProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
 import pro.xite.dev.weatherwhenever.manage.DbManager;
@@ -48,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         View.OnClickListener, IDataProviderListener {
 
-    public static final String TAG_TRACER = "TRACER";
+    public static final String TAG_TRACER = "LOG/TRACER";
     private static final int PROMPT_AFTER_3_SEC = 3000;
     private static final int PROMPT_INSTANT = 0;
 
@@ -142,9 +149,42 @@ public class MainActivity extends AppCompatActivity implements
             whenever = recentCitiesList.getLatestForecast();
         }
 
+        Intent intent = new Intent(this, OwmActualWeatherProvider.class);
+        bindService(intent, connection, BIND_AUTO_CREATE);
+
         updateViews();
 
     }
+
+    private void subscribeOwmWeather() {
+        if(bound && wherever != null && wherever.getName() != null) {
+            owmService.delayedRequest(wherever.getName());
+            Log.d(TAG_TRACER, String.format("Subscribed at %tR", Calendar.getInstance()));
+        }
+    }
+
+    private IDataProvider owmService;
+    private boolean bound = false;
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            WebJsonProvider.DataProviderServiceBinder owmServiceBinder =
+                    (WebJsonProvider.DataProviderServiceBinder) service;
+            owmService = owmServiceBinder.getDataProviderService();
+            owmService.setListener(MainActivity.this);
+            owmService.setDelayedRequestTimeout(90_000);
+            bound = true;
+            Log.d(TAG_TRACER, String.format("onServiceConnected at %tR", Calendar.getInstance()));
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bound = false;
+        }
+    };
+
+
 
     private void addCityToNavigationMenu() {
         Menu menu = navigationView.getMenu();
@@ -276,6 +316,11 @@ public class MainActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         dbManager.close();
+        super.onDestroy();
+        if(bound) {
+            unbindService(connection);
+            bound = false;
+        }
     }
 
     @Override
@@ -298,9 +343,10 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onSerializedDataReceived(Serializable data) {
-        Log.d(TAG_TRACER, Helpers.getMethodName());
+        Log.d(TAG_TRACER, String.format("%s at %tR", Helpers.getMethodName(),Calendar.getInstance()));
         if (data instanceof Weather) {
             weather = (Weather) data;
+            subscribeOwmWeather();
             Log.d(TAG_TRACER, String.format("Got new Weather t==%d", (int) weather.getTemperature()));
         } else if (data instanceof Whenever) {
             whenever = (Whenever) data;
@@ -328,13 +374,7 @@ public class MainActivity extends AppCompatActivity implements
                 promptUseUpdateData(PROMPT_AFTER_3_SEC);
             }
 
-            Intent intent = new Intent(getApplicationContext(), WeatherWidget.class);
-            intent.setAction(WeatherWidget.UPDATE_WIDGET_ACTION);
-            int t = (int)weather.getTemperature();
-            intent.putExtra(WeatherWidget.KEY_TEMPERATURE, t);
-            intent.putExtra(WeatherWidget.KEY_WEATHER, (Serializable) weather);
-            intent.putExtra(WeatherWidget.KEY_WHEREVER, wherever);
-            sendBroadcast(intent);
+            notifyWeatherWidget();
 
         }
         if (wherever != null) {
@@ -351,6 +391,16 @@ public class MainActivity extends AppCompatActivity implements
         if (recentCitiesList.getCounter() == 0)
             promptUseSearchCity(PROMPT_AFTER_3_SEC);
 
+    }
+
+    private void notifyWeatherWidget() {
+        Intent intent = new Intent(getApplicationContext(), WeatherWidget.class);
+        intent.setAction(WeatherWidget.UPDATE_WIDGET_ACTION);
+        int t = (int)weather.getTemperature();
+        intent.putExtra(WeatherWidget.KEY_TEMPERATURE, t);
+        intent.putExtra(WeatherWidget.KEY_WEATHER, (Serializable) weather);
+        intent.putExtra(WeatherWidget.KEY_WHEREVER, wherever);
+        sendBroadcast(intent);
     }
 
     private void tryToSavePreferences() {
