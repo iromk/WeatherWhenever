@@ -39,6 +39,11 @@ public class OneDayWeatherFragment extends Fragment {
     private Weather weather;
 
     private OnFragmentInteractionListener mListener;
+    private View view;
+    private TextView tvTempScale;
+    private ImageView iwWeatherIcon;
+    private TextView tvTemp;
+    private TextView tvTimestampNote;
 
     public OneDayWeatherFragment() {
         // Required empty public constructor
@@ -77,6 +82,10 @@ public class OneDayWeatherFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_one_day_weather, container, false);
         view.setScaleX(widgetScaleFactor);
         view.setScaleY(widgetScaleFactor);
+        tvTempScale = view.findViewById(R.id.textview_tscale);
+        iwWeatherIcon = view.findViewById(R.id.imageview_weather_icon);
+        tvTemp = view.findViewById(R.id.textview_temp);
+        tvTimestampNote = view.findViewById(R.id.textview_notes);
         return view;
     }
 
@@ -95,15 +104,11 @@ public class OneDayWeatherFragment extends Fragment {
 
     public void updateViews() {
         if (getView() != null) {
-            TextView tvTempScale = getView().findViewById(R.id.textview_tscale);
             tvTempScale.setVisibility(View.INVISIBLE);
             if (weather != null) {
-                        ImageView imageView = getView().findViewById(R.id.imageview_weather_icon);
-                imageView.setImageResource(Helpers.getResIdByName("owm_" + weather.getIconId(), R.drawable.class));
-                TextView t = getView().findViewById(R.id.textview_temp);
-                t.setText(Helpers.tempToString(weather.getTemperature()));
-                TextView time = getView().findViewById(R.id.textview_notes);
-                time.setText(String.format("%1$ta, %1$te %1$tb, %1$tR", weather.getCalendar()));
+                iwWeatherIcon.setImageResource(Helpers.getResIdByName("owm_" + weather.getIconId(), R.drawable.class));
+                tvTemp.setText(Helpers.tempToString(weather.getTemperature()));
+                tvTimestampNote.setText(String.format("%1$ta, %1$te %1$tb, %1$tR", weather.getCalendar()));
                 tvTempScale.setVisibility(View.VISIBLE);
             }
         }
