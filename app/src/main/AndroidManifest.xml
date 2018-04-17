@@ -32,6 +32,7 @@
 
         <service android:name=".data.ods.OdsCityProvider" />
         <service android:name=".data.owm.OwmActualWeatherProvider" />
+        <service android:name=".manage.WeatherInfoService" />
 
         <receiver android:name=".WeatherWidget">
             <intent-filter>

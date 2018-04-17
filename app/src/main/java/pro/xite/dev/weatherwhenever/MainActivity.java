@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.http.HttpResponseCache;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -32,8 +31,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Calendar;
 
@@ -42,7 +39,6 @@ import pro.xite.dev.weatherwhenever.data.Weather;
 import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
 import pro.xite.dev.weatherwhenever.data.Whenever;
 import pro.xite.dev.weatherwhenever.data.Wherever;
-import pro.xite.dev.weatherwhenever.data.ods.OdsCityProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
 import pro.xite.dev.weatherwhenever.manage.DbManager;
@@ -53,6 +49,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
+
         View.OnClickListener, IDataProviderListener {
 
     public static final String TAG_TRACER = "LOG/TRACER";
@@ -108,13 +105,13 @@ public class MainActivity extends AppCompatActivity implements
         initDrawer();
         initFloatActionButton();
 
-        try {
-            File httpCacheDir = new File(getCacheDir(), "http");
-            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
-            HttpResponseCache.install(httpCacheDir, httpCacheSize);
-        } catch (IOException e) {
-            Log.i(TAG_TRACER, "HTTP response cache installation failed:" + e);
-        }
+//        try {
+//            File httpCacheDir = new File(getCacheDir(), "http");
+//            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+//            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+//        } catch (IOException e) {
+//            Log.i(TAG_TRACER, "HTTP response cache installation failed:" + e);
+//        }
 
         dbManager = new DbManager(this);
         dbManager.open();

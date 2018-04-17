@@ -18,4 +18,5 @@ public interface Wherever extends Serializable {
     Weather getCurrentWeather();
     Weather getForecasetOn(Date date);
 
+    String KEY = "Wherever/IntentKEY";
 }
