@@ -313,7 +313,6 @@ public class MainActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         dbManager.close();
-        super.onDestroy();
         if(bound) {
             unbindService(connection);
             bound = false;
