@@ -5,8 +5,9 @@ import android.util.Log;
 import java.net.URL;
 import java.util.Locale;
 
-import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
-import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
+import pro.xite.dev.wjdp.IDataProviderListener;
+import pro.xite.dev.wjdp.WebJsonProvider;
+
 
 /**
  * Created by Roman Syrchin on 4/8/18.

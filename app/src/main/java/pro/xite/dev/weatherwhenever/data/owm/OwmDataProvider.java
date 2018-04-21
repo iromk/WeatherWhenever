@@ -3,7 +3,8 @@ package pro.xite.dev.weatherwhenever.data.owm;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
+import pro.xite.dev.wjdp.WebJsonProvider;
+
 
 /**
  * Created by Roman Syrchin on 3/26/18.

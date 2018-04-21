@@ -1,6 +1,8 @@
 package pro.xite.dev.weatherwhenever.manage;
 
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
@@ -9,9 +11,11 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import pro.xite.dev.weatherwhenever.Helpers;
 import pro.xite.dev.weatherwhenever.R;
@@ -21,6 +25,9 @@ import pro.xite.dev.weatherwhenever.data.Whenever;
 import pro.xite.dev.weatherwhenever.data.Wherever;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
+import pro.xite.dev.wjdp.IDataProvider;
+import pro.xite.dev.wjdp.IDataProviderListener;
+import pro.xite.dev.wjdp.WebJsonProvider;
 
 /**
  * Created by Roman Syrchin on 4/16/18.
@@ -38,6 +45,11 @@ public class WeatherInfoService extends Service implements IDataProviderListener
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand: ");
         resetIntent();
+        RemoteViews rv = new RemoteViews(getPackageName(), R.layout.fragment_one_day_weather);
+        rv.setTextViewText(R.id.textview_time, String.format("%tR", Calendar.getInstance()));
+        ComponentName componentName = new ComponentName(this, WeatherWidget.class);
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        appWidgetManager.updateAppWidget(componentName, rv);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -58,7 +70,7 @@ public class WeatherInfoService extends Service implements IDataProviderListener
                 new OwmNearestForecastProvider().asyncRequest(WeatherInfoService.this, cityname);
                 Log.i(TAG, "Handler().postDelayed: requested provs");
              }
-         }, 64_000);
+         }, 640_000);
     }
 
     @Override

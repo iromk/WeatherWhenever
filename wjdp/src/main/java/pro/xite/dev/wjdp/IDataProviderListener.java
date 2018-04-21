@@ -1,4 +1,4 @@
-package pro.xite.dev.weatherwhenever.manage;
+package pro.xite.dev.wjdp;
 
 import java.io.Serializable;
 

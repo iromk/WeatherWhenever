@@ -1,14 +1,12 @@
 package pro.xite.dev.weatherwhenever.data.owm;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-
 import com.google.gson.annotations.SerializedName;
 
-import pro.xite.dev.weatherwhenever.data.Whenever;
+import java.util.Date;
+import java.util.List;
+
 import pro.xite.dev.weatherwhenever.data.Weather;
+import pro.xite.dev.weatherwhenever.data.Whenever;
 
 
 /**

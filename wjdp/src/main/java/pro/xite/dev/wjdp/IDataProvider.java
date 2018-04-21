@@ -1,6 +1,4 @@
-package pro.xite.dev.weatherwhenever.data;
-
-import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
+package pro.xite.dev.wjdp;
 
 /**
  * Created by Roman Syrchin on 4/9/18.

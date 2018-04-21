@@ -1,4 +1,4 @@
-package pro.xite.dev.weatherwhenever.data;
+package pro.xite.dev.wjdp;
 
 import android.app.Service;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -20,9 +21,6 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import pro.xite.dev.weatherwhenever.Helpers;
-import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
-import pro.xite.dev.weatherwhenever.manage.LeakSafeHandler;
 
 /**
  * Created by Roman Syrchin on 4/7/18.

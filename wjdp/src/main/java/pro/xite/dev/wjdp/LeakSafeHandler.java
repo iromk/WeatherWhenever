@@ -1,4 +1,4 @@
-package pro.xite.dev.weatherwhenever.manage;
+package pro.xite.dev.wjdp;
 
 import android.os.Bundle;
 import android.os.Handler;

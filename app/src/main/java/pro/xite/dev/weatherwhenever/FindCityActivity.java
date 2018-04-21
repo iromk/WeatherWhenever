@@ -19,11 +19,11 @@ import android.widget.ListView;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import pro.xite.dev.weatherwhenever.data.IDataProvider;
-import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
 import pro.xite.dev.weatherwhenever.data.ods.OdsCityProvider;
 import pro.xite.dev.weatherwhenever.data.ods.OdsResponse;
-import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
+import pro.xite.dev.wjdp.IDataProvider;
+import pro.xite.dev.wjdp.IDataProviderListener;
+import pro.xite.dev.wjdp.WebJsonProvider;
 
 public class FindCityActivity extends AppCompatActivity
         implements IDataProviderListener, AdapterView.OnItemClickListener {

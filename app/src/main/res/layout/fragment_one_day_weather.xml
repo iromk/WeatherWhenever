@@ -27,6 +27,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
+    <TextView
+        android:id="@+id/textview_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/textview_notes"/>
+
     <ImageView
         android:id="@+id/imageview_weather_icon"
         android:layout_width="wrap_content"

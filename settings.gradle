@@ -1,1 +1,1 @@
-include ':app', ':material-tap-target-prompt-debug'
+include ':app', ':material-tap-target-prompt-debug', ':wjdp'

@@ -34,17 +34,17 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import pro.xite.dev.weatherwhenever.data.IDataProvider;
 import pro.xite.dev.weatherwhenever.data.Weather;
-import pro.xite.dev.weatherwhenever.data.WebJsonProvider;
 import pro.xite.dev.weatherwhenever.data.Whenever;
 import pro.xite.dev.weatherwhenever.data.Wherever;
 import pro.xite.dev.weatherwhenever.data.owm.OwmActualWeatherProvider;
 import pro.xite.dev.weatherwhenever.data.owm.OwmNearestForecastProvider;
 import pro.xite.dev.weatherwhenever.manage.DbManager;
-import pro.xite.dev.weatherwhenever.manage.IDataProviderListener;
 import pro.xite.dev.weatherwhenever.manage.PrefsManager;
 import pro.xite.dev.weatherwhenever.manage.RecentCitiesList;
+import pro.xite.dev.wjdp.IDataProvider;
+import pro.xite.dev.wjdp.IDataProviderListener;
+import pro.xite.dev.wjdp.WebJsonProvider;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 public class MainActivity extends AppCompatActivity implements
